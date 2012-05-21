@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e
+
+mac_file="/var/lib/mac/mac.$IFACE"
+
+# Store MAC for reuse
+mkdir -p /var/lib/mac
+if [ ! -r "$mac_file" ]; then
+    echo "Storing MAC for $IFACE for future use." > /dev/stderr
+    cat /sys/class/net/usb0/address > "$mac_file"
+    exit 0
+fi
+
+# Restore MAC setting
+stored=`cat "$mac_file"`
+current=`cat /sys/class/net/usb0/address`
+
+if [ "$current" != "$stored" ]; then
+    echo "Setting back to old MAC."
+    ifconfig $IFACE hw ether $stored
+fi
