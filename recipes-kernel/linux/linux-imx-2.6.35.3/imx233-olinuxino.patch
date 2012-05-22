@@ -77,7 +77,7 @@ diff -rupN linux-2.6.31.orig/arch/arm/mach-mx23/imx233_olinuxino.c linux-2.6.31/
 +	mxs_add_device(pdev, 3);
 +}
 +#else
-+static void __init mx23evk_init_adc(void)
++static void __init imx233_olinuxino_init_adc(void)
 +{
 +
 +}
