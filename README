@@ -7,11 +7,11 @@ use with OpenEmbedded and/or Yocto Freescale's BSP layer.
 This layer depends on:
 
 URI: git://git.openembedded.org/openembedded-core
-branch: master
+branch: denzil
 revision: HEAD
 
 URI: git://github.com/Freescale/meta-fsl-arm.git
-branch: master
+branch: denzil
 revision: HEAD
 
 Contributing
