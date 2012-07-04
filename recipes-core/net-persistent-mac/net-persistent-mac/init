@@ -1,0 +1,42 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          net-persistent-mac
+# Required-Start:    $local_fs
+# Required-Stop:
+# Default-Start:     S
+# Default-Stop:
+# X-Start-Before:    networking
+# Short-Description: restore MAC during boot process
+### END INIT INFO
+
+set -e
+
+[ -f /etc/default/net-persistent-mac ] && . /etc/default/net-persistent-mac
+
+MAC_DIR="/var/lib/net-persistent-mac"
+
+for if in $INTERFACES; do
+	mkdir -p "$MAC_DIR"
+	IF_FILE="$MAC_DIR/$if.mac"
+	IF_MAC="/sys/class/net/$if/address"
+
+	# Store MAC for reuse
+	if [ ! -r "$IF_FILE" ]; then
+		if [ -e "$IF_MAC" ]; then
+			echo "Storing MAC for $if for future use." > /dev/stderr
+			cat "$IF_MAC" > "$IF_FILE"
+		else
+			echo "Failed to read MAC for $if; skiping device."
+		fi
+	fi
+
+	if [ -r "$IF_FILE" ]; then
+		# Restore MAC setting
+		WANTED_MAC=`cat $IF_FILE`
+		if [ "$WANTED_MAC" != "`cat $IF_MAC`" ]; then
+			echo "Setting MAC of $if to $WANTED_MAC."
+			ifconfig $if hw ether "$WANTED_MAC"
+		fi
+	fi
+done
