@@ -1,6 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-PRINC := "${@int(PRINC) + 1}"
+PRINC := "${@int(PRINC) + 2}"
 
 # Board specific patches
-SRC_URI_append_imx233-olinuxino-maxi = " file://imx233-olinuxino-maxi.patch"
+SRC_URI_append_imx233-olinuxino = " file://imx233-olinuxino.patch"
