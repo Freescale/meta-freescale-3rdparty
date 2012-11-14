@@ -20,5 +20,5 @@ Contributing
 To contribute to this layer you should the patches for review to the
 mailing list.
 
-Mailing list: http://groups.google.com/group/meta-fsl-arm
+Mailing list: https://lists.yoctoproject.org/listinfo/meta-freescale
 Source code: https://github.com/Freescale/meta-fsl-arm-extra
