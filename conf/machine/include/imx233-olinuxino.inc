@@ -2,17 +2,16 @@
 
 include conf/machine/include/mxs-base.inc
 
+IMXBOOTLETS_MACHINE = "stmp378x_dev"
+UBOOT_MACHINE = "mx23_olinuxino_config"
+
 # Add a override for all iMX233-OLinuXino variants
 SOC_FAMILY = "imx233-olinuxino:mx23:mxs"
 
-IMXBOOTLETS_MACHINE = "stmp378x_dev"
-
-KERNEL_IMAGETYPE = "zImage"
+KERNEL_IMAGETYPE = "uImage"
 KERNEL_DEVICETREE = "${S}/arch/arm/boot/dts/imx23-olinuxino.dts"
 
-IMAGE_BOOTLOADER = "imx-bootlets"
-
 SDCARD_ROOTFS ?= "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.ext3"
-IMAGE_FSTYPES ?= "tar.bz2 ext3 linux.sb sdcard"
+IMAGE_FSTYPES ?= "tar.bz2 ext3 uboot.mxsboot-sdcard sdcard"
 
 MACHINE_FEATURES = "apm usbgadget usbhost vfat alsa"
