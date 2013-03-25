@@ -26,3 +26,4 @@ BROADCOM_FIRMWARE_wandboard-dual = "bcm4329"
 
 RDEPENDS_${PN} = "linux-firmware-${BROADCOM_FIRMWARE}"
 
+COMPATIBLE_MACHINE = "(wandboard-dual)"
