@@ -3,7 +3,7 @@
 include conf/machine/include/mxs-base.inc
 
 # Add a override for all iMX233-OLinuXino variants
-SOC_FAMILY_append = ":imx233-olinuxino"
+SOC_FAMILY = "imx233-olinuxino:mx23:mxs"
 
 IMXBOOTLETS_MACHINE = "stmp378x_dev"
 
