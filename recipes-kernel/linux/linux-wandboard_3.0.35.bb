@@ -7,4 +7,4 @@ include linux-wandboard.inc
 SRCREV = "64fee2d5ee42688a813a33b0d2f047f3dcc6b56f"
 LOCALVERSION = "-wandboard+yocto"
 
-COMPATIBLE_MACHINE = "(mx6)"
+COMPATIBLE_MACHINE = "(wandboard)"
