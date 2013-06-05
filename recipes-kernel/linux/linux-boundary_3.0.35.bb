@@ -10,7 +10,7 @@ INC_PR = "r1"
 SRC_URI = "git://github.com/boundarydevices/linux-imx6.git \
            file://defconfig"
 
-LOCALVERSION = "-1.1.0"
-SRCREV = "2dc5560fddb82b26c7010978361c28aad42fc023"
+LOCALVERSION = "-4.0.0"
+SRCREV = "e6e1b5aeccf7c88a725440095f83dfa9459dbfca"
 
 COMPATIBLE_MACHINE = "(mx6)"
