@@ -1,5 +1,44 @@
+From a58f89ba75334edcb1759fa174a4d56afe1b55ce Mon Sep 17 00:00:00 2001
+From: Leo Sartre <lsartre@adeneo-embedded.com>
+Date: Wed, 29 May 2013 11:03:07 +0200
+Subject: [PATCH] Add support for congatec qmx6 board
+
+Add support for the Congatec Qseven evaluation board, the patch was
+originally written by Congatec Team, some minor changes and cleanup
+were applied to make it work with the new Freescale BSP 4.0.
+---
+ Makefile                                         |   10 +
+ board/freescale/cgt_qmx6/Makefile                |   51 +
+ board/freescale/cgt_qmx6/cgt_qmx6.c              | 1726 ++++++++++++++++++++++
+ board/freescale/cgt_qmx6/config.mk               |    7 +
+ board/freescale/cgt_qmx6/flash_header.S          |  202 +++
+ board/freescale/cgt_qmx6/flash_header_pn016101.S |  202 +++
+ board/freescale/cgt_qmx6/flash_header_pn016104.S |  202 +++
+ board/freescale/cgt_qmx6/lowlevel_init.S         |  167 +++
+ board/freescale/cgt_qmx6/u-boot.lds              |   74 +
+ common/cmd_mii.c                                 |   17 +
+ drivers/mtd/spi/imx_spi_nor_sst.c                |   24 +-
+ include/asm-arm/mach-types.h                     |   13 +
+ include/configs/cgt_qmx6.h                       |  364 +++++
+ include/configs/cgt_qmx6_android.h               |  360 +++++
+ include/configs/cgt_qmx6_mfg.h                   |  320 ++++
+ localversion-qmx6                                |    1 +
+ 16 files changed, 3737 insertions(+), 3 deletions(-)
+ create mode 100644 board/freescale/cgt_qmx6/Makefile
+ create mode 100644 board/freescale/cgt_qmx6/cgt_qmx6.c
+ create mode 100644 board/freescale/cgt_qmx6/config.mk
+ create mode 100644 board/freescale/cgt_qmx6/flash_header.S
+ create mode 100644 board/freescale/cgt_qmx6/flash_header_pn016101.S
+ create mode 100644 board/freescale/cgt_qmx6/flash_header_pn016104.S
+ create mode 100644 board/freescale/cgt_qmx6/lowlevel_init.S
+ create mode 100644 board/freescale/cgt_qmx6/u-boot.lds
+ create mode 100644 include/configs/cgt_qmx6.h
+ create mode 100644 include/configs/cgt_qmx6_android.h
+ create mode 100644 include/configs/cgt_qmx6_mfg.h
+ create mode 100644 localversion-qmx6
+
 diff --git a/Makefile b/Makefile
-index 1088794..263aad0 100644
+index 17c21cd..47e6cbe 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -3205,6 +3205,15 @@ apollon_config		: unconfig
@@ -18,7 +57,7 @@ index 1088794..263aad0 100644
  mx23_evk_config : unconfig
  	@$(MKCONFIG) $(@:_config=) arm arm926ejs mx23_evk freescale mx23
  
-@@ -3817,6 +3826,7 @@ grsim_leon2_config : unconfig
+@@ -3838,6 +3847,7 @@ grsim_leon2_config : unconfig
  #########################################################################
  
  clean:
@@ -85,10 +124,10 @@ index 0000000..fa5e709
 +#########################################################################
 diff --git a/board/freescale/cgt_qmx6/cgt_qmx6.c b/board/freescale/cgt_qmx6/cgt_qmx6.c
 new file mode 100644
-index 0000000..c0c6121
+index 0000000..2f47e7e
 --- /dev/null
 +++ b/board/freescale/cgt_qmx6/cgt_qmx6.c
-@@ -0,0 +1,1740 @@
+@@ -0,0 +1,1726 @@
 +/*
 + * Copyright (C) 2011-2012 Freescale Semiconductor, Inc.
 + *
@@ -1068,20 +1107,6 @@ index 0000000..c0c6121
 +	{USDHC4_BASE_ADDR, 1, 1, 1, 0},
 +};
 +
-+#ifdef CONFIG_DYNAMIC_MMC_DEVNO
-+int get_mmc_env_devno(void)
-+{
-+	uint soc_sbmr = readl(SRC_BASE_ADDR + 0x4);
-+
-+	if (SD_BOOT == boot_dev || MMC_BOOT == boot_dev) {
-+		/* BOOT_CFG2[3] and BOOT_CFG2[4] */
-+		return (soc_sbmr & 0x00001800) >> 11;
-+	} else
-+		return -1;
-+
-+}
-+#endif
-+
 +#if defined CONFIG_MX6Q
 +iomux_v3_cfg_t usdhc1_pads[] = {
 +	MX6Q_PAD_SD1_CLK__USDHC1_CLK,
@@ -1842,6 +1867,214 @@ index 0000000..a0ce2a1
 +ifndef TEXT_BASE
 +	TEXT_BASE = 0x27800000
 +endif
+diff --git a/board/freescale/cgt_qmx6/flash_header.S b/board/freescale/cgt_qmx6/flash_header.S
+new file mode 100644
+index 0000000..8bbef35
+--- /dev/null
++++ b/board/freescale/cgt_qmx6/flash_header.S
+@@ -0,0 +1,202 @@
++/*
++ * Copyright (C) 2011 Freescale Semiconductor, Inc.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License as
++ * published by the Free Software Foundation; either version 2 of
++ * the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
++ * MA 02111-1307 USA
++ */
++
++#include <config.h>
++#include <asm/arch/mx6.h>
++
++#ifdef	CONFIG_FLASH_HEADER
++#ifndef CONFIG_FLASH_HEADER_OFFSET
++# error "Must define the offset of flash header"
++#endif
++
++#define CPU_2_BE_32(l) \
++       ((((l) & 0x000000FF) << 24) | \
++	(((l) & 0x0000FF00) << 8)  | \
++	(((l) & 0x00FF0000) >> 8)  | \
++	(((l) & 0xFF000000) >> 24))
++
++#define MXC_DCD_ITEM(i, addr, val)   \
++dcd_node_##i:                        \
++        .word CPU_2_BE_32(addr) ;     \
++        .word CPU_2_BE_32(val)  ;     \
++
++.section ".text.flasheader", "x"
++	b	_start
++	.org	CONFIG_FLASH_HEADER_OFFSET
++
++ivt_header:       .word 0x402000D1 /* Tag=0xD1, Len=0x0020, Ver=0x40 */
++app_code_jump_v:  .word _start
++reserv1:          .word 0x0
++dcd_ptr:          .word dcd_hdr
++boot_data_ptr:	  .word boot_data
++self_ptr:         .word ivt_header
++app_code_csf:     .word 0x0
++reserv2:          .word 0x0
++
++boot_data:        .word TEXT_BASE
++image_len:        .word _end_of_copy  - TEXT_BASE + CONFIG_FLASH_HEADER_OFFSET
++plugin:           .word 0x0
++
++dcd_hdr:          .word 0x40F802D2 /* Tag=0xD2, Len=94*8 + 4 + 4, Ver=0x40 */
++write_dcd_cmd:    .word 0x04F402CC /* Tag=0xCC, Len=94*8 + 4, Param=0x04 */
++
++/* DCD */
++
++/* DDR IO TYPE */
++MXC_DCD_ITEM(1, IOMUXC_BASE_ADDR + 0x798, 0x000C0000)
++MXC_DCD_ITEM(2, IOMUXC_BASE_ADDR + 0x758, 0x00000000)
++
++/* clock */
++MXC_DCD_ITEM(3, IOMUXC_BASE_ADDR + 0x588, 0x00000030)
++MXC_DCD_ITEM(4, IOMUXC_BASE_ADDR + 0x594, 0x00000030)
++
++/* address */
++MXC_DCD_ITEM(5, IOMUXC_BASE_ADDR + 0x56c, 0x00000030)
++MXC_DCD_ITEM(6, IOMUXC_BASE_ADDR + 0x578, 0x00000030)
++MXC_DCD_ITEM(7, IOMUXC_BASE_ADDR + 0x74c, 0x00000030)
++
++/* control */
++MXC_DCD_ITEM(8, IOMUXC_BASE_ADDR + 0x57c, 0x00000030)
++MXC_DCD_ITEM(9, IOMUXC_BASE_ADDR + 0x590, 0x00003000)
++MXC_DCD_ITEM(10, IOMUXC_BASE_ADDR + 0x598, 0x00003000)
++MXC_DCD_ITEM(11, IOMUXC_BASE_ADDR + 0x58c, 0x00000000)
++MXC_DCD_ITEM(12, IOMUXC_BASE_ADDR + 0x59c, 0x00003030)
++MXC_DCD_ITEM(13, IOMUXC_BASE_ADDR + 0x5a0, 0x00003030)
++MXC_DCD_ITEM(14, IOMUXC_BASE_ADDR + 0x78c, 0x00000030)
++
++/* data strobe */
++MXC_DCD_ITEM(15, IOMUXC_BASE_ADDR + 0x750, 0x00020000)
++
++MXC_DCD_ITEM(16, IOMUXC_BASE_ADDR + 0x5a8, 0x00000030)
++MXC_DCD_ITEM(17, IOMUXC_BASE_ADDR + 0x5b0, 0x00000030)
++MXC_DCD_ITEM(18, IOMUXC_BASE_ADDR + 0x524, 0x00000030)
++MXC_DCD_ITEM(19, IOMUXC_BASE_ADDR + 0x51c, 0x00000030)
++MXC_DCD_ITEM(20, IOMUXC_BASE_ADDR + 0x518, 0x00000030)
++MXC_DCD_ITEM(21, IOMUXC_BASE_ADDR + 0x50c, 0x00000030)
++MXC_DCD_ITEM(22, IOMUXC_BASE_ADDR + 0x5b8, 0x00000030)
++MXC_DCD_ITEM(23, IOMUXC_BASE_ADDR + 0x5c0, 0x00000030)
++
++/* data */
++MXC_DCD_ITEM(24, IOMUXC_BASE_ADDR + 0x774, 0x00020000)
++
++MXC_DCD_ITEM(25, IOMUXC_BASE_ADDR + 0x784, 0x00000030)
++MXC_DCD_ITEM(26, IOMUXC_BASE_ADDR + 0x788, 0x00000030)
++MXC_DCD_ITEM(27, IOMUXC_BASE_ADDR + 0x794, 0x00000030)
++MXC_DCD_ITEM(28, IOMUXC_BASE_ADDR + 0x79c, 0x00000030)
++MXC_DCD_ITEM(29, IOMUXC_BASE_ADDR + 0x7a0, 0x00000030)
++MXC_DCD_ITEM(30, IOMUXC_BASE_ADDR + 0x7a4, 0x00000030)
++MXC_DCD_ITEM(31, IOMUXC_BASE_ADDR + 0x7a8, 0x00000030)
++MXC_DCD_ITEM(32, IOMUXC_BASE_ADDR + 0x748, 0x00000030)
++
++MXC_DCD_ITEM(33, IOMUXC_BASE_ADDR + 0x5ac, 0x00000030)
++MXC_DCD_ITEM(34, IOMUXC_BASE_ADDR + 0x5b4, 0x00000030)
++MXC_DCD_ITEM(35, IOMUXC_BASE_ADDR + 0x528, 0x00000030)
++MXC_DCD_ITEM(36, IOMUXC_BASE_ADDR + 0x520, 0x00000030)
++MXC_DCD_ITEM(37, IOMUXC_BASE_ADDR + 0x514, 0x00000030)
++MXC_DCD_ITEM(38, IOMUXC_BASE_ADDR + 0x510, 0x00000030)
++MXC_DCD_ITEM(39, IOMUXC_BASE_ADDR + 0x5bc, 0x00000030)
++MXC_DCD_ITEM(40, IOMUXC_BASE_ADDR + 0x5c4, 0x00000030)
++
++/* calibrations */
++/* ZQ */
++MXC_DCD_ITEM(41, MMDC_P0_BASE_ADDR + 0x800, 0xA1390003)
++MXC_DCD_ITEM(42, MMDC_P1_BASE_ADDR + 0x800, 0xA1390003)
++
++/* write leveling */
++MXC_DCD_ITEM(43, MMDC_P0_BASE_ADDR + 0x80c, 0x001C001C)
++MXC_DCD_ITEM(44, MMDC_P0_BASE_ADDR + 0x810, 0x0024001F)
++                                            
++MXC_DCD_ITEM(45, MMDC_P1_BASE_ADDR + 0x80c, 0x001A0037)
++MXC_DCD_ITEM(46, MMDC_P1_BASE_ADDR + 0x810, 0x001A002F)
++
++/* DQS gating, read delay, write delay calibration values based on calibration compare of 0x00ffff00 */
++MXC_DCD_ITEM(47, MMDC_P0_BASE_ADDR + 0x83c, 0x43050315)
++MXC_DCD_ITEM(48, MMDC_P0_BASE_ADDR + 0x840, 0x02720272)
++MXC_DCD_ITEM(49, MMDC_P1_BASE_ADDR + 0x83c, 0x03220325)
++MXC_DCD_ITEM(50, MMDC_P1_BASE_ADDR + 0x840, 0x0312026B)
++
++/* read calibration */
++MXC_DCD_ITEM(51, MMDC_P0_BASE_ADDR + 0x848, 0x43393A3B)
++MXC_DCD_ITEM(52, MMDC_P1_BASE_ADDR + 0x848, 0x3E433A43)
++
++/* write calibration */
++MXC_DCD_ITEM(53, MMDC_P0_BASE_ADDR + 0x850, 0x47444C47)
++MXC_DCD_ITEM(54, MMDC_P1_BASE_ADDR + 0x850, 0x4D334F46)
++
++/* read data bit delay: (3 is the recommended default value, although out of reset value is 0) */
++MXC_DCD_ITEM(55, MMDC_P0_BASE_ADDR + 0x81c, 0x33333333)
++MXC_DCD_ITEM(56, MMDC_P0_BASE_ADDR + 0x820, 0x33333333)
++MXC_DCD_ITEM(57, MMDC_P0_BASE_ADDR + 0x824, 0x33333333)
++MXC_DCD_ITEM(58, MMDC_P0_BASE_ADDR + 0x828, 0x33333333)
++MXC_DCD_ITEM(59, MMDC_P1_BASE_ADDR + 0x81c, 0x33333333)
++MXC_DCD_ITEM(60, MMDC_P1_BASE_ADDR + 0x820, 0x33333333)
++MXC_DCD_ITEM(61, MMDC_P1_BASE_ADDR + 0x824, 0x33333333)
++MXC_DCD_ITEM(62, MMDC_P1_BASE_ADDR + 0x828, 0x33333333)
++
++/* complete calibration by forced measurment */
++MXC_DCD_ITEM(63, MMDC_P0_BASE_ADDR + 0x8b8, 0x00000800)
++MXC_DCD_ITEM(64, MMDC_P1_BASE_ADDR + 0x8b8, 0x00000800)
++
++/* MMDC init */
++/* in DDR3, 64-bit mode, only MMDC0 is initiated */
++MXC_DCD_ITEM(65, MMDC_P0_BASE_ADDR + 0x004, 0x00020036)
++MXC_DCD_ITEM(66, MMDC_P0_BASE_ADDR + 0x008, 0x09444040)
++MXC_DCD_ITEM(67, MMDC_P0_BASE_ADDR + 0x00c, 0x40445323)
++MXC_DCD_ITEM(68, MMDC_P0_BASE_ADDR + 0x010, 0xB66E8C63)
++MXC_DCD_ITEM(69, MMDC_P0_BASE_ADDR + 0x014, 0x01ff00db)
++MXC_DCD_ITEM(70, MMDC_P0_BASE_ADDR + 0x018, 0x00091740)
++
++MXC_DCD_ITEM(71, MMDC_P0_BASE_ADDR + 0x01c, 0x00008000)
++
++MXC_DCD_ITEM(72, MMDC_P0_BASE_ADDR + 0x02c, 0x000026d2)
++MXC_DCD_ITEM(73, MMDC_P0_BASE_ADDR + 0x030, 0x005b0e21)
++MXC_DCD_ITEM(74, MMDC_P0_BASE_ADDR + 0x040, 0x00000047)
++
++MXC_DCD_ITEM(75, MMDC_P0_BASE_ADDR + 0x000, 0x841A0000)
++
++/* Initialize 2GB DDR3 - Micron MT41J128M */
++MXC_DCD_ITEM(76, MMDC_P0_BASE_ADDR + 0x01c, 0x04008032)
++MXC_DCD_ITEM(77, MMDC_P0_BASE_ADDR + 0x01c, 0x0400803a)
++MXC_DCD_ITEM(78, MMDC_P0_BASE_ADDR + 0x01c, 0x00008033)
++MXC_DCD_ITEM(79, MMDC_P0_BASE_ADDR + 0x01c, 0x0000803b)
++MXC_DCD_ITEM(80, MMDC_P0_BASE_ADDR + 0x01c, 0x00428031)
++MXC_DCD_ITEM(81, MMDC_P0_BASE_ADDR + 0x01c, 0x00428039)
++MXC_DCD_ITEM(82, MMDC_P0_BASE_ADDR + 0x01c, 0x07208030)
++MXC_DCD_ITEM(83, MMDC_P0_BASE_ADDR + 0x01c, 0x07208038)
++
++/* DDR device ZQ calibration */
++MXC_DCD_ITEM(84, MMDC_P0_BASE_ADDR + 0x01c, 0x04008040)
++MXC_DCD_ITEM(85, MMDC_P0_BASE_ADDR + 0x01c, 0x04008048)
++
++/* final DDR setup, before operation start */
++MXC_DCD_ITEM(86, MMDC_P0_BASE_ADDR + 0x020, 0x00005800)
++MXC_DCD_ITEM(87, MMDC_P0_BASE_ADDR + 0x818, 0x00011117)
++MXC_DCD_ITEM(88, MMDC_P1_BASE_ADDR + 0x818, 0x00011117)
++
++MXC_DCD_ITEM(89, MMDC_P0_BASE_ADDR + 0x004, 0x00025576)
++MXC_DCD_ITEM(90, MMDC_P0_BASE_ADDR + 0x404, 0x00011006)
++MXC_DCD_ITEM(91, MMDC_P0_BASE_ADDR + 0x01c, 0x00000000)
++
++/* enable AXI cache for VDOA/VPU/IPU */
++MXC_DCD_ITEM(92, IOMUXC_BASE_ADDR + 0x010, 0xf00000ff)
++/* set IPU AXI-id0 Qos=0xf(bypass) AXI-id1 Qos=0x7 */
++MXC_DCD_ITEM(93, IOMUXC_BASE_ADDR + 0x018, 0x007f007f)
++MXC_DCD_ITEM(94, IOMUXC_BASE_ADDR + 0x01c, 0x007f007f)
++
++#endif
 diff --git a/board/freescale/cgt_qmx6/flash_header_pn016101.S b/board/freescale/cgt_qmx6/flash_header_pn016101.S
 new file mode 100644
 index 0000000..1528d67
@@ -2545,19 +2778,6 @@ index 65e13c3..dfa45fe 100644
  #if defined(CONFIG_MII_INIT)
  	mii_init ();
  #endif
-diff --git a/cpu/arm_cortexa8/mx6/generic.c b/cpu/arm_cortexa8/mx6/generic.c
-index 12cfc51..94527f4 100644
---- a/cpu/arm_cortexa8/mx6/generic.c
-+++ b/cpu/arm_cortexa8/mx6/generic.c
-@@ -877,7 +877,7 @@ static inline int read_cpu_temperature(void)
- 			MXC_CCM_CCGR2);
- 	fuse = readl(OCOTP_BASE_ADDR + OCOTP_THERMAL_OFFSET);
- 	writel(ccm_ccgr2, MXC_CCM_CCGR2);
--	if (fuse == 0 || fuse == 0xffffffff)
-+	if (fuse == 0 || fuse == 0xffffffff || (fuse & 0xff) == 0)
- 		return TEMPERATURE_MIN;
- 
- 	/* Fuse data layout:
 diff --git a/drivers/mtd/spi/imx_spi_nor_sst.c b/drivers/mtd/spi/imx_spi_nor_sst.c
 index d484a51..19ba1bf 100644
 --- a/drivers/mtd/spi/imx_spi_nor_sst.c
@@ -2608,7 +2828,7 @@ index d484a51..19ba1bf 100644
  			spi_nor_write_status(flash, 0) != 0) {
  		printf("Error: %s: %d\n", __func__, __LINE__);
 diff --git a/include/asm-arm/mach-types.h b/include/asm-arm/mach-types.h
-index 2630bac..e1fc3b3 100644
+index a1fee0e..06ec506 100644
 --- a/include/asm-arm/mach-types.h
 +++ b/include/asm-arm/mach-types.h
 @@ -3259,6 +3259,7 @@ extern unsigned int __machine_arch_type;
@@ -2616,10 +2836,10 @@ index 2630bac..e1fc3b3 100644
  #define MACH_TYPE_MX6Q_SABRESD	       3980
  #define MACH_TYPE_MX6SL_ARM2           4091
 +#define MACH_TYPE_CGT_QMX6             4122
+ #define MACH_TYPE_MX6Q_HDMIDONGLE      4284
  #define MACH_TYPE_MX6SL_EVK            4307
  
- #ifdef CONFIG_ARCH_EBSA110
-@@ -42213,6 +42214,18 @@ extern unsigned int __machine_arch_type;
+@@ -42214,6 +42215,18 @@ extern unsigned int __machine_arch_type;
  # define machine_is_mx6sl_evk()	(0)
  #endif
  
@@ -2640,7 +2860,7 @@ index 2630bac..e1fc3b3 100644
   */
 diff --git a/include/configs/cgt_qmx6.h b/include/configs/cgt_qmx6.h
 new file mode 100644
-index 0000000..c1e3184
+index 0000000..fdfe5c1
 --- /dev/null
 +++ b/include/configs/cgt_qmx6.h
 @@ -0,0 +1,364 @@
@@ -3010,7 +3230,7 @@ index 0000000..c1e3184
 +#endif				/* __CONFIG_H */
 diff --git a/include/configs/cgt_qmx6_android.h b/include/configs/cgt_qmx6_android.h
 new file mode 100644
-index 0000000..a485db8
+index 0000000..9c3a80d
 --- /dev/null
 +++ b/include/configs/cgt_qmx6_android.h
 @@ -0,0 +1,360 @@
@@ -3376,7 +3596,7 @@ index 0000000..a485db8
 +#endif				/* __CONFIG_H */
 diff --git a/include/configs/cgt_qmx6_mfg.h b/include/configs/cgt_qmx6_mfg.h
 new file mode 100644
-index 0000000..1725e66
+index 0000000..8a8ba20
 --- /dev/null
 +++ b/include/configs/cgt_qmx6_mfg.h
 @@ -0,0 +1,320 @@
@@ -3707,3 +3927,6 @@ index 0000000..5293f29
 +++ b/localversion-qmx6
 @@ -0,0 +1 @@
 + QMX6R003
+-- 
+1.7.10.4
+

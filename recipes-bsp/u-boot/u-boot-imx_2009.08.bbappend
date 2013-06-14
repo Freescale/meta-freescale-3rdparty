@@ -2,10 +2,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}"
 
 PRINC := "${@int(PRINC) + 2}"
 
-# Revision of imx_3.0.35_1.1.0 branch
-SRCREV_cgtqmx6 = "98a5299c945cb7e440e3c3d9c572f017e5a02ede"
 SRC_URI_append_cgtqmx6 = " \
-   file://cgtqmx6/uboot-support-for-cgtqmx6.patch \
+   file://cgtqmx6/0001-Add-uboot-support-for-congatec-qmx6-board.patch \
 "
 
 UBOOT_MACHINE_cgtqmx6 = "cgt_qmx6_config"
