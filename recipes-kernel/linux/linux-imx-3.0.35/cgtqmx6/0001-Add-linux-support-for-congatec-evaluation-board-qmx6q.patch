@@ -1,12 +1,45 @@
+From 08820dff9be6ad5e55986e155d7acd0ac051b2c7 Mon Sep 17 00:00:00 2001
+From: Leo Sartre <lsartre@adeneo-embedded.com>
+Date: Wed, 29 May 2013 09:46:23 +0200
+Subject: [PATCH] Add support for congatec evaluation board qmx6q and qmx6qdl
+
+Add support for congatec Qeval board, patch originaly written by
+Congatec team, some minor changes and cleanup were applied to make it
+work with the bsp 4.0 release.
+---
+ arch/arm/configs/qmx6_defconfig             | 2659 +++++++++++++++++++++++++++
+ arch/arm/configs/qmx6_updater_defconfig     | 2367 ++++++++++++++++++++++++
+ arch/arm/mach-mx6/Kconfig                   |   35 +
+ arch/arm/mach-mx6/Makefile                  |    2 +
+ arch/arm/mach-mx6/board-mx6dl_qmx6.h        |  199 ++
+ arch/arm/mach-mx6/board-mx6q_qmx6.c         |  979 ++++++++++
+ arch/arm/mach-mx6/board-mx6q_qmx6.h         |  199 ++
+ arch/arm/mach-mx6/mx6q_qmx6_pmic_pfuze100.c |  422 +++++
+ arch/arm/plat-mxc/include/mach/esdhc.h      |    1 +
+ arch/arm/tools/mach-types                   |    1 +
+ drivers/mmc/host/sdhci-esdhc-imx.c          |    5 +-
+ drivers/net/fec.c                           |   29 +-
+ drivers/net/phy/micrel.c                    |   23 +
+ include/linux/micrel_phy.h                  |    1 +
+ sound/soc/imx/Kconfig                       |    2 +-
+ sound/soc/imx/imx-sgtl5000.c                |    2 +-
+ 16 files changed, 6910 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm/configs/qmx6_defconfig
+ create mode 100644 arch/arm/configs/qmx6_updater_defconfig
+ create mode 100644 arch/arm/mach-mx6/board-mx6dl_qmx6.h
+ create mode 100644 arch/arm/mach-mx6/board-mx6q_qmx6.c
+ create mode 100644 arch/arm/mach-mx6/board-mx6q_qmx6.h
+ create mode 100644 arch/arm/mach-mx6/mx6q_qmx6_pmic_pfuze100.c
+
 diff --git a/arch/arm/configs/qmx6_defconfig b/arch/arm/configs/qmx6_defconfig
 new file mode 100644
-index 0000000..22b117b
+index 0000000..9aeb4a5
 --- /dev/null
 +++ b/arch/arm/configs/qmx6_defconfig
-@@ -0,0 +1,2714 @@
+@@ -0,0 +1,2659 @@
 +#
 +# Automatically generated make config: don't edit
-+# Linux/arm 3.0.35 Kernel Configuration
++# Linux/arm 3.0.15 Kernel Configuration
 +#
 +CONFIG_ARM=y
 +CONFIG_HAVE_PWM=y
@@ -263,17 +296,14 @@ index 0000000..22b117b
 +CONFIG_GPIO_PCA953X=y
 +# CONFIG_KEYBOARD_GPIO_POLLED is not set
 +CONFIG_IMX_HAVE_PLATFORM_DMA=y
-+CONFIG_IMX_HAVE_PLATFORM_MXC_MLB=y
 +CONFIG_IMX_HAVE_PLATFORM_FEC=y
 +CONFIG_IMX_HAVE_PLATFORM_FLEXCAN=y
 +CONFIG_IMX_HAVE_PLATFORM_FSL_USB2_UDC=y
 +CONFIG_IMX_HAVE_PLATFORM_GPMI_NFC=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX2_WDT=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_SNVS_RTC=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_CAAM=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_I2C=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_SSI=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_ESAI=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_UART=y
 +CONFIG_IMX_HAVE_PLATFORM_MXC_EHCI=y
 +CONFIG_IMX_HAVE_PLATFORM_MXC_PWM=y
@@ -285,11 +315,7 @@ index 0000000..22b117b
 +CONFIG_IMX_HAVE_PLATFORM_AHCI=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_OCOTP=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_VIIM=y
-+CONFIG_IMX_HAVE_PLATFORM_PERFMON=y
 +CONFIG_IMX_HAVE_PLATFORM_LDB=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_PXP=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_ELCDIF=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_EPDC=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_SPDIF=y
 +CONFIG_IMX_HAVE_PLATFORM_VIV_GPU=y
 +CONFIG_IMX_HAVE_PLATFORM_MXC_HDMI=y
@@ -298,7 +324,6 @@ index 0000000..22b117b
 +CONFIG_IMX_HAVE_PLATFORM_FSL_USB_WAKEUP=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_PM=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_ASRC=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_MIPI_DSI=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_MIPI_CSI2=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_VDOA=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_PCIE=y
@@ -317,8 +342,6 @@ index 0000000..22b117b
 +CONFIG_FORCE_MAX_ZONEORDER=14
 +CONFIG_SOC_IMX6Q=y
 +# CONFIG_MACH_MX6Q_ARM2 is not set
-+# CONFIG_MACH_MX6SL_ARM2 is not set
-+# CONFIG_MACH_MX6SL_EVK is not set
 +# CONFIG_MACH_MX6Q_SABRELITE is not set
 +CONFIG_MACH_MX6Q_QMX6=y
 +# CONFIG_MACH_MX6Q_SABRESD is not set
@@ -328,14 +351,10 @@ index 0000000..22b117b
 +# MX6 Options:
 +#
 +# CONFIG_IMX_PCIE is not set
-+CONFIG_USB_EHCI_ARC_H1=y
-+# CONFIG_MX6_INTER_LDO_BYPASS is not set
 +CONFIG_ISP1504_MXC=y
 +# CONFIG_MXC_IRQ_PRIOR is not set
 +CONFIG_MXC_PWM=y
 +# CONFIG_MXC_DEBUG_BOARD is not set
-+CONFIG_MXC_REBOOT_MFGMODE=y
-+# CONFIG_MXC_REBOOT_ANDROID_CMD is not set
 +CONFIG_ARCH_MXC_IOMUX_V3=y
 +CONFIG_ARCH_MXC_AUDMUX_V2=y
 +CONFIG_IRAM_ALLOC=y
@@ -487,10 +506,10 @@ index 0000000..22b117b
 +# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
 +# CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE is not set
 +CONFIG_CPU_FREQ_DEFAULT_GOV_INTERACTIVE=y
-+CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
++# CONFIG_CPU_FREQ_GOV_PERFORMANCE is not set
 +CONFIG_CPU_FREQ_GOV_POWERSAVE=y
 +CONFIG_CPU_FREQ_GOV_USERSPACE=y
-+CONFIG_CPU_FREQ_GOV_ONDEMAND=y
++# CONFIG_CPU_FREQ_GOV_ONDEMAND is not set
 +CONFIG_CPU_FREQ_GOV_INTERACTIVE=y
 +CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
 +CONFIG_CPU_FREQ_IMX=y
@@ -587,8 +606,7 @@ index 0000000..22b117b
 +# CONFIG_NET_DSA is not set
 +# CONFIG_VLAN_8021Q is not set
 +# CONFIG_DECNET is not set
-+CONFIG_LLC=y
-+CONFIG_LLC2=y
++# CONFIG_LLC2 is not set
 +# CONFIG_IPX is not set
 +# CONFIG_ATALK is not set
 +# CONFIG_X25 is not set
@@ -684,7 +702,6 @@ index 0000000..22b117b
 +# CONFIG_MAC80211 is not set
 +# CONFIG_WIMAX is not set
 +CONFIG_RFKILL=y
-+CONFIG_RFKILL_LEDS=y
 +CONFIG_RFKILL_INPUT=y
 +# CONFIG_RFKILL_REGULATOR is not set
 +# CONFIG_RFKILL_GPIO is not set
@@ -985,7 +1002,6 @@ index 0000000..22b117b
 +# CONFIG_KS8851 is not set
 +# CONFIG_KS8851_MLL is not set
 +CONFIG_FEC=y
-+CONFIG_FEC_NAPI=y
 +# CONFIG_FEC_1588 is not set
 +# CONFIG_FTMAC100 is not set
 +# CONFIG_NETDEV_1000 is not set
@@ -1088,7 +1104,6 @@ index 0000000..22b117b
 +# CONFIG_TOUCHSCREEN_HAMPSHIRE is not set
 +# CONFIG_TOUCHSCREEN_EETI is not set
 +CONFIG_TOUCHSCREEN_EGALAX=y
-+# CONFIG_TOUCHSCREEN_ELAN is not set
 +# CONFIG_TOUCHSCREEN_FUJITSU is not set
 +# CONFIG_TOUCHSCREEN_GUNZE is not set
 +# CONFIG_TOUCHSCREEN_ELO is not set
@@ -1144,7 +1159,7 @@ index 0000000..22b117b
 +CONFIG_CONSOLE_TRANSLATIONS=y
 +CONFIG_VT_CONSOLE=y
 +CONFIG_HW_CONSOLE=y
-+CONFIG_VT_HW_CONSOLE_BINDING=y
++# CONFIG_VT_HW_CONSOLE_BINDING is not set
 +CONFIG_UNIX98_PTYS=y
 +# CONFIG_DEVPTS_MULTIPLE_INSTANCES is not set
 +CONFIG_LEGACY_PTYS=y
@@ -1190,7 +1205,6 @@ index 0000000..22b117b
 +CONFIG_I2C_CHARDEV=y
 +# CONFIG_I2C_MUX is not set
 +CONFIG_I2C_HELPER_AUTO=y
-+CONFIG_I2C_ALGOBIT=m
 +
 +#
 +# I2C Hardware Bus support
@@ -1314,8 +1328,7 @@ index 0000000..22b117b
 +# CONFIG_BATTERY_MAX17040 is not set
 +# CONFIG_BATTERY_MAX17042 is not set
 +# CONFIG_CHARGER_ISP1704 is not set
-+# CONFIG_CHARGER_MAX8903 is not set
-+# CONFIG_SABRESD_MAX8903 is not set
++CONFIG_CHARGER_MAX8903=y
 +# CONFIG_CHARGER_GPIO is not set
 +CONFIG_HWMON=y
 +# CONFIG_HWMON_VID is not set
@@ -1505,7 +1518,6 @@ index 0000000..22b117b
 +# CONFIG_REGULATOR_AD5398 is not set
 +CONFIG_REGULATOR_ANATOP=y
 +# CONFIG_REGULATOR_TPS6524X is not set
-+# CONFIG_REGULATOR_MAX17135 is not set
 +CONFIG_MEDIA_SUPPORT=y
 +
 +#
@@ -1635,12 +1647,11 @@ index 0000000..22b117b
 +# CONFIG_MXC_CAMERA_OV2640 is not set
 +CONFIG_MXC_CAMERA_OV3640=m
 +CONFIG_MXC_CAMERA_OV5640=m
++CONFIG_MXC_CAMERA_OV5640_MIPI=m
 +CONFIG_MXC_CAMERA_OV8820_MIPI=m
 +CONFIG_MXC_CAMERA_OV5642=m
-+CONFIG_MXC_TVIN_ADV7180=m
-+CONFIG_MXC_CAMERA_OV5640_MIPI=m
 +CONFIG_MXC_CAMERA_SENSOR_CLK=m
-+CONFIG_MXC_IPU_DEVICE_QUEUE_SDC=m
++CONFIG_MXC_IPU_PRP_VF_SDC=m
 +CONFIG_MXC_IPU_PRP_ENC=m
 +CONFIG_MXC_IPU_CSI_ENC=m
 +CONFIG_VIDEO_MXC_OUTPUT=y
@@ -1714,8 +1725,7 @@ index 0000000..22b117b
 +#
 +# Graphics support
 +#
-+CONFIG_DRM=m
-+CONFIG_DRM_VIVANTE=m
++# CONFIG_DRM is not set
 +# CONFIG_VGASTATE is not set
 +# CONFIG_VIDEO_OUTPUT_CONTROL is not set
 +CONFIG_FB=y
@@ -1776,7 +1786,6 @@ index 0000000..22b117b
 +# CONFIG_FB_MXC_ASYNC_PANEL is not set
 +CONFIG_FB_MXC_EINK_PANEL=y
 +# CONFIG_FB_MXC_EINK_AUTO_UPDATE_MODE is not set
-+# CONFIG_FB_MXC_SIPIX_PANEL is not set
 +# CONFIG_FB_MXC_ELCDIF_FB is not set
 +CONFIG_FB_MXC_HDMI=y
 +
@@ -1846,8 +1855,6 @@ index 0000000..22b117b
 +CONFIG_SND_SOC_IMX_SGTL5000=y
 +CONFIG_SND_SOC_IMX_WM8958=y
 +CONFIG_SND_SOC_IMX_WM8962=y
-+CONFIG_SND_SOC_IMX_CS42888=y
-+# CONFIG_SND_SOC_IMX_SI4763 is not set
 +CONFIG_SND_SOC_IMX_SPDIF=y
 +CONFIG_SND_SOC_IMX_HDMI=y
 +CONFIG_SND_SOC_I2C_AND_SPI=y
@@ -1856,7 +1863,6 @@ index 0000000..22b117b
 +CONFIG_SND_SOC_MXC_HDMI=y
 +CONFIG_SND_SOC_MXC_SPDIF=y
 +CONFIG_SND_SOC_SGTL5000=y
-+CONFIG_SND_SOC_CS42888=y
 +CONFIG_SND_SOC_WM8962=y
 +CONFIG_SND_SOC_WM8994=y
 +# CONFIG_SOUND_PRIME is not set
@@ -1929,7 +1935,7 @@ index 0000000..22b117b
 +# CONFIG_HID_ZYDACRON is not set
 +CONFIG_USB_SUPPORT=y
 +CONFIG_USB_ARCH_HAS_HCD=y
-+CONFIG_USB_ARCH_HAS_OHCI=y
++# CONFIG_USB_ARCH_HAS_OHCI is not set
 +CONFIG_USB_ARCH_HAS_EHCI=y
 +CONFIG_USB=y
 +# CONFIG_USB_DEBUG is not set
@@ -2043,7 +2049,6 @@ index 0000000..22b117b
 +CONFIG_USB_GADGET_VBUS_DRAW=2
 +CONFIG_USB_GADGET_SELECTED=y
 +CONFIG_USB_GADGET_ARC=y
-+# CONFIG_IMX_USB_CHARGER is not set
 +CONFIG_USB_ARC=y
 +# CONFIG_USB_GADGET_FSL_USB2 is not set
 +# CONFIG_USB_GADGET_FUSB300 is not set
@@ -2114,8 +2119,7 @@ index 0000000..22b117b
 +#
 +# CONFIG_LEDS_LM3530 is not set
 +# CONFIG_LEDS_PCA9532 is not set
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_GPIO_PLATFORM=y
++# CONFIG_LEDS_GPIO is not set
 +# CONFIG_LEDS_LP3944 is not set
 +# CONFIG_LEDS_LP5521 is not set
 +# CONFIG_LEDS_LP5523 is not set
@@ -2125,19 +2129,10 @@ index 0000000..22b117b
 +# CONFIG_LEDS_REGULATOR is not set
 +# CONFIG_LEDS_BD2802 is not set
 +# CONFIG_LEDS_LT3593 is not set
-+CONFIG_LEDS_TRIGGERS=y
++# CONFIG_LEDS_TRIGGERS is not set
 +
 +#
 +# LED Triggers
-+#
-+# CONFIG_LEDS_TRIGGER_TIMER is not set
-+# CONFIG_LEDS_TRIGGER_HEARTBEAT is not set
-+# CONFIG_LEDS_TRIGGER_BACKLIGHT is not set
-+CONFIG_LEDS_TRIGGER_GPIO=y
-+CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
-+
-+#
-+# iptables trigger is under Netfilter config (LED target)
 +#
 +
 +#
@@ -2292,7 +2287,6 @@ index 0000000..22b117b
 +#
 +CONFIG_MXC_VPU=y
 +# CONFIG_MXC_VPU_DEBUG is not set
-+# CONFIG_MX6_VPU_352M is not set
 +
 +#
 +# MXC Asynchronous Sample Rate Converter support
@@ -2332,11 +2326,6 @@ index 0000000..22b117b
 +# MXC MIPI Support
 +#
 +CONFIG_MXC_MIPI_CSI2=y
-+
-+#
-+# MXC HDMI CEC (Consumer Electronics Control) support
-+#
-+# CONFIG_MXC_HDMI_CEC is not set
 +
 +#
 +# File systems
@@ -2533,7 +2522,7 @@ index 0000000..22b117b
 +CONFIG_ENABLE_WARN_DEPRECATED=y
 +CONFIG_ENABLE_MUST_CHECK=y
 +CONFIG_FRAME_WARN=1024
-+CONFIG_MAGIC_SYSRQ=y
++# CONFIG_MAGIC_SYSRQ is not set
 +# CONFIG_STRIP_ASM_SYMS is not set
 +# CONFIG_UNUSED_SYMBOLS is not set
 +CONFIG_DEBUG_FS=y
@@ -2584,44 +2573,42 @@ index 0000000..22b117b
 +#
 +CONFIG_CRYPTO_ALGAPI=y
 +CONFIG_CRYPTO_ALGAPI2=y
-+CONFIG_CRYPTO_AEAD=y
 +CONFIG_CRYPTO_AEAD2=y
 +CONFIG_CRYPTO_BLKCIPHER=y
 +CONFIG_CRYPTO_BLKCIPHER2=y
 +CONFIG_CRYPTO_HASH=y
 +CONFIG_CRYPTO_HASH2=y
-+CONFIG_CRYPTO_RNG=y
 +CONFIG_CRYPTO_RNG2=y
 +CONFIG_CRYPTO_PCOMP2=y
 +CONFIG_CRYPTO_MANAGER=y
 +CONFIG_CRYPTO_MANAGER2=y
-+# CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
-+CONFIG_CRYPTO_GF128MUL=y
++CONFIG_CRYPTO_MANAGER_DISABLE_TESTS=y
++# CONFIG_CRYPTO_GF128MUL is not set
 +# CONFIG_CRYPTO_NULL is not set
 +# CONFIG_CRYPTO_PCRYPT is not set
 +CONFIG_CRYPTO_WORKQUEUE=y
 +# CONFIG_CRYPTO_CRYPTD is not set
-+CONFIG_CRYPTO_AUTHENC=y
++# CONFIG_CRYPTO_AUTHENC is not set
 +CONFIG_CRYPTO_TEST=m
 +# CONFIG_CRYPTO_CRYPTODEV is not set
 +
 +#
 +# Authenticated Encryption with Associated Data
 +#
-+CONFIG_CRYPTO_CCM=y
-+CONFIG_CRYPTO_GCM=y
-+CONFIG_CRYPTO_SEQIV=y
++# CONFIG_CRYPTO_CCM is not set
++# CONFIG_CRYPTO_GCM is not set
++# CONFIG_CRYPTO_SEQIV is not set
 +
 +#
 +# Block modes
 +#
 +CONFIG_CRYPTO_CBC=y
-+CONFIG_CRYPTO_CTR=y
-+CONFIG_CRYPTO_CTS=y
++# CONFIG_CRYPTO_CTR is not set
++# CONFIG_CRYPTO_CTS is not set
 +CONFIG_CRYPTO_ECB=y
-+CONFIG_CRYPTO_LRW=y
-+CONFIG_CRYPTO_PCBC=y
-+CONFIG_CRYPTO_XTS=y
++# CONFIG_CRYPTO_LRW is not set
++# CONFIG_CRYPTO_PCBC is not set
++# CONFIG_CRYPTO_XTS is not set
 +
 +#
 +# Hash modes
@@ -2634,7 +2621,7 @@ index 0000000..22b117b
 +# Digest
 +#
 +# CONFIG_CRYPTO_CRC32C is not set
-+CONFIG_CRYPTO_GHASH=y
++# CONFIG_CRYPTO_GHASH is not set
 +# CONFIG_CRYPTO_MD4 is not set
 +# CONFIG_CRYPTO_MD5 is not set
 +CONFIG_CRYPTO_MICHAEL_MIC=y
@@ -2658,7 +2645,7 @@ index 0000000..22b117b
 +# CONFIG_CRYPTO_CAMELLIA is not set
 +# CONFIG_CRYPTO_CAST5 is not set
 +# CONFIG_CRYPTO_CAST6 is not set
-+CONFIG_CRYPTO_DES=y
++# CONFIG_CRYPTO_DES is not set
 +# CONFIG_CRYPTO_FCRYPT is not set
 +# CONFIG_CRYPTO_KHAZAD is not set
 +# CONFIG_CRYPTO_SALSA20 is not set
@@ -2681,15 +2668,6 @@ index 0000000..22b117b
 +# CONFIG_CRYPTO_USER_API_HASH is not set
 +# CONFIG_CRYPTO_USER_API_SKCIPHER is not set
 +CONFIG_CRYPTO_HW=y
-+CONFIG_CRYPTO_DEV_FSL_CAAM=y
-+CONFIG_CRYPTO_DEV_FSL_CAAM_RINGSIZE=9
-+CONFIG_CRYPTO_DEV_FSL_CAAM_INTC=y
-+CONFIG_CRYPTO_DEV_FSL_CAAM_INTC_COUNT_THLD=255
-+CONFIG_CRYPTO_DEV_FSL_CAAM_INTC_TIME_THLD=2048
-+CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API=y
-+CONFIG_CRYPTO_DEV_FSL_CAAM_AHASH_API=y
-+CONFIG_CRYPTO_DEV_FSL_CAAM_RNG_API=y
-+# CONFIG_CRYPTO_DEV_FSL_CAAM_RNG_TEST is not set
 +# CONFIG_BINARY_PRINTF is not set
 +
 +#
@@ -2720,13 +2698,13 @@ index 0000000..22b117b
 +# CONFIG_AVERAGE is not set
 diff --git a/arch/arm/configs/qmx6_updater_defconfig b/arch/arm/configs/qmx6_updater_defconfig
 new file mode 100644
-index 0000000..e4c45c7
+index 0000000..0b0c165
 --- /dev/null
 +++ b/arch/arm/configs/qmx6_updater_defconfig
-@@ -0,0 +1,2384 @@
+@@ -0,0 +1,2367 @@
 +#
 +# Automatically generated make config: don't edit
-+# Linux/arm 3.0.35 Kernel Configuration
++# Linux/arm 3.0.15 Kernel Configuration
 +#
 +CONFIG_ARM=y
 +CONFIG_HAVE_PWM=y
@@ -2753,7 +2731,7 @@ index 0000000..e4c45c7
 +CONFIG_NEED_DMA_MAP_STATE=y
 +CONFIG_FIQ=y
 +CONFIG_VECTORS_BASE=0xffff0000
-+CONFIG_ARM_PATCH_PHYS_VIRT=y
++# CONFIG_ARM_PATCH_PHYS_VIRT is not set
 +CONFIG_DEFCONFIG_LIST="/lib/modules/$UNAME_RELEASE/.config"
 +CONFIG_HAVE_IRQ_WORK=y
 +CONFIG_IRQ_WORK=y
@@ -2981,7 +2959,6 @@ index 0000000..e4c45c7
 +# CONFIG_PLAT_SPEAR is not set
 +# CONFIG_ARCH_VT8500 is not set
 +CONFIG_GPIO_PCA953X=y
-+# CONFIG_KEYBOARD_GPIO_POLLED is not set
 +CONFIG_IMX_HAVE_PLATFORM_DMA=y
 +CONFIG_IMX_HAVE_PLATFORM_MXC_MLB=y
 +CONFIG_IMX_HAVE_PLATFORM_FEC=y
@@ -2990,7 +2967,6 @@ index 0000000..e4c45c7
 +CONFIG_IMX_HAVE_PLATFORM_GPMI_NFC=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX2_WDT=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_SNVS_RTC=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_CAAM=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_I2C=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_SSI=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_ESAI=y
@@ -3008,8 +2984,7 @@ index 0000000..e4c45c7
 +CONFIG_IMX_HAVE_PLATFORM_PERFMON=y
 +CONFIG_IMX_HAVE_PLATFORM_LDB=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_PXP=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_ELCDIF=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_EPDC=y
++# CONFIG_IMX_HAVE_PLATFORM_IMX_EPDC is not set
 +CONFIG_IMX_HAVE_PLATFORM_IMX_SPDIF=y
 +CONFIG_IMX_HAVE_PLATFORM_VIV_GPU=y
 +CONFIG_IMX_HAVE_PLATFORM_MXC_HDMI=y
@@ -3020,8 +2995,6 @@ index 0000000..e4c45c7
 +CONFIG_IMX_HAVE_PLATFORM_IMX_ASRC=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_MIPI_DSI=y
 +CONFIG_IMX_HAVE_PLATFORM_IMX_MIPI_CSI2=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_VDOA=y
-+CONFIG_IMX_HAVE_PLATFORM_IMX_PCIE=y
 +
 +#
 +# Freescale MXC Implementations
@@ -3036,28 +3009,20 @@ index 0000000..e4c45c7
 +CONFIG_ARCH_MX6Q=y
 +CONFIG_FORCE_MAX_ZONEORDER=13
 +CONFIG_SOC_IMX6Q=y
-+CONFIG_SOC_IMX6SL=y
 +# CONFIG_MACH_MX6Q_ARM2 is not set
-+# CONFIG_MACH_MX6SL_ARM2 is not set
 +# CONFIG_MACH_MX6Q_SABRELITE is not set
-+CONFIG_MACH_MX6Q_QMX6=y
 +# CONFIG_MACH_MX6Q_SABRESD is not set
 +# CONFIG_MACH_MX6Q_SABREAUTO is not set
++CONFIG_MACH_MX6Q_QMX6=y
 +
 +#
 +# MX6 Options:
 +#
 +# CONFIG_IMX_PCIE is not set
-+CONFIG_USB_EHCI_ARC_H1=y
-+CONFIG_USB_FSL_ARC_OTG=y
-+# CONFIG_MX6_INTER_LDO_BYPASS is not set
 +CONFIG_ISP1504_MXC=y
 +# CONFIG_MXC_IRQ_PRIOR is not set
 +CONFIG_MXC_PWM=y
 +# CONFIG_MXC_DEBUG_BOARD is not set
-+# CONFIG_MXC_REBOOT_MFGMODE is not set
-+# CONFIG_MXC_REBOOT_ANDROID_CMD is not set
-+CONFIG_ARCH_HAS_RNGC=y
 +CONFIG_ARCH_MXC_IOMUX_V3=y
 +CONFIG_ARCH_MXC_AUDMUX_V2=y
 +CONFIG_IRAM_ALLOC=y
@@ -3134,6 +3099,7 @@ index 0000000..e4c45c7
 +CONFIG_SMP=y
 +CONFIG_SMP_ON_UP=y
 +CONFIG_HAVE_ARM_SCU=y
++CONFIG_HAVE_ARM_TWD=y
 +# CONFIG_VMSPLIT_3G is not set
 +CONFIG_VMSPLIT_2G=y
 +# CONFIG_VMSPLIT_1G is not set
@@ -3188,7 +3154,7 @@ index 0000000..e4c45c7
 +# CONFIG_XIP_KERNEL is not set
 +# CONFIG_KEXEC is not set
 +# CONFIG_CRASH_DUMP is not set
-+CONFIG_AUTO_ZRELADDR=y
++# CONFIG_AUTO_ZRELADDR is not set
 +
 +#
 +# CPU Power Management
@@ -3206,12 +3172,10 @@ index 0000000..e4c45c7
 +CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
 +# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
 +# CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE is not set
-+# CONFIG_CPU_FREQ_DEFAULT_GOV_INTERACTIVE is not set
 +# CONFIG_CPU_FREQ_GOV_PERFORMANCE is not set
 +CONFIG_CPU_FREQ_GOV_POWERSAVE=y
 +CONFIG_CPU_FREQ_GOV_USERSPACE=y
 +# CONFIG_CPU_FREQ_GOV_ONDEMAND is not set
-+# CONFIG_CPU_FREQ_GOV_INTERACTIVE is not set
 +CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
 +CONFIG_CPU_FREQ_IMX=y
 +# CONFIG_CPU_IDLE is not set
@@ -3636,7 +3600,6 @@ index 0000000..e4c45c7
 +# CONFIG_KS8851 is not set
 +# CONFIG_KS8851_MLL is not set
 +CONFIG_FEC=y
-+# CONFIG_FEC_NAPI is not set
 +# CONFIG_FEC_1588 is not set
 +# CONFIG_FTMAC100 is not set
 +# CONFIG_NETDEV_1000 is not set
@@ -3710,7 +3673,6 @@ index 0000000..e4c45c7
 +# CONFIG_TOUCHSCREEN_HAMPSHIRE is not set
 +# CONFIG_TOUCHSCREEN_EETI is not set
 +CONFIG_TOUCHSCREEN_EGALAX=y
-+# CONFIG_TOUCHSCREEN_ELAN is not set
 +# CONFIG_TOUCHSCREEN_FUJITSU is not set
 +# CONFIG_TOUCHSCREEN_GUNZE is not set
 +# CONFIG_TOUCHSCREEN_ELO is not set
@@ -3796,7 +3758,6 @@ index 0000000..e4c45c7
 +# CONFIG_IPMI_HANDLER is not set
 +CONFIG_HW_RANDOM=y
 +# CONFIG_HW_RANDOM_TIMERIOMEM is not set
-+# CONFIG_HW_RANDOM_FSL_RNGC is not set
 +# CONFIG_R3964 is not set
 +# CONFIG_RAW_DRIVER is not set
 +# CONFIG_TCG_TPM is not set
@@ -4129,15 +4090,25 @@ index 0000000..e4c45c7
 +# CONFIG_VIDEO_THS7303 is not set
 +# CONFIG_VIDEO_M52790 is not set
 +# CONFIG_VIDEO_VIVI is not set
-+# CONFIG_VIDEO_MXC_CAMERA is not set
++CONFIG_VIDEO_MXC_CAMERA=m
++
++#
++# MXC Camera/V4L2 PRP Features support
++#
++CONFIG_VIDEO_MXC_IPU_CAMERA=y
++# CONFIG_VIDEO_MXC_CSI_CAMERA is not set
 +# CONFIG_MXC_CAMERA_MICRON111 is not set
 +# CONFIG_MXC_CAMERA_OV2640 is not set
-+# CONFIG_MXC_CAMERA_OV3640 is not set
-+# CONFIG_MXC_CAMERA_OV5640 is not set
++CONFIG_MXC_CAMERA_OV3640=m
++CONFIG_MXC_CAMERA_OV5640=m
++# CONFIG_MXC_CAMERA_OV5640_MIPI is not set
 +# CONFIG_MXC_CAMERA_OV8820_MIPI is not set
-+# CONFIG_MXC_CAMERA_OV5642 is not set
++CONFIG_MXC_CAMERA_OV5642=m
 +# CONFIG_MXC_TVIN_ADV7180 is not set
-+# CONFIG_MXC_IPU_DEVICE_QUEUE_SDC is not set
++CONFIG_MXC_CAMERA_SENSOR_CLK=m
++CONFIG_MXC_IPU_PRP_VF_SDC=m
++CONFIG_MXC_IPU_PRP_ENC=m
++CONFIG_MXC_IPU_CSI_ENC=m
 +CONFIG_VIDEO_MXC_OUTPUT=y
 +CONFIG_VIDEO_MXC_IPU_OUTPUT=y
 +# CONFIG_VIDEO_MXC_IPUV1_WVGA_OUTPUT is not set
@@ -4206,7 +4177,6 @@ index 0000000..e4c45c7
 +# CONFIG_FB_MXC_TVOUT_CH7024 is not set
 +# CONFIG_FB_MXC_ASYNC_PANEL is not set
 +# CONFIG_FB_MXC_EINK_PANEL is not set
-+# CONFIG_FB_MXC_SIPIX_PANEL is not set
 +# CONFIG_FB_MXC_ELCDIF_FB is not set
 +CONFIG_FB_MXC_HDMI=y
 +
@@ -4271,9 +4241,7 @@ index 0000000..e4c45c7
 +CONFIG_SND_IMX_SOC=y
 +CONFIG_SND_MXC_SOC_MX2=y
 +# CONFIG_SND_SOC_IMX_SGTL5000 is not set
-+# CONFIG_SND_SOC_IMX_WM8962 is not set
 +CONFIG_SND_SOC_IMX_CS42888=y
-+# CONFIG_SND_SOC_IMX_SI4763 is not set
 +# CONFIG_SND_SOC_IMX_SPDIF is not set
 +# CONFIG_SND_SOC_IMX_HDMI is not set
 +CONFIG_SND_SOC_I2C_AND_SPI=y
@@ -4455,7 +4423,6 @@ index 0000000..e4c45c7
 +CONFIG_USB_GADGET_VBUS_DRAW=2
 +CONFIG_USB_GADGET_SELECTED=y
 +CONFIG_USB_GADGET_ARC=y
-+# CONFIG_IMX_USB_CHARGER is not set
 +CONFIG_USB_ARC=y
 +# CONFIG_USB_GADGET_FSL_USB2 is not set
 +# CONFIG_USB_GADGET_FUSB300 is not set
@@ -4599,6 +4566,7 @@ index 0000000..e4c45c7
 +# DMA Devices
 +#
 +# CONFIG_DW_DMAC is not set
++# CONFIG_MXC_PXP is not set
 +# CONFIG_MXC_PXP_V2 is not set
 +# CONFIG_TIMB_DMA is not set
 +CONFIG_IMX_SDMA=y
@@ -4732,11 +4700,6 @@ index 0000000..e4c45c7
 +# MXC MIPI Support
 +#
 +# CONFIG_MXC_MIPI_CSI2 is not set
-+
-+#
-+# MXC HDMI CEC (Consumer Electronics Control) support
-+#
-+# CONFIG_MXC_HDMI_CEC is not set
 +
 +#
 +# File systems
@@ -5078,8 +5041,6 @@ index 0000000..e4c45c7
 +# CONFIG_CRYPTO_USER_API_HASH is not set
 +# CONFIG_CRYPTO_USER_API_SKCIPHER is not set
 +CONFIG_CRYPTO_HW=y
-+# CONFIG_CRYPTO_DEV_FSL_CAAM is not set
-+# CONFIG_CRYPTO_DEV_DCP is not set
 +# CONFIG_BINARY_PRINTF is not set
 +
 +#
@@ -5109,10 +5070,10 @@ index 0000000..e4c45c7
 +CONFIG_NLATTR=y
 +# CONFIG_AVERAGE is not set
 diff --git a/arch/arm/mach-mx6/Kconfig b/arch/arm/mach-mx6/Kconfig
-index 2ffd90d..99fad3a 100644
+index df954b4..7308ad7 100644
 --- a/arch/arm/mach-mx6/Kconfig
 +++ b/arch/arm/mach-mx6/Kconfig
-@@ -179,6 +179,42 @@ config MACH_MX6Q_SABRELITE
+@@ -180,6 +180,41 @@ config MACH_MX6Q_SABRELITE
  	  Include support for i.MX 6Quad SABRE Lite platform. This includes specific
  	  configurations for the board and its peripherals.
  
@@ -5145,8 +5106,7 @@ index 2ffd90d..99fad3a 100644
 +	select IMX_HAVE_PLATFORM_MXC_HDMI
 +	select IMX_HAVE_PLATFORM_IMX_ASRC
 +	select IMX_HAVE_PLATFORM_FLEXCAN
-+	select IMX_HAVE_PLATFORM_PERFMON	
-+	select IMX_HAVE_PLATFORM_IMX_PXP
++	select IMX_HAVE_PLATFORM_IMX_MIPI_CSI2
 +	select IMX_HAVE_PLATFORM_IMX_PCIE
 +	help
 +	  Include support for Congatec i.MX 6Quad QMX6 platform. This includes specific
@@ -5156,14 +5116,14 @@ index 2ffd90d..99fad3a 100644
  	bool "Support i.MX 6Quad SABRESD platform"
  	select ARCH_MX6Q
 diff --git a/arch/arm/mach-mx6/Makefile b/arch/arm/mach-mx6/Makefile
-index 5cac9bc..a2f64c3 100644
+index 8c1d754..b745797 100644
 --- a/arch/arm/mach-mx6/Makefile
 +++ b/arch/arm/mach-mx6/Makefile
 @@ -1,6 +1,7 @@
  #
  # Makefile for the linux kernel.
  #
-+# CFLAGS_mx6q_qmx6_pmic_pfuze100.o += -DPFUZE100_FIRST_VERSION
++CFLAGS_mx6q_qmx6_pmic_pfuze100.o += -DPFUZE100_FIRST_VERSION
  
  # Object file lists.
  obj-y   := cpu.o mm.o system.o devices.o dummy_gpio.o irq.o bus_freq.o  usb_h2.o usb_h3.o\
@@ -5174,13 +5134,13 @@ index 5cac9bc..a2f64c3 100644
 +obj-$(CONFIG_MACH_MX6Q_QMX6) += board-mx6q_qmx6.o mx6q_qmx6_pmic_pfuze100.o
  obj-$(CONFIG_MACH_MX6Q_SABRESD) += board-mx6q_sabresd.o mx6q_sabresd_pmic_pfuze100.o
  obj-$(CONFIG_MACH_MX6Q_SABREAUTO) += board-mx6q_sabreauto.o mx6q_sabreauto_pmic_pfuze100.o
- obj-$(CONFIG_SMP) += plat_hotplug.o platsmp.o headsmp.o
+ obj-$(CONFIG_MACH_MX6Q_HDMIDONGLE) += board-mx6q_hdmidongle.o
 diff --git a/arch/arm/mach-mx6/board-mx6dl_qmx6.h b/arch/arm/mach-mx6/board-mx6dl_qmx6.h
 new file mode 100644
-index 0000000..883fea6
+index 0000000..b7f7e9a
 --- /dev/null
 +++ b/arch/arm/mach-mx6/board-mx6dl_qmx6.h
-@@ -0,0 +1,205 @@
+@@ -0,0 +1,199 @@
 +/*
 + * Copyright (C) 2012 Freescale Semiconductor, Inc. All Rights Reserved.
 + *
@@ -5204,7 +5164,7 @@ index 0000000..883fea6
 +#include <mach/iomux-mx6dl.h>
 +
 +static iomux_v3_cfg_t mx6dl_qmx6_pads[] = {
-+	/* AUDMUX */	
++	/* AUDMUX */
 +	MX6DL_PAD_DI0_PIN4__AUDMUX_AUD6_RXD,
 +	MX6DL_PAD_DI0_PIN15__AUDMUX_AUD6_TXC,
 +	MX6DL_PAD_DI0_PIN2__AUDMUX_AUD6_TXD,
@@ -5216,7 +5176,7 @@ index 0000000..883fea6
 +	MX6DL_PAD_GPIO_2__GPIO_1_2,		/* PCIE_WAKE_B */
 +
 +	/* CCM  */
-+	MX6DL_PAD_GPIO_0__GPIO_1_0,		/* GPIO_0/Audio Ref. CLK */		
++	MX6DL_PAD_GPIO_0__GPIO_1_0,		/* GPIO_0/Audio Ref. CLK */
 +
 +	/* ECSPI1 */
 +	MX6DL_PAD_EIM_D17__ECSPI1_MISO,
@@ -5240,7 +5200,7 @@ index 0000000..883fea6
 +	MX6DL_PAD_RGMII_RD2__ENET_RGMII_RD2,
 +	MX6DL_PAD_RGMII_RD3__ENET_RGMII_RD3,
 +	MX6DL_PAD_RGMII_RX_CTL__ENET_RGMII_RX_CTL,
-+	MX6DL_PAD_ENET_TX_EN__GPIO_1_28,		/* Micrel RGMII Phy Interrupt */
++	MX6DL_PAD_ENET_TX_EN__GPIO_1_28, /* Micrel RGMII Phy Interrupt */
 +	MX6DL_PAD_EIM_D23__GPIO_3_23,		/* RGMII reset */
 +
 +	/* GPIO1 */
@@ -5340,6 +5300,9 @@ index 0000000..883fea6
 +	/* WATCHDOG */
 +	MX6DL_PAD_KEY_COL4__GPIO_4_14,
 +
++	/* USB OC pin */
++	/* MX6DL_PAD_EIM_D30__USBOH3_USBH1_OC, TODO: to be checked */
++
 +	/* USDHC2 */
 +	MX6DL_PAD_SD2_CLK__USDHC2_CLK,
 +	MX6DL_PAD_SD2_CMD__USDHC2_CMD,
@@ -5376,22 +5339,13 @@ index 0000000..883fea6
 +	MX6DL_PAD_NANDF_D7__GPIO_2_7,		/* SD4_WP */
 +};
 +
-+static iomux_v3_cfg_t mx6dl_qmx6_hdmi_ddc_pads[] = {
-+	MX6DL_PAD_KEY_COL3__HDMI_TX_DDC_SCL, /* HDMI DDC SCL */
-+	MX6DL_PAD_KEY_ROW3__HDMI_TX_DDC_SDA, /* HDMI DDC SDA */
-+};
-+
-+static iomux_v3_cfg_t mx6dl_qmx6_i2c2_pads[] = {
-+	MX6DL_PAD_KEY_COL3__I2C2_SCL,	/* I2C2 SCL */
-+	MX6DL_PAD_KEY_ROW3__I2C2_SDA,	/* I2C2 SDA */
-+};
 +#endif
 diff --git a/arch/arm/mach-mx6/board-mx6q_qmx6.c b/arch/arm/mach-mx6/board-mx6q_qmx6.c
 new file mode 100644
-index 0000000..7b61ca0
+index 0000000..720ca7f
 --- /dev/null
 +++ b/arch/arm/mach-mx6/board-mx6q_qmx6.c
-@@ -0,0 +1,986 @@
+@@ -0,0 +1,979 @@
 +/*
 + * Copyright (C) 2012 Freescale Semiconductor, Inc. All Rights Reserved.
 + *
@@ -5444,7 +5398,6 @@ index 0000000..7b61ca0
 +#include <linux/regulator/consumer.h>
 +#include <linux/regulator/machine.h>
 +#include <linux/regulator/fixed.h>
-+#include <linux/mfd/mxc-hdmi-core.h>
 +
 +#include <mach/common.h>
 +#include <mach/hardware.h>
@@ -5486,8 +5439,7 @@ index 0000000..7b61ca0
 +#define MX6Q_QMX6_USB_OTG_PWR		IMX_GPIO_NR(3, 22)
 +#define MX6Q_QMX6_POWER_OFF			IMX_GPIO_NR(2, 3)
 +#define MX6Q_QMX6_PCIE_WAKE_B		IMX_GPIO_NR(1, 2)
-+#define MX6Q_QMX6_BLT_EN        	IMX_GPIO_NR(1, 9)
-+#define MX6Q_QMX6_LCD_EN        	IMX_GPIO_NR(1, 7)
++#define MX6Q_QMX6_BLT_EN			IMX_GPIO_NR(1, 9)
 +
 +#define MX6Q_QMX6_TCH_INT1			IMX_GPIO_NR(7, 11)
 +#define MX6Q_QMX6_CSI0_RST			IMX_GPIO_NR(1, 8)
@@ -5499,28 +5451,26 @@ index 0000000..7b61ca0
 +extern int mx6q_qmx6_init_pfuze100(u32 int_gpio);
 +
 +static struct clk *sata_clk;
-+static int enable_lcd_ldb;
++static int disable_ldb;
 +
 +extern char *gp_reg_id;
-+extern char *soc_reg_id;
-+extern char *pu_reg_id;
-+
++extern void mx6_cpu_regulator_init(void);
 +
 +static const struct esdhc_platform_data mx6q_qmx6_sd2_data __initconst = {
 +	.cd_gpio = MX6Q_QMX6_SD2_CD,
-+	.wp_gpio = -1,
++
 +	.keep_power_at_suspend = 1,
 +	.support_8bit = 0,
 +	.delay_line = 0,
-+	.cd_type = ESDHC_CD_CONTROLLER,
++	.force_write_access = 1,
 +};
 +
 +static const struct esdhc_platform_data mx6q_qmx6_sd3_data __initconst = {
 +	.always_present = 1,
++	.cd_gpio = -1,
 +	.keep_power_at_suspend = 1,
 +	.support_8bit = 1,
 +	.delay_line = 0,
-+	.cd_type = ESDHC_CD_PERMANENT,
 +};
 +
 +static const struct esdhc_platform_data mx6q_qmx6_sd4_data __initconst = {
@@ -5529,7 +5479,6 @@ index 0000000..7b61ca0
 +	.keep_power_at_suspend = 1,
 +	.support_8bit = 1,
 +	.delay_line = 0,
-+	.cd_type = ESDHC_CD_CONTROLLER,
 +};
 +
 +static const struct anatop_thermal_platform_data
@@ -5546,7 +5495,7 @@ index 0000000..7b61ca0
 +static int mx6q_qmx6_fec_phy_init(struct phy_device *phydev)
 +{
 +	/* adjust KSZ9031 ethernet phy */
-+ 
++
 +	phy_write(phydev, 0x0d, 0x2);
 +	phy_write(phydev, 0x0e, 0x4);
 +	phy_write(phydev, 0x0d, 0xc002);
@@ -5590,16 +5539,16 @@ index 0000000..7b61ca0
 +	{
 +	 .name = "bootloader",
 +	 .offset = 0,
-+	 .size = 0x00100000,
++	 .size = 0x00040000,
 +	},
 +	{
 +	 .name = "user",
 +	 .offset = MTDPART_OFS_APPEND,
-+	 .size = 0x002FC000,
++	 .size = 0x003BC000,
 +	},
 +	{
 +	 /* this 16KB area is used for congatec manufacturing purposes */
-+	 /* we strongly recommend not to modify or destroy this area */ 
++	 /* we strongly recommend not to modify or destroy this area */
 +	 .name = "reserved",
 +	 .offset = MTDPART_OFS_APPEND,
 +	 .size = 0x00004000,
@@ -5722,7 +5671,6 @@ index 0000000..7b61ca0
 +	}
 +	gpio_direction_output(MX6Q_QMX6_USB_OTG_PWR, 0);
 +
-+	mxc_iomux_set_gpr_register(1, 13, 1, 1);
 +	mx6_set_otghost_vbus_func(imx6q_qmx6_usbotg_vbus);
 +}
 +
@@ -5854,40 +5802,10 @@ index 0000000..7b61ca0
 +
 +	/* GPR3, bits 2-3 = HDMI_MUX_CTL */
 +	mxc_iomux_set_gpr_register(3, 2, 2, hdmi_mux_setting);
-+
-+	/* Set HDMI event as SDMA event2 while Chip version later than TO1.2 */
-+	if (hdmi_SDMA_check())
-+		mxc_iomux_set_gpr_register(0, 0, 1, 1);
-+}
-+
-+/* On mx6x sabresd board i2c2 iomux with hdmi ddc,
-+ * the pins default work at i2c2 function,
-+ when hdcp enable, the pins should work at ddc function */
-+
-+static void hdmi_enable_ddc_pin(void)
-+{
-+	if (cpu_is_mx6dl())
-+		mxc_iomux_v3_setup_multiple_pads(mx6dl_qmx6_hdmi_ddc_pads,
-+			ARRAY_SIZE(mx6dl_qmx6_hdmi_ddc_pads));
-+	else
-+		mxc_iomux_v3_setup_multiple_pads(mx6q_qmx6_hdmi_ddc_pads,
-+			ARRAY_SIZE(mx6q_qmx6_hdmi_ddc_pads));
-+}
-+
-+static void hdmi_disable_ddc_pin(void)
-+{
-+	if (cpu_is_mx6dl())
-+		mxc_iomux_v3_setup_multiple_pads(mx6dl_qmx6_i2c2_pads,
-+			ARRAY_SIZE(mx6dl_qmx6_i2c2_pads));
-+	else
-+		mxc_iomux_v3_setup_multiple_pads(mx6q_qmx6_i2c2_pads,
-+			ARRAY_SIZE(mx6q_qmx6_i2c2_pads));
 +}
 +
 +static struct fsl_mxc_hdmi_platform_data hdmi_data = {
 +	.init = hdmi_init,
-+	.enable_pins = hdmi_enable_ddc_pin,
-+	.disable_pins = hdmi_disable_ddc_pin,
 +};
 +
 +static struct fsl_mxc_hdmi_core_platform_data hdmi_core_data = {
@@ -5913,19 +5831,25 @@ index 0000000..7b61ca0
 +static struct imx_ipuv3_platform_data ipu_data[] = {
 +	{
 +	.rev = 4,
-+	.csi_clk[0] = "clko_clk",
-+	.bypass_reset = false,
++	.csi_clk[0] = "clko2_clk",
 +	}, {
 +	.rev = 4,
-+	.csi_clk[0] = "clko_clk",
-+	.bypass_reset = false,
++	.csi_clk[0] = "clko2_clk",
++	},
++};
++
++static struct fsl_mxc_capture_platform_data capture_data[] = {
++	{
++		.csi = 0,
++		.ipu = 0,
++		.mclk_source = 0,
++		.is_mipi = 0,
 +	},
 +};
 +
 +static void qmx6_suspend_enter(void)
 +{
 +	/* suspend preparation */
-+
 +	/* disable backlight */
 +	gpio_set_value(MX6Q_QMX6_BLT_EN, 0);
 +}
@@ -5933,7 +5857,6 @@ index 0000000..7b61ca0
 +static void qmx6_suspend_exit(void)
 +{
 +	/* resume restore */
-+
 +	/* enable backlight */
 +	gpio_set_value(MX6Q_QMX6_BLT_EN, 1);
 +}
@@ -5981,6 +5904,11 @@ index 0000000..7b61ca0
 +	.dev_name = "0-000a",
 +};
 +
++static struct regulator_consumer_supply sgtl5000_qmx6_consumer_vddd = {
++	.supply = "VDDD",
++	.dev_name = "0-000a",
++};
++
 +static struct regulator_init_data sgtl5000_qmx6_vdda_reg_initdata = {
 +	.num_consumer_supplies = 1,
 +	.consumer_supplies = &sgtl5000_qmx6_consumer_vdda,
@@ -5989,6 +5917,11 @@ index 0000000..7b61ca0
 +static struct regulator_init_data sgtl5000_qmx6_vddio_reg_initdata = {
 +	.num_consumer_supplies = 1,
 +	.consumer_supplies = &sgtl5000_qmx6_consumer_vddio,
++};
++
++static struct regulator_init_data sgtl5000_qmx6_vddd_reg_initdata = {
++	.num_consumer_supplies = 1,
++	.consumer_supplies = &sgtl5000_qmx6_consumer_vddd,
 +};
 +
 +static struct fixed_voltage_config sgtl5000_qmx6_vdda_reg_config = {
@@ -6003,6 +5936,13 @@ index 0000000..7b61ca0
 +	.microvolts		= 3300000,
 +	.gpio			= -1,
 +	.init_data		= &sgtl5000_qmx6_vddio_reg_initdata,
++};
++
++static struct fixed_voltage_config sgtl5000_qmx6_vddd_reg_config = {
++	.supply_name		= "VDDD",
++	.microvolts		= 0,
++	.gpio			= -1,
++	.init_data		= &sgtl5000_qmx6_vddd_reg_initdata,
 +};
 +
 +static struct platform_device sgtl5000_qmx6_vdda_reg_devices = {
@@ -6021,9 +5961,17 @@ index 0000000..7b61ca0
 +	},
 +};
 +
++static struct platform_device sgtl5000_qmx6_vddd_reg_devices = {
++	.name	= "reg-fixed-voltage",
++	.id	= 2,
++	.dev	= {
++		.platform_data = &sgtl5000_qmx6_vddd_reg_config,
++	},
++};
++
 +#endif /* CONFIG_SND_SOC_SGTL5000 */
 +
-+static int __init imx6q_init_audio(void)
++static int imx6q_init_audio(void)
 +{
 +	mxc_register_device(&mx6_qmx6_audio_device,
 +			    &mx6_qmx6_audio_data);
@@ -6031,14 +5979,28 @@ index 0000000..7b61ca0
 +#ifdef CONFIG_SND_SOC_SGTL5000
 +	platform_device_register(&sgtl5000_qmx6_vdda_reg_devices);
 +	platform_device_register(&sgtl5000_qmx6_vddio_reg_devices);
++	platform_device_register(&sgtl5000_qmx6_vddd_reg_devices);
 +	mx6_qmx6_sgtl5000_init();
 +#endif
 +	return 0;
 +
 +}
 +
++static void pcie_3v3_reset(void)
++{
++	/* reset miniPCIe */
++	gpio_request(MX6Q_QMX6_PCIE_RST_B, "pcie_reset");
++	gpio_direction_output(MX6Q_QMX6_PCIE_RST_B, 1);
++
++	gpio_set_value(MX6Q_QMX6_PCIE_RST_B, 0);
++	/* The PCI Express Mini CEM specification states that PREST# is
++	deasserted minimum 1ms after 3.3vVaux has been applied and stable*/
++	msleep(1);
++	gpio_set_value(MX6Q_QMX6_PCIE_RST_B, 1);
++}
++
 +#if defined(CONFIG_KEYBOARD_GPIO) || defined(CONFIG_KEYBOARD_GPIO_MODULE)
-+#define GPIO_BUTTON(gpio_num, ev_code, act_low, descr, wake, debounce)	\
++#define GPIO_BUTTON(gpio_num, ev_code, act_low, descr, wake)	\
 +{								\
 +	.gpio		= gpio_num,				\
 +	.type		= EV_KEY,				\
@@ -6046,16 +6008,15 @@ index 0000000..7b61ca0
 +	.active_low	= act_low,				\
 +	.desc		= "btn " descr,				\
 +	.wakeup		= wake,					\
-+	.debounce_interval = debounce,				\
 +}
 +
 +static struct gpio_keys_button imx6q_buttons[] = {
-+	GPIO_BUTTON(MX6Q_QMX6_POWER_OFF, KEY_POWER, 1, "key-power", 1, 1),
-+	GPIO_BUTTON(MX6Q_QMX6_MENU_KEY, KEY_MENU, 1, "key-memu", 0, 1),
-+	GPIO_BUTTON(MX6Q_QMX6_HOME_KEY, KEY_HOME, 1, "key-home", 0, 1),
-+	GPIO_BUTTON(MX6Q_QMX6_BACK_KEY, KEY_BACK, 1, "key-back", 0, 1),
-+	GPIO_BUTTON(MX6Q_QMX6_VOLUME_UP_KEY, KEY_VOLUMEUP, 1, "volume-up", 0, 1),
-+	GPIO_BUTTON(MX6Q_QMX6_VOLUME_DOWN_KEY, KEY_VOLUMEDOWN, 1, "volume-down", 0, 1),
++	GPIO_BUTTON(MX6Q_QMX6_POWER_OFF, KEY_POWER, 1, "key-power", 1),
++	GPIO_BUTTON(MX6Q_QMX6_MENU_KEY, KEY_MENU, 1, "key-memu", 0),
++	GPIO_BUTTON(MX6Q_QMX6_HOME_KEY, KEY_HOME, 1, "key-home", 0),
++	GPIO_BUTTON(MX6Q_QMX6_BACK_KEY, KEY_BACK, 1, "key-back", 0),
++	GPIO_BUTTON(MX6Q_QMX6_VOLUME_UP_KEY, KEY_VOLUMEUP, 1, "volume-up", 0),
++	GPIO_BUTTON(MX6Q_QMX6_VOLUME_DOWN_KEY, KEY_VOLUMEDOWN, 1, "volume-down", 0),
 +};
 +
 +static struct gpio_keys_platform_data imx6q_button_data = {
@@ -6088,8 +6049,7 @@ index 0000000..7b61ca0
 +};
 +
 +static struct mxc_dvfs_platform_data qmx6_dvfscore_data = {
-+	.reg_id = "VDDCORE",
-+	.soc_id	= "VDDSOC",
++	.reg_id = "cpu_vddgp",
 +	.clk1_id = "cpu_clk",
 +	.clk2_id = "gpc_dvfs_clk",
 +	.gpc_cntr_offset = MXC_GPC_CNTR_OFFSET,
@@ -6148,6 +6108,15 @@ index 0000000..7b61ca0
 +	writel(value | 0x60, mx6_snvs_base + SNVS_LPCR);
 +}
 +
++static int __init early_disable_ldb(char *p)
++{
++	/*mipi dsi need pll3_pfd_540M as 540MHz, ldb will change to 454Mhz*/
++	disable_ldb = 1;
++	return 0;
++}
++
++early_param("disable_ldb", early_disable_ldb);
++
 +static const struct imx_pcie_platform_data mx6_qmx6_pcie_data __initconst = {
 +	.pcie_pwr_en	= -1,
 +	.pcie_rst	= MX6Q_QMX6_PCIE_RST_B,
@@ -6155,14 +6124,7 @@ index 0000000..7b61ca0
 +	.pcie_dis	= -1,
 +};
 +
-+static int __init early_enable_lcd_ldb(char *p)
-+{
-+	enable_lcd_ldb = 1;
-+	return 0;
-+}
-+early_param("enable_lcd_ldb", early_enable_lcd_ldb);
-+
-+/*!
++/*
 + * Board specific initialization.
 + */
 +static void __init mx6_qmx6_board_init(void)
@@ -6182,8 +6144,6 @@ index 0000000..7b61ca0
 +	}
 +
 +	gp_reg_id = qmx6_dvfscore_data.reg_id;
-+	soc_reg_id = qmx6_dvfscore_data.soc_id;
-+	pu_reg_id = qmx6_dvfscore_data.pu_id;
 +	mx6q_qmx6_init_uart();
 +
 +	/*
@@ -6199,27 +6159,24 @@ index 0000000..7b61ca0
 +		ldb_data.sec_ipu_id = 0;
 +		ldb_data.sec_disp_id = 1;
 +		hdmi_core_data.disp_id = 1;
-+		if (enable_lcd_ldb) {
-+			ldb_data.disp_id = 1;
-+			ldb_data.mode = LDB_SIN1;
-+		}
 +	}
 +	imx6q_add_mxc_hdmi_core(&hdmi_core_data);
 +
 +	imx6q_add_ipuv3(0, &ipu_data[0]);
 +	if (cpu_is_mx6q()) {
 +		imx6q_add_ipuv3(1, &ipu_data[1]);
-+		for (i = 0; i < 4 && i < ARRAY_SIZE(qmx6_fb_data); i++)
++		for (i = 0; i < ARRAY_SIZE(qmx6_fb_data); i++)
 +			imx6q_add_ipuv3fb(i, &qmx6_fb_data[i]);
 +	} else
-+		for (i = 0; i < 2 && i < ARRAY_SIZE(qmx6_fb_data); i++)
++		for (i = 0; i < (ARRAY_SIZE(qmx6_fb_data) + 1) / 2; i++)
 +			imx6q_add_ipuv3fb(i, &qmx6_fb_data[i]);
 +
 +	imx6q_add_vdoa();
 +	imx6q_add_lcdif(&lcdif_data);
-+	imx6q_add_ldb(&ldb_data);
++	if (!disable_ldb)
++		imx6q_add_ldb(&ldb_data);
 +	imx6q_add_v4l2_output(0);
-+
++	imx6q_add_v4l2_capture(0, &capture_data[0]);
 +	imx6q_add_imx_snvs_rtc();
 +
 +	imx6q_add_imx_i2c(0, &mx6q_qmx6_i2c_data);
@@ -6233,12 +6190,13 @@ index 0000000..7b61ca0
 +			ARRAY_SIZE(mxc_i2c2_board_info));
 +	ret = gpio_request(MX6Q_QMX6_PFUZE_INT, "pFUZE-int");
 +	if (ret) {
-+		printk(KERN_ERR "request pFUZE-int error!!\n");
++		printk(KERN_ERR"request pFUZE-int error!!\n");
 +		return;
 +	} else {
 +		gpio_direction_input(MX6Q_QMX6_PFUZE_INT);
 +		mx6q_qmx6_init_pfuze100(MX6Q_QMX6_PFUZE_INT);
 +	}
++
 +	/* SPI */
 +	imx6q_add_ecspi(0, &mx6q_qmx6_spi_data);
 +	spi_device_init();
@@ -6248,13 +6206,13 @@ index 0000000..7b61ca0
 +	imx6q_add_anatop_thermal_imx(1, &mx6q_qmx6_anatop_thermal_data);
 +	imx6_init_fec(fec_data);
 +	imx6q_add_pm_imx(0, &mx6q_qmx6_pm_data);
-+
 +	/* Move sd3 to first because sd3 connect to emmc.
 +	   Mfgtools want emmc is mmcblk0 and other sd card is mmcblk1.
 +	*/
 +	imx6q_add_sdhci_usdhc_imx(1, &mx6q_qmx6_sd2_data);
 +	imx6q_add_sdhci_usdhc_imx(2, &mx6q_qmx6_sd3_data);
-+	imx6q_add_sdhci_usdhc_imx(3, &mx6q_qmx6_sd4_data);	
++	imx6q_add_sdhci_usdhc_imx(3, &mx6q_qmx6_sd4_data);
++
 +	imx_add_viv_gpu(&imx6_gpu_data, &imx6q_gpu_pdata);
 +	imx6q_qmx6_init_usb();
 +	/* SATA is not supported by MX6DL/Solo */
@@ -6263,6 +6221,7 @@ index 0000000..7b61ca0
 +	imx6q_add_vpu();
 +	imx6q_init_audio();
 +	platform_device_register(&qmx6_vmmc_reg_devices);
++
 +	imx_asrc_data.asrc_core_clk = clk_get(NULL, "asrc_clk");
 +	imx_asrc_data.asrc_audio_clk = clk_get(NULL, "asrc_serial_clk");
 +	imx6q_add_asrc(&imx_asrc_data);
@@ -6275,11 +6234,6 @@ index 0000000..7b61ca0
 +	imx6q_add_mxc_pwm(3);
 +	imx6q_add_mxc_pwm_backlight(3, &mx6_qmx6_pwm_backlight_data);
 +
-+	/* switch on lcd vcc */
-+	gpio_request(MX6Q_QMX6_LCD_EN, "lcden");
-+	gpio_direction_output(MX6Q_QMX6_LCD_EN, 1);
-+	gpio_set_value(MX6Q_QMX6_LCD_EN, 1);
-+
 +	/* switch on backlight */
 +	gpio_request(MX6Q_QMX6_BLT_EN, "backlight");
 +	gpio_direction_output(MX6Q_QMX6_BLT_EN, 1);
@@ -6291,24 +6245,11 @@ index 0000000..7b61ca0
 +	imx6q_add_dma();
 +
 +	imx6q_add_dvfs_core(&qmx6_dvfscore_data);
-+	imx6q_add_device_buttons();	
++
++	imx6q_add_device_buttons();
 +
 +	imx6q_add_hdmi_soc();
 +	imx6q_add_hdmi_soc_dai();
-+
-+	if (cpu_is_mx6dl()) {
-+		imx6dl_add_imx_pxp();
-+		imx6dl_add_imx_pxp_client();
-+	}
-+
-+	/*
-+	ret = gpio_request_array(mx6q_qmx6_flexcan_gpios,
-+			ARRAY_SIZE(mx6q_qmx6_flexcan_gpios));
-+	if (ret)
-+		pr_err("failed to request flexcan1-gpios: %d\n", ret);
-+	else
-+		imx6q_add_flexcan0(&mx6q_qmx6_flexcan0_pdata);
-+	*/
 +
 +	clko2 = clk_get(NULL, "clko2_clk");
 +	if (IS_ERR(clko2))
@@ -6327,10 +6268,6 @@ index 0000000..7b61ca0
 +	imx6q_add_busfreq();
 +
 +	imx6q_add_pcie(&mx6_qmx6_pcie_data);
-+	imx6_add_armpmu();
-+	imx6q_add_perfmon(0);
-+	imx6q_add_perfmon(1);
-+	imx6q_add_perfmon(2);
 +}
 +
 +extern void __iomem *twd_base;
@@ -6353,16 +6290,26 @@ index 0000000..7b61ca0
 +
 +static void __init mx6q_qmx6_reserve(void)
 +{
-+#if defined(CONFIG_MXC_GPU_VIV) || defined(CONFIG_MXC_GPU_VIV_MODULE)
 +	phys_addr_t phys;
++	int i;
 +
 +	if (imx6q_gpu_pdata.reserved_mem_size) {
 +		phys = memblock_alloc_base(imx6q_gpu_pdata.reserved_mem_size,
 +					   SZ_4K, SZ_1G);
++		memblock_free(phys, imx6q_gpu_pdata.reserved_mem_size);
 +		memblock_remove(phys, imx6q_gpu_pdata.reserved_mem_size);
 +		imx6q_gpu_pdata.reserved_mem_base = phys;
 +	}
-+#endif
++
++	for (i = 0; i < ARRAY_SIZE(qmx6_fb_data); i++)
++		if (qmx6_fb_data[i].res_size[0]) {
++			/* reserve for background buffer */
++			phys = memblock_alloc(qmx6_fb_data[i].res_size[0],
++						SZ_4K);
++			memblock_free(phys, qmx6_fb_data[i].res_size[0]);
++			memblock_remove(phys, qmx6_fb_data[i].res_size[0]);
++			qmx6_fb_data[i].res_base[0] = phys;
++		}
 +}
 +
 +/*
@@ -6380,10 +6327,10 @@ index 0000000..7b61ca0
 +MACHINE_END
 diff --git a/arch/arm/mach-mx6/board-mx6q_qmx6.h b/arch/arm/mach-mx6/board-mx6q_qmx6.h
 new file mode 100644
-index 0000000..27436e9
+index 0000000..48829a3
 --- /dev/null
 +++ b/arch/arm/mach-mx6/board-mx6q_qmx6.h
-@@ -0,0 +1,205 @@
+@@ -0,0 +1,199 @@
 +/*
 + * Copyright (C) 2012 Freescale Semiconductor, Inc. All Rights Reserved.
 + *
@@ -6407,7 +6354,7 @@ index 0000000..27436e9
 +#include <mach/iomux-mx6q.h>
 +
 +static iomux_v3_cfg_t mx6q_qmx6_pads[] = {
-+	/* AUDMUX */	
++	/* AUDMUX */
 +	MX6Q_PAD_DI0_PIN4__AUDMUX_AUD6_RXD,
 +	MX6Q_PAD_DI0_PIN15__AUDMUX_AUD6_TXC,
 +	MX6Q_PAD_DI0_PIN2__AUDMUX_AUD6_TXD,
@@ -6419,7 +6366,7 @@ index 0000000..27436e9
 +	MX6Q_PAD_GPIO_2__GPIO_1_2,		/* PCIE_WAKE_B */
 +
 +	/* CCM  */
-+	MX6Q_PAD_GPIO_0__GPIO_1_0,		/* GPIO_0/Audio Ref. CLK */		
++	MX6Q_PAD_GPIO_0__GPIO_1_0,		/* GPIO_0/Audio Ref. CLK */
 +
 +	/* ECSPI1 */
 +	MX6Q_PAD_EIM_D17__ECSPI1_MISO,
@@ -6543,6 +6490,9 @@ index 0000000..27436e9
 +	/* WATCHDOG */
 +	MX6Q_PAD_KEY_COL4__GPIO_4_14,
 +
++	/* USB OC pin */
++	/* MX6Q_PAD_EIM_D30__USBOH3_USBH1_OC, TODO: to be checked */
++
 +	/* USDHC2 */
 +	MX6Q_PAD_SD2_CLK__USDHC2_CLK,
 +	MX6Q_PAD_SD2_CMD__USDHC2_CMD,
@@ -6579,22 +6529,13 @@ index 0000000..27436e9
 +	MX6Q_PAD_NANDF_D7__GPIO_2_7,		/* SD4_WP */
 +};
 +
-+static iomux_v3_cfg_t mx6q_qmx6_hdmi_ddc_pads[] = {
-+	MX6Q_PAD_KEY_COL3__HDMI_TX_DDC_SCL, /* HDMI DDC SCL */
-+	MX6Q_PAD_KEY_ROW3__HDMI_TX_DDC_SDA, /* HDMI DDC SDA */
-+};
-+
-+static iomux_v3_cfg_t mx6q_qmx6_i2c2_pads[] = {
-+	MX6Q_PAD_KEY_COL3__I2C2_SCL,	/* I2C2 SCL */
-+	MX6Q_PAD_KEY_ROW3__I2C2_SDA,	/* I2C2 SDA */
-+};
 +#endif
 diff --git a/arch/arm/mach-mx6/mx6q_qmx6_pmic_pfuze100.c b/arch/arm/mach-mx6/mx6q_qmx6_pmic_pfuze100.c
 new file mode 100644
-index 0000000..7dae799
+index 0000000..1743ff8
 --- /dev/null
 +++ b/arch/arm/mach-mx6/mx6q_qmx6_pmic_pfuze100.c
-@@ -0,0 +1,529 @@
+@@ -0,0 +1,422 @@
 +/*
 + * Copyright (C) 2012 Freescale Semiconductor, Inc. All Rights Reserved.
 + *
@@ -6621,12 +6562,7 @@ index 0000000..7dae799
 +#include <linux/gpio.h>
 +#include <linux/regulator/machine.h>
 +#include <linux/mfd/pfuze.h>
-+#include <linux/io.h>
 +#include <mach/irqs.h>
-+#include <mach/system.h>
-+#include "crm_regs.h"
-+#include "regs-anadig.h"
-+#include "cpu_op-mx6.h"
 +
 +/*
 + * Convenience conversion.
@@ -6639,34 +6575,33 @@ index 0000000..7dae799
 +
 +#define PFUZE100_I2C_DEVICE_NAME  "pfuze100"
 +/* 7-bit I2C bus slave address */
-+#define PFUZE100_I2C_ADDR		(0x08)
-+#define PFUZE100_DEVICEID		(0x0)
-+#define PFUZE100_REVID			(0x3)
-+#define PFUZE100_SW1AMODE		(0x23)
-+#define PFUZE100_SW1AVOL       32
-+#define PFUZE100_SW1AVOL_VSEL_M        (0x3f<<0)
-+#define PFUZE100_SW1CVOL       46
-+#define PFUZE100_SW1CVOL_VSEL_M        (0x3f<<0)
-+#define PFUZE100_SW1ACON		36
-+#define PFUZE100_SW1ACON_SPEED_VAL	(0x1<<6)	/*default */
-+#define PFUZE100_SW1ACON_SPEED_M	(0x3<<6)
-+#define PFUZE100_SW1CCON		49
-+#define PFUZE100_SW1CCON_SPEED_VAL	(0x1<<6)	/*default */
-+#define PFUZE100_SW1CCON_SPEED_M	(0x3<<6)
++#define PFUZE100_I2C_ADDR         (0x08)
++ /*SWBST*/
++#define PFUZE100_SW1ASTANDBY	33
++#define PFUZE100_SW1ASTANDBY_STBY_VAL	(0x18)
++#define PFUZE100_SW1ASTANDBY_STBY_M	(0x3f<<0)
++#define PFUZE100_SW1BSTANDBY   40
++#define PFUZE100_SW1BSTANDBY_STBY_VAL  (0x18)
++#define PFUZE100_SW1BSTANDBY_STBY_M    (0x3f<<0)
++#define PFUZE100_SW1CSTANDBY	47
++#define PFUZE100_SW1CSTANDBY_STBY_VAL	(0x18)
++#define PFUZE100_SW1CSTANDBY_STBY_M	(0x3f<<0)
++#define PFUZE100_SW2STANDBY     54
++#define PFUZE100_SW2STANDBY_STBY_VAL    0x0
++#define PFUZE100_SW2STANDBY_STBY_M      (0x3f<<0)
++#define PFUZE100_SW3ASTANDBY    61
++#define PFUZE100_SW3ASTANDBY_STBY_VAL   0x0
++#define PFUZE100_SW3ASTANDBY_STBY_M     (0x3f<<0)
++#define PFUZE100_SW3BSTANDBY    68
++#define PFUZE100_SW3BSTANDBY_STBY_VAL   0x0
++#define PFUZE100_SW3BSTANDBY_STBY_M     (0x3f<<0)
++#define PFUZE100_SW4STANDBY     75
++#define PFUZE100_SW4STANDBY_STBY_VAL    0
++#define PFUZE100_SW4STANDBY_STBY_M      (0x3f<<0)
++#define PFUZE100_SWBSTCON1	102
++#define PFUZE100_SWBSTCON1_SWBSTMOD_VAL	(0x1<<2)
++#define PFUZE100_SWBSTCON1_SWBSTMOD_M	(0x3<<2)
 +
-+extern u32 arm_max_freq;
-+extern u32 enable_ldo_mode;
-+
-+static struct regulator_consumer_supply sw1_consumers[] = {
-+	{
-+		.supply	   = "VDDCORE",
-+	}
-+};
-+static struct regulator_consumer_supply sw1c_consumers[] = {
-+	{
-+		.supply	   = "VDDSOC",
-+	},
-+};
 +
 +static struct regulator_consumer_supply sw2_consumers[] = {
 +	{
@@ -6675,22 +6610,22 @@ index 0000000..7dae799
 +	}
 +};
 +static struct regulator_consumer_supply sw4_consumers[] = {
-+       {
++	{
 +	.supply = "AUD_1V8",
 +	}
 +};
 +static struct regulator_consumer_supply swbst_consumers[] = {
-+       {
++	{
 +	.supply = "SWBST_5V",
 +	}
 +};
 +static struct regulator_consumer_supply vgen1_consumers[] = {
-+       {
++	{
 +	.supply = "VGEN1_1V5",
 +	}
 +};
 +static struct regulator_consumer_supply vgen2_consumers[] = {
-+       {
++	{
 +	.supply = "VGEN2_1V5",
 +	}
 +};
@@ -6717,12 +6652,12 @@ index 0000000..7dae799
 +	}
 +};
 +static struct regulator_consumer_supply vgen5_consumers[] = {
-+       {
++	{
 +	.supply = "VGEN5_2V8",
 +	}
 +};
 +static struct regulator_consumer_supply vgen6_consumers[] = {
-+       {
++	{
 +	.supply = "VGEN6_3V3",
 +	}
 +};
@@ -6741,16 +6676,7 @@ index 0000000..7dae799
 +			.valid_modes_mask = 0,
 +			.boot_on = 1,
 +			.always_on = 1,
-+			.initial_state = PM_SUSPEND_MEM,
-+			.state_mem = {
-+				.uV = 975000,/*0.9V+6%*/
-+				.mode = REGULATOR_MODE_NORMAL,
-+				.enabled = 1,
 +			},
-+	},
-+
-+	.num_consumer_supplies = ARRAY_SIZE(sw1_consumers),
-+	.consumer_supplies = sw1_consumers,
 +};
 +
 +static struct regulator_init_data sw1b_init = {
@@ -6774,15 +6700,7 @@ index 0000000..7dae799
 +			.valid_modes_mask = 0,
 +			.always_on = 1,
 +			.boot_on = 1,
-+			.initial_state = PM_SUSPEND_MEM,
-+			.state_mem = {
-+				.uV = 975000,/*0.9V+6%*/
-+				.mode = REGULATOR_MODE_NORMAL,
-+				.enabled = 1,
 +			},
-+	},
-+	.num_consumer_supplies = ARRAY_SIZE(sw1c_consumers),
-+	.consumer_supplies = sw1c_consumers,
 +};
 +
 +static struct regulator_init_data sw2_init = {
@@ -6982,106 +6900,22 @@ index 0000000..7dae799
 +
 +static int pfuze100_init(struct mc_pfuze *pfuze)
 +{
-+	int ret, i;
-+	unsigned char value;
-+	/*use default mode(ldo bypass) if no param from cmdline*/
-+	if (enable_ldo_mode == LDO_MODE_DEFAULT)
-+		enable_ldo_mode = LDO_MODE_BYPASSED;
-+	/*read Device ID*/
-+	ret = pfuze_reg_read(pfuze, PFUZE100_DEVICEID, &value);
++	int ret;
++	ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1ASTANDBY,
++			    PFUZE100_SW1ASTANDBY_STBY_M,
++			    PFUZE100_SW1ASTANDBY_STBY_VAL);
 +	if (ret)
 +		goto err;
-+	if (value != 0x10) {
-+		printk(KERN_ERR "wrong device id:%x!\n", value);
-+		goto err;
-+	}
-+
-+	/*read Revision ID*/
-+	ret = pfuze_reg_read(pfuze, PFUZE100_REVID, &value);
++	ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1BSTANDBY,
++			    PFUZE100_SW1BSTANDBY_STBY_M,
++			    PFUZE100_SW1BSTANDBY_STBY_VAL);
 +	if (ret)
 +		goto err;
-+	if (value == 0x10) {
-+		printk(KERN_WARNING "PF100 1.0 chip found!\n");
-+	/* workaround ER1 of pfuze1.0: set all buck regulators in PWM mode
-+	* except SW1C(APS) in normal and  PFM mode in standby.
-+	*/
-+		for (i = 0; i < 7; i++) {
-+			if (i == 2)/*SW1C*/
-+				value = 0xc;/*normal:APS mode;standby:PFM mode*/
-+			else
-+				value = 0xd;/*normal:PWM mode;standby:PFM mode*/
-+			ret = pfuze_reg_write(pfuze,
-+					PFUZE100_SW1AMODE + (i * 7),
-+					value);
-+			if (ret)
-+				goto err;
-+		}
-+
-+	} else {
-+	/*set all switches APS in normal and PFM mode in standby*/
-+		for (i = 0; i < 7; i++) {
-+			value = 0xc;
-+			ret = pfuze_reg_write(pfuze,
-+					PFUZE100_SW1AMODE + (i * 7),
-+					value);
-+			if (ret)
-+				goto err;
-+		}
-+
-+	}
-+	/*use ldo active mode if use 1.2GHz,otherwise use ldo bypass mode*/
-+	if (arm_max_freq == CPU_AT_1_2GHz) {
-+			/*VDDARM_IN 1.425*/
-+		ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1AVOL,
-+					PFUZE100_SW1AVOL_VSEL_M,
-+					0x2d);
-+		if (ret)
-+			goto err;
-+		/*VDDSOC_IN 1.425V*/
-+		ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1CVOL,
-+					PFUZE100_SW1CVOL_VSEL_M,
-+					0x2d);
-+		if (ret)
-+			goto err;
-+		enable_ldo_mode = LDO_MODE_ENABLED;
-+	} else if (enable_ldo_mode == LDO_MODE_BYPASSED) {
-+		/*decrease VDDARM_IN/VDDSOC_IN,since we will use ldo bypass mode*/
-+		/*VDDARM_IN 1.3V*/
-+		ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1AVOL,
-+					PFUZE100_SW1AVOL_VSEL_M,
-+					0x28);
-+		if (ret)
-+			goto err;
-+		/*VDDSOC_IN 1.3V*/
-+		ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1CVOL,
-+					PFUZE100_SW1CVOL_VSEL_M,
-+					0x28);
-+		if (ret)
-+			goto err;
-+		/*set SW1AB/1C DVSPEED as 25mV step each 4us,quick than 16us before.*/
-+		ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1ACON,
-+				    PFUZE100_SW1ACON_SPEED_M,
-+				    PFUZE100_SW1ACON_SPEED_VAL);
-+		if (ret)
-+			goto err;
-+		ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1CCON,
-+				    PFUZE100_SW1CCON_SPEED_M,
-+				    PFUZE100_SW1CCON_SPEED_VAL);
-+		if (ret)
-+			goto err;
-+	} else if (enable_ldo_mode != LDO_MODE_BYPASSED) {
-+		/*Increase VDDARM_IN/VDDSOC_IN to 1.375V in ldo active mode*/
-+		ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1AVOL,
-+					PFUZE100_SW1AVOL_VSEL_M,
-+					0x2b);
-+		if (ret)
-+			goto err;
-+		ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1CVOL,
-+					PFUZE100_SW1CVOL_VSEL_M,
-+					0x2b);
-+		if (ret)
-+			goto err;
-+	}
++	ret = pfuze_reg_rmw(pfuze, PFUZE100_SW1CSTANDBY,
++			    PFUZE100_SW1CSTANDBY_STBY_M,
++			    PFUZE100_SW1CSTANDBY_STBY_VAL);
++	if (ret)
++		goto err;
 +	return 0;
 +err:
 +	printk(KERN_ERR "pfuze100 init error!\n");
@@ -7124,22 +6958,128 @@ index 0000000..7dae799
 +	pfuze100_i2c_device.irq = gpio_to_irq(int_gpio); /*update INT gpio */
 +	return i2c_register_board_info(1, &pfuze100_i2c_device, 1);
 +}
+diff --git a/arch/arm/plat-mxc/include/mach/esdhc.h b/arch/arm/plat-mxc/include/mach/esdhc.h
+index bb15db1..dc5267d 100644
+--- a/arch/arm/plat-mxc/include/mach/esdhc.h
++++ b/arch/arm/plat-mxc/include/mach/esdhc.h
+@@ -36,5 +36,6 @@ struct esdhc_platform_data {
+ 	unsigned int keep_power_at_suspend;
+ 	unsigned int delay_line;
+ 	int (*platform_pad_change)(unsigned int index, int clock);
++	unsigned int force_write_access;
+ };
+ #endif /* __ASM_ARCH_IMX_ESDHC_H */
 diff --git a/arch/arm/tools/mach-types b/arch/arm/tools/mach-types
-index 88210d9..9e45a49 100644
+index f6b5c0e..0b2d992 100644
 --- a/arch/arm/tools/mach-types
 +++ b/arch/arm/tools/mach-types
-@@ -1118,5 +1118,6 @@ mx6q_sabrelite		MACH_MX6Q_SABRELITE	MX6Q_SABRELITE		3769
+@@ -1118,6 +1118,7 @@ mx6q_sabrelite		MACH_MX6Q_SABRELITE	MX6Q_SABRELITE		3769
  mx6q_sabresd		MACH_MX6Q_SABRESD	MX6Q_SABRESD		3980
  mx6q_arm2		MACH_MX6Q_ARM2		MX6Q_ARM2		3837
  mx6sl_arm2		MACH_MX6SL_ARM2		MX6SL_ARM2		4091
-+mx6q_qmx6		MACH_MX6Q_QMX6		MX6Q_QMX6		4122	
++mx6q_qmx6		MACH_MX6Q_QMX6		MX6Q_QMX6		4122
+ mx6q_hdmidongle		MACH_MX6Q_HDMIDONGLE    MX6Q_HDMIDONGLE		4284
  mx6sl_evk		MACH_MX6SL_EVK		MX6SL_EVK		4307
  
+diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
+index 35fd825..44483dd 100644
+--- a/drivers/mmc/host/sdhci-esdhc-imx.c
++++ b/drivers/mmc/host/sdhci-esdhc-imx.c
+@@ -563,7 +563,7 @@ static void esdhc_writew_le(struct sdhci_host *host, u16 val, int reg)
+ 	case SDHCI_COMMAND:
+ 		if ((host->cmd->opcode == MMC_STOP_TRANSMISSION ||
+ 		     host->cmd->opcode == MMC_SET_BLOCK_COUNT) &&
+-	            (imx_data->flags & ESDHC_FLAG_MULTIBLK_NO_INT))
++			(imx_data->flags & ESDHC_FLAG_MULTIBLK_NO_INT))
+ 			val |= SDHCI_CMD_ABORTCMD;
+ 
+ 		writel(0x08800880, host->ioaddr + SDHCI_CAPABILITIES_1);
+@@ -719,6 +719,9 @@ static unsigned int esdhc_pltfm_get_ro(struct sdhci_host *host)
+ {
+ 	struct esdhc_platform_data *boarddata = host->mmc->parent->platform_data;
+ 
++	if (boarddata->force_write_access)
++		return 0;
++
+ 	if (boarddata && gpio_is_valid(boarddata->wp_gpio))
+ 		return gpio_get_value(boarddata->wp_gpio);
+ 	else
 diff --git a/drivers/net/fec.c b/drivers/net/fec.c
-index 4b5818e..65d1f70 100755
+index fc65bdc..33a0bd5 100755
 --- a/drivers/net/fec.c
 +++ b/drivers/net/fec.c
-@@ -1070,6 +1070,7 @@ static int fec_enet_mii_init(struct platform_device *pdev)
+@@ -105,10 +105,10 @@ MODULE_PARM_DESC(macaddr, "FEC Ethernet MAC address");
+ #define	FEC_FLASHMAC	0xf0006000
+ #elif defined(CONFIG_CANCam)
+ #define	FEC_FLASHMAC	0xf0020000
+-#elif defined (CONFIG_M5272C3)
++#elif defined(CONFIG_M5272C3)
+ #define	FEC_FLASHMAC	(0xffe04000 + 4)
+ #elif defined(CONFIG_MOD5272)
+-#define FEC_FLASHMAC 	0xffc0406b
++#define	FEC_FLASHMAC	0xffc0406b
+ #else
+ #define	FEC_FLASHMAC	0
+ #endif
+@@ -174,8 +174,8 @@ MODULE_PARM_DESC(macaddr, "FEC Ethernet MAC address");
+  * account when setting it.
+  */
+ #if defined(CONFIG_M523x) || defined(CONFIG_M527x) || defined(CONFIG_M528x) || \
+-    defined(CONFIG_M520x) || defined(CONFIG_M532x) || \
+-    defined(CONFIG_ARCH_MXC) || defined(CONFIG_SOC_IMX28)
++	defined(CONFIG_M520x) || defined(CONFIG_M532x) || \
++	defined(CONFIG_ARCH_MXC) || defined(CONFIG_SOC_IMX28)
+ #define	OPT_FRAME_SIZE	(PKT_MAXBUF_SIZE << 16)
+ #else
+ #define	OPT_FRAME_SIZE	0
+@@ -199,8 +199,8 @@ struct fec_enet_private {
+ 
+ 	/* The saved address of a sent-in-place packet/buffer, for skfree(). */
+ 	unsigned char *tx_bounce[TX_RING_SIZE];
+-	struct	sk_buff* tx_skbuff[TX_RING_SIZE];
+-	struct	sk_buff* rx_skbuff[RX_RING_SIZE];
++	struct	sk_buff *tx_skbuff[TX_RING_SIZE];
++	struct	sk_buff *rx_skbuff[RX_RING_SIZE];
+ 	ushort	skb_cur;
+ 	ushort	skb_dirty;
+ 
+@@ -249,7 +249,7 @@ struct fec_enet_private {
+ #define FEC_NAPI_ENABLE FALSE
+ #endif
+ 
+-static irqreturn_t fec_enet_interrupt(int irq, void * dev_id);
++static irqreturn_t fec_enet_interrupt(int irq, void *dev_id);
+ static void fec_enet_tx(struct net_device *dev);
+ static int fec_rx_poll(struct napi_struct *napi, int budget);
+ static void fec_enet_rx(struct net_device *dev);
+@@ -517,7 +517,7 @@ fec_enet_tx(struct net_device *ndev)
+ 		}
+ 
+ 		if (status & BD_ENET_TX_READY)
+-			printk("HEY! Enet xmit interrupt and TX_READY.\n");
++			printk(KERN_INFO "HEY! Enet xmit interrupt and TX_READY.\n");
+ 
+ 		/* Deferred means some collisions occurred during transmit,
+ 		 * but we eventually sent the packet OK.
+@@ -767,7 +767,7 @@ fec_enet_rx(struct net_device *ndev)
+ 		ndev->stats.rx_packets++;
+ 		pkt_len = bdp->cbd_datlen;
+ 		ndev->stats.rx_bytes += pkt_len;
+-		data = (__u8*)__va(bdp->cbd_bufaddr);
++		data = (__u8 *)__va(bdp->cbd_bufaddr);
+ 
+ 		if (bdp->cbd_bufaddr)
+ 			dma_unmap_single(&fep->pdev->dev, bdp->cbd_bufaddr,
+@@ -926,7 +926,7 @@ static void __inline__ fec_get_mac(struct net_device *ndev)
+ 
+ 	/* Adjust MAC if using macaddr */
+ 	if (iap == macaddr)
+-		 ndev->dev_addr[ETH_ALEN-1] = macaddr[ETH_ALEN-1] + fep->pdev->id;
++		ndev->dev_addr[ETH_ALEN-1] = macaddr[ETH_ALEN-1] + fep->pdev->id;
+ }
+ 
+ /* ------------------------------------------------------------------------- */
+@@ -1111,6 +1111,7 @@ static int fec_enet_mii_init(struct platform_device *pdev)
  	const struct platform_device_id *id_entry =
  				platform_get_device_id(fep->pdev);
  	int err = -ENXIO, i;
@@ -7147,21 +7087,30 @@ index 4b5818e..65d1f70 100755
  
  	/*
  	 * The dual fec interfaces are not equivalent with enet-mac.
-@@ -1098,8 +1099,10 @@ static int fec_enet_mii_init(struct platform_device *pdev)
+@@ -1139,8 +1140,10 @@ static int fec_enet_mii_init(struct platform_device *pdev)
  	/*
  	 * Set MII speed to 2.5 MHz (= clk_get_rate() / 2 * phy_speed)
  	 */
 -	fep->phy_speed = DIV_ROUND_UP(clk_get_rate(fep->clk),
 -					(FEC_ENET_MII_CLK << 2)) << 1;
 +
-+	// sml 2012-11-29: MII Speed derived from 66MHz ipg-clk
++	/* sml 2012-11-29: MII Speed derived from 66MHz ipg-clk */
 +	bus_clk = clk_get(NULL, "ipg_clk");
-+	fep->phy_speed = (DIV_ROUND_UP(clk_get_rate(bus_clk),FEC_ENET_MII_CLK))-1;
++	fep->phy_speed = (DIV_ROUND_UP(clk_get_rate(bus_clk), FEC_ENET_MII_CLK)) - 1;
  
  	/* set hold time to 2 internal clock cycle */
  	if (cpu_is_mx6q() || cpu_is_mx6dl())
+@@ -1923,7 +1926,7 @@ fec_probe(struct platform_device *pdev)
+ 
+ 	/* Carrier starts down, phylib will bring it up */
+ 	netif_carrier_off(ndev);
+-	clk_disable(fep->clk);
++	clk_unprepare(fep->clk);
+ 
+ 	INIT_DELAYED_WORK(&fep->fixup_trigger_tx, fixup_trigger_tx_func);
+ 
 diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index 80747d2..cd690e5 100644
+index 80747d2..f158bc6 100644
 --- a/drivers/net/phy/micrel.c
 +++ b/drivers/net/phy/micrel.c
 @@ -187,6 +187,21 @@ static struct phy_driver ksz9021_driver = {
@@ -7186,7 +7135,7 @@ index 80747d2..cd690e5 100644
  static int __init ksphy_init(void)
  {
  	int ret;
-@@ -209,8 +224,15 @@ static int __init ksphy_init(void)
+@@ -209,8 +224,14 @@ static int __init ksphy_init(void)
  	if (ret)
  		goto err5;
  
@@ -7194,7 +7143,6 @@ index 80747d2..cd690e5 100644
 +	if (ret)
 +		goto err6;
 +
-+		
  	return 0;
  
 +err6:
@@ -7202,7 +7150,7 @@ index 80747d2..cd690e5 100644
  err5:
  	phy_driver_unregister(&ks8041_driver);
  err4:
-@@ -230,6 +252,7 @@ static void __exit ksphy_exit(void)
+@@ -230,6 +251,7 @@ static void __exit ksphy_exit(void)
  	phy_driver_unregister(&ksz9021_driver);
  	phy_driver_unregister(&ks8041_driver);
  	phy_driver_unregister(&ks8051_driver);
@@ -7210,7 +7158,7 @@ index 80747d2..cd690e5 100644
  }
  
  module_init(ksphy_init);
-@@ -241,6 +264,7 @@ MODULE_LICENSE("GPL");
+@@ -241,6 +263,7 @@ MODULE_LICENSE("GPL");
  
  static struct mdio_device_id __maybe_unused micrel_tbl[] = {
  	{ PHY_ID_KSZ9021, 0x00ffffff },
@@ -7218,43 +7166,6 @@ index 80747d2..cd690e5 100644
  	{ PHY_ID_KS8001, 0x00ffffff },
  	{ PHY_ID_KS8737, 0x00ffffff },
  	{ PHY_ID_KS8041, 0x00ffffff },
-diff --git a/drivers/video/mxc/ldb.c b/drivers/video/mxc/ldb.c
-index 695ff33..985aedb 100644
---- a/drivers/video/mxc/ldb.c
-+++ b/drivers/video/mxc/ldb.c
-@@ -105,6 +105,14 @@ static int g_ldb_mode;
- 
- static struct fb_videomode ldb_modedb[] = {
- 	{
-+	 "LDB-SGA", 60, 800, 600, 25132,
-+	 88, 40,
-+	 23, 1,
-+	 128, 4,
-+	 0,
-+	 FB_VMODE_NONINTERLACED,
-+	 FB_MODE_IS_DETAILED,},
-+	{
- 	 "LDB-WXGA", 60, 1280, 800, 14065,
- 	 40, 40,
- 	 10, 3,
-diff --git a/drivers/video/mxc_hdmi.c b/drivers/video/mxc_hdmi.c
-index 92822f8..02dd895 100644
---- a/drivers/video/mxc_hdmi.c
-+++ b/drivers/video/mxc_hdmi.c
-@@ -1538,10 +1538,10 @@ static void mxc_hdmi_edid_rebuild_modelist(struct mxc_hdmi *hdmi)
- 		 */
- 		mode = &hdmi->fbi->monspecs.modedb[i];
- 
--		if (!(mode->vmode & FB_VMODE_INTERLACED) &&
--				(mxc_edid_mode_to_vic(mode) != 0)) {
-+    if (!(mode->vmode & FB_VMODE_INTERLACED)) {
-+			int vic = mxc_edid_mode_to_vic(mode);
- 
--			dev_dbg(&hdmi->pdev->dev, "Added mode %d:", i);
-+			dev_dbg(&hdmi->pdev->dev, "%s: Added mode %d(VIC %u):", __func__, i, vic);
- 			dev_dbg(&hdmi->pdev->dev,
- 				"xres = %d, yres = %d, freq = %d, vmode = %d, flag = %d\n",
- 				hdmi->fbi->monspecs.modedb[i].xres,
 diff --git a/include/linux/micrel_phy.h b/include/linux/micrel_phy.h
 index dd8da34..3222193 100644
 --- a/include/linux/micrel_phy.h
@@ -7268,7 +7179,7 @@ index dd8da34..3222193 100644
  #define PHY_ID_KS8041		0x00221510
  #define PHY_ID_KS8051		0x00221550
 diff --git a/sound/soc/imx/Kconfig b/sound/soc/imx/Kconfig
-index 72d8550..f60180b 100644
+index e30ebbe..3967a99 100644
 --- a/sound/soc/imx/Kconfig
 +++ b/sound/soc/imx/Kconfig
 @@ -53,7 +53,7 @@ config SND_SOC_PHYCORE_AC97
@@ -7293,3 +7204,6 @@ index 9325dc8..7c52545 100644
  		imx_sgtl5000_dai[0].codec_name = "sgtl5000.0-000a";
  	else
  		imx_sgtl5000_dai[0].codec_name = "sgtl5000.1-000a";
+-- 
+1.7.10.4
+
