@@ -23,7 +23,8 @@ FILES_${PN} = " \
 "
 BROADCOM_FIRMWARE = "INVALID"
 BROADCOM_FIRMWARE_wandboard-dual = "bcm4329"
+BROADCOM_FIRMWARE_wandboard-quad = "bcm4329"
 
 RDEPENDS_${PN} = "linux-firmware-${BROADCOM_FIRMWARE}"
 
-COMPATIBLE_MACHINE = "(wandboard-dual)"
+COMPATIBLE_MACHINE = "(wandboard-dual|wandboard-quad)"
