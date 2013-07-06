@@ -4,9 +4,7 @@
 include linux-wandboard.inc
 
 # Wandboard branch
-SRCREV = "86429847b5152f040f190015faedcac49b243328"
+SRCREV = "AUTOINC"
 LOCALVERSION = "-wandboard+yocto"
-
-SRC_URI += "file://0001-ENGR00251005-gpu-4.6.9p11-kernel-code-integration.patch"
 
 COMPATIBLE_MACHINE = "(wandboard)"
