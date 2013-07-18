@@ -14,12 +14,16 @@ S = "${WORKDIR}/git"
 inherit deploy
 
 do_mkimage () {
+    # workaround the case where MACHINE=imx6qsabrelite
+    if [ ! -d board/boundary/${MACHINE} ]; then
+        mkdir board/boundary/${MACHINE}
+    fi
     uboot-mkimage  -A arm -O linux -T script -C none -a 0 -e 0 \
-                   -n "boot script" -d board/boundary/${MACHINE}/6x_bootscript.txt \
+                   -n "boot script" -d board/boundary/nitrogen6x/6x_bootscript.txt \
                    board/boundary/${MACHINE}/6x_bootscript
 
     uboot-mkimage  -A arm -O linux -T script -C none -a 0 -e 0 \
-                   -n "upgrade script" -d board/boundary/${MACHINE}/6x_upgrade.txt \
+                   -n "upgrade script" -d board/boundary/nitrogen6x/6x_upgrade.txt \
                    board/boundary/${MACHINE}/6x_upgrade
 }
 
