@@ -3,8 +3,8 @@
 
 include linux-wandboard.inc
 
-# Wandboard branch
-SRCREV = "AUTOINC"
-LOCALVERSION = "-wandboard+yocto"
+# Wandboard branch - based on 4.0.0 from Freescale git
+SRCREV = "e259a0f89e1d69a919793d2191e98cf7c11a76af"
+LOCALVERSION = "-4.0.0-wandboard"
 
 COMPATIBLE_MACHINE = "(wandboard)"
