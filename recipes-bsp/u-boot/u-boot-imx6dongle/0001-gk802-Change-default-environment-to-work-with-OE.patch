@@ -1,0 +1,41 @@
+From 2983c330eaf49a9d6f8cba9379c4c9ba4b92e4df Mon Sep 17 00:00:00 2001
+From: Matthias Benesch <twoof7@freenet.de>
+Date: Sat, 3 Aug 2013 15:28:32 -0700
+Subject: [PATCH] gk802: Change default environment to work with OE
+
+Signed-off-by: Matthias Benesch <twoof7@freenet.de>
+---
+ include/configs/gk802.h | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/include/configs/gk802.h b/include/configs/gk802.h
+index a84f16b..b7bc8ee 100644
+--- a/include/configs/gk802.h
++++ b/include/configs/gk802.h
+@@ -109,14 +109,20 @@
+ 
+ #define CONFIG_EXTRA_ENV_SETTINGS \
+ 	"script=boot.scr\0" \
+-	"uimage=/boot/uImage\0" \
++	"uimage=uImage\0" \
+ 	"console=" CONFIG_CONSOLE_DEV "\0" \
++	"mmcpart=1\0" \
++	"mmcroot=/dev/mmcblk0p2 rw\0" \
++	"mmcrootfstype=ext3 rootwait\0" \
++	"mmcargs=setenv bootargs ${bootargs} console=${console},${baudrate} " \
++		"root=${mmcroot} " \
++		"rootfstype=${mmcrootfstype}\0" \
+ 	"fdt_high=0xffffffff\0"	  \
+ 	"initrd_high=0xffffffff\0" \
+     "boot_recovery=setenv bootsuffix _recovery; setenv mmcdev 1; run try_boot; setenv mmcdev 0; run try_boot; run boot_normal\0" \
+     "boot_normal=  setenv bootsuffix ''; setenv mmcdev 1; run try_boot; setenv mmcdev 0; run try_boot\0" \
+-    "try_boot=if ext2load mmc ${mmcdev} ${loadaddr} /boot/ubootcmd${bootsuffix}; then source; fi;" \
+-    "         if ext2load mmc ${mmcdev} ${loadaddr} /boot/uImage${bootsuffix}; then bootm; fi;\0"
++    "try_boot=if fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script}${bootsuffix}; then source; fi;" \
++    "         if fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${uimage}${bootsuffix}; then run mmcargs; bootm; fi;\0"
+ 
+ 
+ 
+-- 
+1.8.3.4
+
