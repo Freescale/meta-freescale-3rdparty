@@ -9,7 +9,7 @@ UBOOT_MACHINE = "mx23_olinuxino_config"
 SOC_FAMILY = "mxs:mx23:imx233-olinuxino"
 
 KERNEL_IMAGETYPE = "uImage"
-KERNEL_DEVICETREE = "${S}/arch/arm/boot/dts/imx23-olinuxino.dts"
+KERNEL_DEVICETREE = "imx23-olinuxino.dtb"
 
 SDCARD_ROOTFS ?= "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.ext3"
 IMAGE_FSTYPES ?= "tar.bz2 ext3 uboot.mxsboot-sdcard sdcard"
