@@ -1,0 +1,271 @@
+Add cfa10036 support
+
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+
+diff --git a/Makefile b/Makefile
+index 367738c..a9c5d21 100644
+--- a/Makefile
++++ b/Makefile
+@@ -16,6 +16,9 @@ endif
+ ifeq ($(BOARD), iMX28_EVK)
+ ARCH = mx28
+ endif
++ifeq ($(BOARD), cfa10036)
++ARCH = mx28
++endif
+ 
+ all: build_prep gen_bootstream
+ 
+diff --git a/boot_prep/Makefile b/boot_prep/Makefile
+index 0267ede..86570fc 100644
+--- a/boot_prep/Makefile
++++ b/boot_prep/Makefile
+@@ -23,6 +23,30 @@ MEM_TYPE ?= MEM_DDR1
+ CFLAGS 	= -g -Wall -I$(INCLUDEDIR) -I$(INCLUDEDIR)/mach -I./ -O -D$(MEM_TYPE)
+ LDFLAGS = -static -nostdlib -T $(BOOT_LAYOUT)
+ 
++# The board defines STMP CPU family and peripherial components
++# So, set ARCH and HW_OBJS variables for each supported board
++# separately.
++ifeq ($(BOARD), stmp37xx_dev)
++ARCH = 37xx
++HW_OBJS = $(LRADC_OBJS)
++CFLAGS += -DSTMP37XX -DBOARD_STMP37XX_DEV
++endif
++ifeq ($(BOARD), stmp378x_dev)
++ARCH = mx23
++HW_OBJS = $(LRADC_OBJS)
++CFLAGS += -DSTMP378X -DBOARD_STMP378X_DEV
++endif
++ifeq ($(BOARD), iMX28_EVK)
++ARCH = mx28
++HW_OBJS = $(LRADC_OBJS)
++CFLAGS += -DMX28 -DBOARD_MX28_EVK
++endif
++ifeq ($(BOARD), cfa10036)
++ARCH = mx28
++HW_OBJS = $(LRADC_OBJS)
++CFLAGS += -DMX28 -DBOARD_CFA10036
++endif
++
+ # Generic code
+ CORE_OBJS = init-$(ARCH).o debug.o
+ 
+diff --git a/boot_prep/init-mx28.c b/boot_prep/init-mx28.c
+index a1e4752..480a1c2 100644
+--- a/boot_prep/init-mx28.c
++++ b/boot_prep/init-mx28.c
+@@ -752,17 +752,17 @@ void DDR2EmiController_EDE1116_200MHz(void)
+ 	DRAM_REG[24] = 0x00000000;
+ 	DRAM_REG[25] = 0x00000000;
+ 	DRAM_REG[26] = 0x00010101;
+-	DRAM_REG[27] = 0x01010101;
++	DRAM_REG[27] = 0x01010101; // 0000000 1 0000000 1 0000000 1 0000000 1
+ 	DRAM_REG[28] = 0x000f0f01;
+-	DRAM_REG[29] = 0x0f02020a;
++	DRAM_REG[29] = 0x0f02010a; // 0000 1111 00000 010 00000 001 0000 1010
+ 	DRAM_REG[30] = 0x00000000;
+-	DRAM_REG[31] = 0x00010101;
+-	DRAM_REG[32] = 0x00000100;
++	DRAM_REG[31] = 0x00010101; // 000000000000000 1(8 banks) 0000000 1 0000000 1
++	DRAM_REG[32] = 0x00000100; // 0000000000000000 0000000 1(REDUC) 0000000 0(REG_DIMM_ENABLE)
+ 	DRAM_REG[33] = 0x00000100;
+ 	DRAM_REG[34] = 0x00000000;
+-	DRAM_REG[35] = 0x00000002;
++	DRAM_REG[35] = 0x00000002; // 000000000000000 0 0000000 0 0000 0010
+ 	DRAM_REG[36] = 0x01010000;
+-	DRAM_REG[37] = 0x07080403;
++	DRAM_REG[37] = 0x07080503; // 0000 0111 0000 1000 00000 101(CAS5) 0000 0011
+ 	DRAM_REG[38] = 0x06005003;
+ 	DRAM_REG[39] = 0x0a0000c8;
+ 	DRAM_REG[40] = 0x02009c40;
+@@ -1300,12 +1300,54 @@ void poweron_vdda()
+ 	HW_POWER_VDDACTRL_WR( BF_POWER_VDDACTRL_TRG(0xC) | BF_POWER_VDDACTRL_BO_OFFSET(7)
+ 							| BF_POWER_VDDACTRL_LINREG_OFFSET(2) );
+ }
++
++/*
++ * Check memory range for valid RAM. A simple memory test determines
++ * the actually available RAM size between addresses `base' and
++ * `base + maxsize'.
++ * Copied and pasted from barebox common/memsize.c file
++ */
++long get_ram_size(long *base, long maxsize)
++{
++	volatile long *addr;
++	long           cnt;
++	long           val;
++	long           size;
++	int            i = 0;
++
++	for (cnt = (maxsize / sizeof (long)) >> 1; cnt > 0; cnt >>= 1) {
++		addr = base + cnt;	/* pointer arith! */
++		*addr = ~cnt;
++	}
++
++	addr = base;
++	*addr = 0;
++
++	for (cnt = 1; cnt < maxsize / sizeof (long); cnt <<= 1) {
++		addr = base + cnt;	/* pointer arith! */
++		val = *addr;
++		if (val != ~cnt) {
++			size = cnt * sizeof (long);
++			return (size);
++		}
++	}
++
++	return (maxsize);
++}
++
+ int _start(int arg)
+ {
+ 	unsigned int value;
+-	volatile int *pTest = 0x40000000;
+-	int i;
+-
++	int memsize;
++
++#ifdef BOARD_CFA10036
++	/* Remove all the previous DUART muxing */
++	HW_PINCTRL_MUXSEL6_CLR((3 << 4) | (3 << 6));
++	HW_PINCTRL_MUXSEL7_CLR((3 << 0) | (3 << 2));
++	HW_PINCTRL_MUXSEL7_CLR((3 << 16) | (3 << 18));
++	/* Mux only the DUART to pins actually used for this function */
++	HW_PINCTRL_MUXSEL6_SET((2 << 4) | (2 << 6));
++#else
+ 	//boot rom wrong use debug uart port.
+ 	//If fuse burned, the below two line can be removed.
+ 	HW_PINCTRL_MUXSEL7_CLR(0xF);
+@@ -1315,6 +1357,7 @@ int _start(int arg)
+ 	 * which cause uboot can't input
+ 	*/
+ 	HW_PINCTRL_MUXSEL7_SET(0x30000);
++#endif
+ 
+ #ifdef MEM_MDDR
+ 	/* set to mddr mode*/
+@@ -1374,28 +1417,8 @@ int _start(int arg)
+ 
+ 	change_cpu_freq();
+ 
+-#if 0
+-	for (i = 0; i <= 40; i++) {
+-		printf("mem %x - 0x%x\r\n",
+-			i, *(volatile int*)(0x800E0000 + i * 4));
+-	}
+-#endif
+-
+-	/*Test Memory;*/
+-	printf("start test memory accress\r\n");
+-	printf("ddr2 0x%x\r\n", pTest);
+-	for (i = 0; i < 1000; i++)
+-		*pTest++ = i;
+-
+-	pTest = (volatile int *)0x40000000;
+-
+-	for (i = 0; i < 1000; i++) {
+-		if (*pTest != (i)) {
+-			printf("0x%x error value 0x%x\r\n", i, *pTest);
+-		}
+-		pTest++;
+-	}
+-	printf("finish simple test\r\n");
++	memsize = get_ram_size((long *)0x40000000, 0x10000000);
++	printf("finish simple test memory size = 0x%xMB\r\n", memsize >> 20);
+ 	return 0;
+ }
+ 
+diff --git a/linux_prep/Makefile b/linux_prep/Makefile
+index 19b02a9..b33e4c1 100644
+--- a/linux_prep/Makefile
++++ b/linux_prep/Makefile
+@@ -69,6 +69,11 @@ ARCH = mx28
+ HW_OBJS = $(LRADC_OBJS)
+ CFLAGS += -DMX28 -DBOARD_MX28_EVK
+ endif
++ifeq ($(BOARD), cfa10036)
++ARCH = mx28
++HW_OBJS = $(LRADC_OBJS)
++CFLAGS += -DMX28 -DBOARD_CFA10036
++endif
+ 
+ # Generic code
+ CORE_OBJS = entry.o resume.o cmdlines.o setup.o keys.o
+diff --git a/linux_prep/board/cfa10036.c b/linux_prep/board/cfa10036.c
+new file mode 100644
+index 0000000..b084ed4
+--- /dev/null
++++ b/linux_prep/board/cfa10036.c
+@@ -0,0 +1,51 @@
++/*
++ * Platform specific data for the  STMP37XX development board
++ *
++ * Vladislav Buzov <vbuzov@embeddedalley.com>
++ *
++ * Copyright 2008 SigmaTel, Inc
++ * Copyright 2008 Embedded Alley Solutions, Inc
++ * Copyright 2008-2010 Freescale Semiconductor, Inc. All Rights Reserved.
++ *
++ * This file is licensed under the terms of the GNU General Public License
++ * version 2.  This program  is licensed "as is" without any warranty of any
++ * kind, whether express or implied.
++ */
++#include <setup.h>
++#include <keys.h>
++#include <lradc_buttons.h>
++
++/************************************************
++ *		LRADC keyboard data		*
++ ************************************************/
++int lradc_keypad_ch = LRADC_CH1;
++int lradc_vddio_ch = LRADC_CH10;
++
++struct lradc_keycode lradc_keycodes[] = {
++	{ 100, KEY4 },
++	{ 306, KEY5 },
++	{ 626, KEY6 },
++	{ 932, KEY7 },
++	{ 1260, KEY8 },
++	{ 1584, KEY9 },
++	{ 1757, KEY10 },
++	{ 2207, KEY11 },
++	{ 2525, KEY12 },
++	{ 2831, KEY13 },
++	{ 3134, KEY14 },
++	{ -1, 0 },
++};
++
++/************************************************
++ *	Magic key combinations for Armadillo	*
++ ************************************************/
++u32 magic_keys[MAGIC_KEY_NR] = {
++	[MAGIC_KEY1]	= KEY4,
++	[MAGIC_KEY2]	= KEY6,
++	[MAGIC_KEY3]	= KEY10,
++};
++
++/************************************************
++ *		Default command line		*
++ ************************************************/
++char cmdline_def[] = "console=ttyAMA0,115200";
+diff --git a/linux_prep/cmdlines/cfa10036.txt b/linux_prep/cmdlines/cfa10036.txt
+new file mode 100644
+index 0000000..486ffe8
+--- /dev/null
++++ b/linux_prep/cmdlines/cfa10036.txt
+@@ -0,0 +1 @@
++console=ttyAMA0,115200 root=/dev/mmcblk0p3 rw rootwait
+diff --git a/linux_prep/include/mx28/platform.h b/linux_prep/include/mx28/platform.h
+index d4063f8..3d1f1d7 100644
+--- a/linux_prep/include/mx28/platform.h
++++ b/linux_prep/include/mx28/platform.h
+@@ -19,6 +19,8 @@
+ 
+ #if defined (BOARD_MX28_EVK)
+ #define	MACHINE_ID	2531
++#elif defined (BOARD_CFA10036)
++#define	MACHINE_ID	4142
+ #else
+ #error "Allocate a machine ID for your board"
+ #endif
