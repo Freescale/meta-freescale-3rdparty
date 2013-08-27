@@ -5,9 +5,8 @@ DEPENDS = "u-boot-mkimage-native"
 
 PV = "v2013.01+git${SRCPV}"
 
-SRCREV = "d6b05d35b8b29392e71fdd8fa43d5cb8bd4fe276"
-SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git \
-           file://nitrogen6x-bootscript-modify-for-use-with-the-Yocto.patch"
+SRCREV = "f89bc066db0569008418fac1a0408a9a57f2232f"
+SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git"
 
 S = "${WORKDIR}/git"
 
@@ -19,7 +18,7 @@ do_mkimage () {
         mkdir board/boundary/${MACHINE}
     fi
     uboot-mkimage  -A arm -O linux -T script -C none -a 0 -e 0 \
-                   -n "boot script" -d board/boundary/nitrogen6x/6x_bootscript.txt \
+                   -n "boot script" -d board/boundary/nitrogen6x/6x_bootscript-yocto.txt \
                    board/boundary/${MACHINE}/6x_bootscript
 
     uboot-mkimage  -A arm -O linux -T script -C none -a 0 -e 0 \

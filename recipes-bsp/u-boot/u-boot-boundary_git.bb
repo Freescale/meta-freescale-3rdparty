@@ -8,7 +8,7 @@ PROVIDES = "u-boot"
 
 PV = "v2013.01+git${SRCPV}"
 
-SRCREV = "d6b05d35b8b29392e71fdd8fa43d5cb8bd4fe276"
+SRCREV = "f89bc066db0569008418fac1a0408a9a57f2232f"
 SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git"
 
 S = "${WORKDIR}/git"
