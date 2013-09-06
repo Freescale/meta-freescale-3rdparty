@@ -26,7 +26,7 @@ pkg_postinst_kernel-devicetree_append () {
 }
 
 pkg_postinst_kernel-image_append () {
-	update-alternatives --install /${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${MACHINE} ${KERNEL_IMAGETYPE}-${MACHINE} ${KERNEL_IMAGETYPE}-${KERNEL_VERSION} ${KERNEL_PRIORITY} || true
+	update-alternatives --install /${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-cfa10036 ${KERNEL_IMAGETYPE}-cfa10036 ${KERNEL_IMAGETYPE}-${KERNEL_VERSION} ${KERNEL_PRIORITY} || true
 }
 
 COMPATIBLE_MACHINE = "cfa10036"
