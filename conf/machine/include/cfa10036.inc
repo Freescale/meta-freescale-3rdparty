@@ -26,5 +26,5 @@ SERIAL_CONSOLE = "115200 ttyAMA0"
 
 MACHINE_FEATURES = "apm usbgadget usbhost vfat"
 
-# Gstreamer plugin
-MACHINE_GSTREAMER_PLUGIN ?= "gst-fsl-plugin"
+# Avoid adding gst-fsl-plugin as we use non-FSL kernel
+MACHINE_GSTREAMER_PLUGIN_cfa10036 = ""
