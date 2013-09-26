@@ -2,9 +2,7 @@
 
 include conf/machine/include/mxs-base.inc
 
-SOC_FAMILY = "mxs:mx28"
-
-MACHINEOVERRIDES =. "cfa10036:"
+SOC_FAMILY = "mxs:mx28:cfa10036"
 
 PREFERRED_PROVIDER_virtual/kernel = "linux-cfa"
 
