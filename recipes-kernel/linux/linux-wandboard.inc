@@ -12,7 +12,7 @@ LOCALVERSION ?= "+yocto"
 SCMVERSION ?= "y"
 
 # SRC_URI for wandboard kernel
-SRC_URI = "git://github.com/johnweber/linux.git \
+SRC_URI = "git://github.com/wandboard-org/linux.git \
            file://defconfig \
 "
 
