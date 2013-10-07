@@ -22,9 +22,10 @@ FILES_${PN} = " \
   /lib/firmware/brcm/brcmfmac-sdio.txt \
 "
 BROADCOM_FIRMWARE = "INVALID"
+BROADCOM_FIRMWARE_nitrogen6x-lite = "bcm4330"
 BROADCOM_FIRMWARE_wandboard-dual = "bcm4329"
 BROADCOM_FIRMWARE_wandboard-quad = "bcm4329"
 
 RDEPENDS_${PN} = "linux-firmware-${BROADCOM_FIRMWARE}"
 
-COMPATIBLE_MACHINE = "(wandboard-dual|wandboard-quad)"
+COMPATIBLE_MACHINE = "(nitrogen6x-lite|wandboard-dual|wandboard-quad)"
