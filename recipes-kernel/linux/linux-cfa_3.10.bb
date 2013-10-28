@@ -10,7 +10,7 @@ require recipes-kernel/linux/linux-dtb.inc
 SRC_URI = "git://github.com/crystalfontz/cfa_10036_kernel \
            file://defconfig"
 
-SRCREV = "552d876f4737ffeb18c9139ede3c439bdcafca94"
+SRCREV = "83b17774ae0201bbd6333f7b1757db4476c95475"
 
 S = "${WORKDIR}/git"
 
