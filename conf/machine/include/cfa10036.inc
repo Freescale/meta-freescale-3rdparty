@@ -4,7 +4,7 @@ include conf/machine/include/mxs-base.inc
 
 SOC_FAMILY = "mxs:mx28:cfa10036"
 
-PREFERRED_PROVIDER_virtual/kernel = "linux-cfa"
+PREFERRED_PROVIDER_virtual/kernel ?= "linux-cfa"
 
 IMAGE_BOOTLOADER = "barebox"
 BAREBOX_BINARY = "barebox"
