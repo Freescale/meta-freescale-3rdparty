@@ -4,7 +4,7 @@
 include linux-wandboard.inc
 
 # Wandboard branch - based on 4.0.0 from Freescale git
-SRCREV = "929768aaf8c9161b2729c11c0b96012547bdc4eb"
+SRCREV = "d35902c77a077a25e4dfedc6aac11ba49c52c586"
 LOCALVERSION = "-4.0.0-wandboard"
 
 # GPU support patches
