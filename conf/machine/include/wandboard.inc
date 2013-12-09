@@ -7,4 +7,4 @@ PREFERRED_PROVIDER_virtual/kernel ?= "linux-wandboard"
 
 SERIAL_CONSOLE = "115200 ttymxc0"
 
-MACHINE_FEATURES += "pci"
+MACHINE_FEATURES += "pci touchscreen"
