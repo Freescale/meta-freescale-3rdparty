@@ -4,6 +4,7 @@
 include linux-wandboard.inc
 
 # Wandboard branch - based on 4.0.0 from Freescale git
+GITBRANCH = "wandboard_imx_3.0.35_4.0.0"
 SRCREV = "d35902c77a077a25e4dfedc6aac11ba49c52c586"
 LOCALVERSION = "-4.0.0-wandboard"
 

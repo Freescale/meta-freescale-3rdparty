@@ -11,8 +11,10 @@ require recipes-kernel/linux/linux-imx.inc
 LOCALVERSION ?= "+yocto"
 SCMVERSION ?= "y"
 
+GITBRANCH ??= "master"
+
 # SRC_URI for wandboard kernel
-SRC_URI = "git://github.com/wandboard-org/linux.git \
+SRC_URI = "git://github.com/wandboard-org/linux.git;branch=${GITBRANCH} \
            file://defconfig \
 "
 
