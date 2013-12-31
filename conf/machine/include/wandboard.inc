@@ -9,3 +9,5 @@ PREFERRED_VERSION_linux-wandboard ?= "3.0.35"
 SERIAL_CONSOLE = "115200 ttymxc0"
 
 MACHINE_FEATURES += "pci touchscreen"
+
+KERNEL_IMAGETYPE = "zImage"
