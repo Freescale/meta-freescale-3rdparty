@@ -7,10 +7,11 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 inherit kernel
 require recipes-kernel/linux/linux-dtb.inc
 
-SRC_URI = "git://github.com/crystalfontz/cfa_10036_kernel \
+SRCBRANCH = "cfa-3.10.25"
+SRC_URI = "git://github.com/crystalfontz/cfa_10036_kernel;branch=${SRCBRANCH} \
            file://defconfig"
 
-SRCREV = "83b17774ae0201bbd6333f7b1757db4476c95475"
+SRCREV = "61dbe8ef338ce4cc1c10d5a6cdd418c047fb136d"
 
 S = "${WORKDIR}/git"
 
