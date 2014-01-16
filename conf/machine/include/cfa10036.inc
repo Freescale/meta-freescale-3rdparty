@@ -22,7 +22,7 @@ IMAGE_FSTYPES ?= "tar.bz2 ext3 barebox.mxsboot-sdcard sdcard"
 
 SERIAL_CONSOLE = "115200 ttyAMA0"
 
-MACHINE_FEATURES = "apm usbgadget usbhost vfat"
+MACHINE_FEATURES = "usbgadget usbhost vfat"
 
 # Avoid adding gst-fsl-plugin as we use non-FSL kernel
 MACHINE_GSTREAMER_PLUGIN_cfa10036 = ""
