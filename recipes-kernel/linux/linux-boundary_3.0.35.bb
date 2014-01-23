@@ -10,11 +10,6 @@ SRC_URI = "git://github.com/boundarydevices/linux-imx6.git;branch=${SRCBRANCH} \
 
 LOCALVERSION = "-4.1.0+yocto"
 SRCBRANCH = "boundary-imx_3.0.35_4.1.0"
-SRCREV = "58099389255add7c17ce6babf37a50ce5d11d6b8"
-
-
-# GPU support patches
-SRC_URI += "file://drm-vivante-Add-00-sufix-in-returned-bus-Id.patch \
-"
+SRCREV = "79a3b6d5276a4025411367912c33d7d4f5e63c15"
 
 COMPATIBLE_MACHINE = "(mx6)"
