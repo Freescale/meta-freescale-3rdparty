@@ -1,4 +1,4 @@
-# Adapted from linux-imx.inc, copyright (C) 2013 O.S. Systems Software LTDA
+# Adapted from linux-imx.inc, copyright (C) 2013, 2014 O.S. Systems Software LTDA
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 require recipes-kernel/linux/linux-imx.inc
@@ -6,6 +6,7 @@ require recipes-kernel/linux/linux-imx.inc
 DESCRIPTION = "Linux kernel for Boundary Devices boards"
 
 SRC_URI = "git://github.com/boundarydevices/linux-imx6.git;branch=${SRCBRANCH} \
+           file://ENGR00278350-gpu-viante-4.6.9p13-kernel-part-integra.patch \
            file://defconfig"
 
 LOCALVERSION = "-4.1.0+yocto"
