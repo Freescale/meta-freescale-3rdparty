@@ -1,12 +1,12 @@
 LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
+LIC_FILES_CHKSUM = "file://Licenses/README;md5=025bf9f768cbcb1a165dbe1a110babfb"
 COMPATIBLE_MACHINE = "(imx6qsabrelite|nitrogen6x)"
 DEPENDS = "u-boot-mkimage-native"
 
-PV = "v2013.01+git${SRCPV}"
+PV = "v2013.10+git${SRCPV}"
 
-SRCREV = "f89bc066db0569008418fac1a0408a9a57f2232f"
-SRCBRANCH = "production-before-20131107"
+SRCREV = "30a8005a20e73ef963ba056d8835ab1bb8dcb77a"
+SRCBRANCH = "v2013.10-20131119"
 SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git;branch=${SRCBRANCH}"
 
 S = "${WORKDIR}/git"
