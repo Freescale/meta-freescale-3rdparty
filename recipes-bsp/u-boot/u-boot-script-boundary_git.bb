@@ -14,16 +14,33 @@ S = "${WORKDIR}/git"
 inherit deploy
 
 do_mkimage () {
-    # workaround the case where MACHINE=imx6qsabrelite
+
+    boarddir=nitrogen6x;
+    if test "${MACHINE}" = "nitrogen6x-lite"; then
+            boarddir=nit6xlite;
+    fi
+
+    # allow deploy to use the ${MACHINE} name to simplify things
     if [ ! -d board/boundary/${MACHINE} ]; then
         mkdir board/boundary/${MACHINE}
     fi
+    bootscript=board/boundary/${boarddir}/6x_bootscript-yocto.txt;
+    if ! [ -f $bootscript ]; then
+        bootscript=board/boundary/${boarddir}/6x_bootscript-yocto.txt;
+    fi
+    echo "bootscript == $bootscript"
+
+    upgradescript=board/boundary/${boarddir}/6x_upgrade.txt;
+    if ! [ -f $upgradescript ]; then
+        upgradescript=board/boundary/nitrogen6x/6x_upgrade.txt;
+    fi
+
     uboot-mkimage  -A arm -O linux -T script -C none -a 0 -e 0 \
-                   -n "boot script" -d board/boundary/nitrogen6x/6x_bootscript-yocto.txt \
+                   -n "boot script" -d $bootscript \
                    board/boundary/${MACHINE}/6x_bootscript
 
     uboot-mkimage  -A arm -O linux -T script -C none -a 0 -e 0 \
-                   -n "upgrade script" -d board/boundary/nitrogen6x/6x_upgrade.txt \
+                   -n "upgrade script" -d $upgradescript \
                    board/boundary/${MACHINE}/6x_upgrade
 }
 
