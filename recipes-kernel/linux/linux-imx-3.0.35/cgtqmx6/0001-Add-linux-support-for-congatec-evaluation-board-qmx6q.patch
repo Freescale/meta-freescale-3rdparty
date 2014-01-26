@@ -1,11 +1,12 @@
-From 08820dff9be6ad5e55986e155d7acd0ac051b2c7 Mon Sep 17 00:00:00 2001
+From 8848547bb783e01a9f00104b0d4fb1366893c245 Mon Sep 17 00:00:00 2001
 From: Leo Sartre <lsartre@adeneo-embedded.com>
 Date: Wed, 29 May 2013 09:46:23 +0200
 Subject: [PATCH] Add support for congatec evaluation board qmx6q and qmx6qdl
+Organization: O.S. Systems Software LTDA.
 
 Add support for congatec Qeval board, patch originaly written by
 Congatec team, some minor changes and cleanup were applied to make it
-work with the bsp 4.0 release.
+work with the bsp 4.1 release.
 ---
  arch/arm/configs/qmx6_defconfig             | 2659 +++++++++++++++++++++++++++
  arch/arm/configs/qmx6_updater_defconfig     | 2367 ++++++++++++++++++++++++
@@ -18,12 +19,12 @@ work with the bsp 4.0 release.
  arch/arm/plat-mxc/include/mach/esdhc.h      |    1 +
  arch/arm/tools/mach-types                   |    1 +
  drivers/mmc/host/sdhci-esdhc-imx.c          |    5 +-
- drivers/net/fec.c                           |   29 +-
+ drivers/net/fec.c                           |   32 +-
  drivers/net/phy/micrel.c                    |   23 +
  include/linux/micrel_phy.h                  |    1 +
  sound/soc/imx/Kconfig                       |    2 +-
  sound/soc/imx/imx-sgtl5000.c                |    2 +-
- 16 files changed, 6910 insertions(+), 16 deletions(-)
+ 16 files changed, 6910 insertions(+), 19 deletions(-)
  create mode 100644 arch/arm/configs/qmx6_defconfig
  create mode 100644 arch/arm/configs/qmx6_updater_defconfig
  create mode 100644 arch/arm/mach-mx6/board-mx6dl_qmx6.h
@@ -5070,7 +5071,7 @@ index 0000000..0b0c165
 +CONFIG_NLATTR=y
 +# CONFIG_AVERAGE is not set
 diff --git a/arch/arm/mach-mx6/Kconfig b/arch/arm/mach-mx6/Kconfig
-index df954b4..7308ad7 100644
+index 64ce4d4..e6c2fca 100644
 --- a/arch/arm/mach-mx6/Kconfig
 +++ b/arch/arm/mach-mx6/Kconfig
 @@ -180,6 +180,41 @@ config MACH_MX6Q_SABRELITE
@@ -7005,7 +7006,7 @@ index 35fd825..44483dd 100644
  		return gpio_get_value(boarddata->wp_gpio);
  	else
 diff --git a/drivers/net/fec.c b/drivers/net/fec.c
-index fc65bdc..33a0bd5 100755
+index 71e0abc..d437fec 100755
 --- a/drivers/net/fec.c
 +++ b/drivers/net/fec.c
 @@ -105,10 +105,10 @@ MODULE_PARM_DESC(macaddr, "FEC Ethernet MAC address");
@@ -7032,7 +7033,7 @@ index fc65bdc..33a0bd5 100755
  #define	OPT_FRAME_SIZE	(PKT_MAXBUF_SIZE << 16)
  #else
  #define	OPT_FRAME_SIZE	0
-@@ -199,8 +199,8 @@ struct fec_enet_private {
+@@ -200,8 +200,8 @@ struct fec_enet_private {
  
  	/* The saved address of a sent-in-place packet/buffer, for skfree(). */
  	unsigned char *tx_bounce[TX_RING_SIZE];
@@ -7043,7 +7044,7 @@ index fc65bdc..33a0bd5 100755
  	ushort	skb_cur;
  	ushort	skb_dirty;
  
-@@ -249,7 +249,7 @@ struct fec_enet_private {
+@@ -250,7 +250,7 @@ struct fec_enet_private {
  #define FEC_NAPI_ENABLE FALSE
  #endif
  
@@ -7052,7 +7053,7 @@ index fc65bdc..33a0bd5 100755
  static void fec_enet_tx(struct net_device *dev);
  static int fec_rx_poll(struct napi_struct *napi, int budget);
  static void fec_enet_rx(struct net_device *dev);
-@@ -517,7 +517,7 @@ fec_enet_tx(struct net_device *ndev)
+@@ -518,7 +518,7 @@ fec_enet_tx(struct net_device *ndev)
  		}
  
  		if (status & BD_ENET_TX_READY)
@@ -7061,7 +7062,7 @@ index fc65bdc..33a0bd5 100755
  
  		/* Deferred means some collisions occurred during transmit,
  		 * but we eventually sent the packet OK.
-@@ -767,7 +767,7 @@ fec_enet_rx(struct net_device *ndev)
+@@ -768,7 +768,7 @@ fec_enet_rx(struct net_device *ndev)
  		ndev->stats.rx_packets++;
  		pkt_len = bdp->cbd_datlen;
  		ndev->stats.rx_bytes += pkt_len;
@@ -7070,7 +7071,7 @@ index fc65bdc..33a0bd5 100755
  
  		if (bdp->cbd_bufaddr)
  			dma_unmap_single(&fep->pdev->dev, bdp->cbd_bufaddr,
-@@ -926,7 +926,7 @@ static void __inline__ fec_get_mac(struct net_device *ndev)
+@@ -927,7 +927,7 @@ static void __inline__ fec_get_mac(struct net_device *ndev)
  
  	/* Adjust MAC if using macaddr */
  	if (iap == macaddr)
@@ -7079,7 +7080,7 @@ index fc65bdc..33a0bd5 100755
  }
  
  /* ------------------------------------------------------------------------- */
-@@ -1111,6 +1111,7 @@ static int fec_enet_mii_init(struct platform_device *pdev)
+@@ -1112,6 +1112,7 @@ static int fec_enet_mii_init(struct platform_device *pdev)
  	const struct platform_device_id *id_entry =
  				platform_get_device_id(fep->pdev);
  	int err = -ENXIO, i;
@@ -7087,20 +7088,23 @@ index fc65bdc..33a0bd5 100755
  
  	/*
  	 * The dual fec interfaces are not equivalent with enet-mac.
-@@ -1139,8 +1140,10 @@ static int fec_enet_mii_init(struct platform_device *pdev)
- 	/*
- 	 * Set MII speed to 2.5 MHz (= clk_get_rate() / 2 * phy_speed)
- 	 */
--	fep->phy_speed = DIV_ROUND_UP(clk_get_rate(fep->clk),
+@@ -1137,11 +1138,10 @@ static int fec_enet_mii_init(struct platform_device *pdev)
+ 
+ 	fep->mii_timeout = 0;
+ 
+-	/*
+-	 * Set MII speed to 2.5 MHz (= clk_get_rate() / 2 * phy_speed)
+-	 */
+-	fep->phy_speed = DIV_ROUND_UP(clk_get_rate(fep->mdc_clk),
 -					(FEC_ENET_MII_CLK << 2)) << 1;
-+
 +	/* sml 2012-11-29: MII Speed derived from 66MHz ipg-clk */
 +	bus_clk = clk_get(NULL, "ipg_clk");
 +	fep->phy_speed = (DIV_ROUND_UP(clk_get_rate(bus_clk), FEC_ENET_MII_CLK)) - 1;
- 
++
  	/* set hold time to 2 internal clock cycle */
  	if (cpu_is_mx6q() || cpu_is_mx6dl())
-@@ -1923,7 +1926,7 @@ fec_probe(struct platform_device *pdev)
+ 		fep->phy_speed |= FEC_ENET_HOLD_TIME;
+@@ -1929,7 +1929,7 @@ fec_probe(struct platform_device *pdev)
  
  	/* Carrier starts down, phylib will bring it up */
  	netif_carrier_off(ndev);
@@ -7205,5 +7209,5 @@ index 9325dc8..7c52545 100644
  	else
  		imx_sgtl5000_dai[0].codec_name = "sgtl5000.1-000a";
 -- 
-1.7.10.4
+1.8.5.3
 
