@@ -15,6 +15,8 @@ require recipes-kernel/linux/linux-dtb.inc
 # Avoid imx-test installation hacks
 IMX_TEST_SUPPORT = "n"
 
-SRC_URI = "git://git.denx.de/linux-denx.git "
+SRCBRANCH ?= "master"
+SRC_URI = "git://git.denx.de/linux-denx.git;branch=${SRCBRANCH} \
+           file://defconfig"
 
 LOCALVERSION = "-denx"

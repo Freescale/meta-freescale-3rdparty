@@ -5,6 +5,6 @@ include linux-denx.inc
 
 # m53evk
 SRCREV_m53evk = "7c75b82904fa555ce7988b97619b85a436a8ed12"
-SRC_URI_append_m53evk = "file://defconfig "
+SRCBRANCH_m53evk = "denx/DENX-v3.9-stable"
 
 COMPATIBLE_MACHINE = "(mx5)"
