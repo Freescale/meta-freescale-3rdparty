@@ -18,6 +18,7 @@ SRC_URI = "git://github.com/SolidRun/linux-imx6.git;branch=${SRCBRANCH} \
            file://0006-Add-support-for-DVI-monitors.patch \
            file://0007-ARM-mach-mx6-board-mx6q_sabresd-Register-SDHC3-first.patch \
            file://mxc_hdmi-dont-require-cea-mode.patch \
-           file://fix-install-breakage-for-fw-images.patch"
+           file://fix-install-breakage-for-fw-images.patch \
+           file://ENGR00278350-gpu-viante-4.6.9p13-kernel-part-integra.patch"
 
 COMPATIBLE_MACHINE = "(cubox-i)"
