@@ -1,0 +1,32 @@
+From f6a15304bc2730ba091eb747c413d4ef4124565e Mon Sep 17 00:00:00 2001
+From: Denys Dmytriyenko <denys at ti.com>
+Date: Mon, 5 Mar 2012 16:34:53 -0500
+Subject: [PATCH] Makefile.fwinst: fix install breakage for FW images residing
+ in firmware/ dir
+
+This fixes below error found on some distros (Gentoo and Fedora):
+*** No rule to make target `lib/firmware/./', needed by `lib/firmware/ti_3410.fw'.  Stop.
+
+Upstream-Status: Pending
+
+Signed-off-by: Denys Dmytriyenko <denys at ti.com>
+---
+ scripts/Makefile.fwinst |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/scripts/Makefile.fwinst b/scripts/Makefile.fwinst
+index 6bf8e87..4d908d1 100644
+--- a/scripts/Makefile.fwinst
++++ b/scripts/Makefile.fwinst
+@@ -27,7 +27,7 @@ endif
+ installed-mod-fw := $(addprefix $(INSTALL_FW_PATH)/,$(mod-fw))
+ 
+ installed-fw := $(addprefix $(INSTALL_FW_PATH)/,$(fw-shipped-all))
+-installed-fw-dirs := $(sort $(dir $(installed-fw))) $(INSTALL_FW_PATH)/.
++installed-fw-dirs := $(sort $(dir $(installed-fw))) $(INSTALL_FW_PATH)/./
+ 
+ # Workaround for make < 3.81, where .SECONDEXPANSION doesn't work.
+ PHONY += $(INSTALL_FW_PATH)/$$(%) install-all-dirs
+-- 
+1.7.8.5
+
