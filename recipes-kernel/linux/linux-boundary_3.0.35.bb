@@ -13,3 +13,4 @@ SRCBRANCH = "boundary-imx_3.0.35_4.1.0"
 SRCREV = "79a3b6d5276a4025411367912c33d7d4f5e63c15"
 
 COMPATIBLE_MACHINE = "(mx6)"
+COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite)"

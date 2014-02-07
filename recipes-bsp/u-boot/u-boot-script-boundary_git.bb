@@ -1,6 +1,5 @@
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=025bf9f768cbcb1a165dbe1a110babfb"
-COMPATIBLE_MACHINE = "(imx6qsabrelite|nitrogen6x)"
 DEPENDS = "u-boot-mkimage-native"
 
 PV = "v2013.10+git${SRCPV}"
@@ -66,3 +65,4 @@ do_install[noexec] = "1"
 do_populate_sysroot[noexec] = "1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite)"

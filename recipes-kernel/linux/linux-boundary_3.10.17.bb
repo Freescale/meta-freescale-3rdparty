@@ -1,4 +1,4 @@
-# Adapted from linux-imx.inc, copyright (C) 2013 O.S. Systems Software LTDA
+# Adapted from linux-imx.inc, copyright (C) 2013, 2014 O.S. Systems Software LTDA
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 require recipes-kernel/linux/linux-imx.inc
@@ -14,3 +14,4 @@ SRCBRANCH = "boundary-imx_3.10.17_1.0.0_beta"
 SRCREV = "92608435c09eef1b111d6b704d016bcc769c55ca"
 
 COMPATIBLE_MACHINE = "(mx6)"
+COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite)"
