@@ -24,5 +24,6 @@ SERIAL_CONSOLE = "115200 ttyAMA0"
 
 MACHINE_FEATURES = "usbgadget usbhost vfat"
 
-# Avoid adding gst-fsl-plugin as we use non-FSL kernel
+# Overrides due use of non-FSL kernel
+PREFERRED_VERSION_imx-test = "00.00.00"
 MACHINE_GSTREAMER_PLUGIN_cfa10036 = ""
