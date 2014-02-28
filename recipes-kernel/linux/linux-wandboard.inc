@@ -13,8 +13,12 @@ SCMVERSION ?= "y"
 
 SRCBRANCH ??= "master"
 
+# Allow override of WANDBOARD_GITHUB_MIRROR to make use of
+# local repository easier
+WANDBOARD_GITHUB_MIRROR ?= "git://github.com/wandboard-org/linux.git"
+
 # SRC_URI for wandboard kernel
-SRC_URI = "git://github.com/wandboard-org/linux.git;branch=${SRCBRANCH} \
+SRC_URI = "${WANDBOARD_GITHUB_MIRROR};branch=${SRCBRANCH} \
            file://defconfig \
 "
 
