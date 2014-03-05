@@ -2,10 +2,10 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=025bf9f768cbcb1a165dbe1a110babfb"
 DEPENDS = "u-boot-mkimage-native"
 
-PV = "v2013.10+git${SRCPV}"
+PV = "v2014.01+git${SRCPV}"
 
-SRCREV = "30a8005a20e73ef963ba056d8835ab1bb8dcb77a"
-SRCBRANCH = "v2013.10-20131119"
+SRCREV = "c4acd1b68c9a843d05aa8cb233843c2689041ef2"
+SRCBRANCH = "v2014.01-20140228"
 SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git;branch=${SRCBRANCH}"
 
 S = "${WORKDIR}/git"
