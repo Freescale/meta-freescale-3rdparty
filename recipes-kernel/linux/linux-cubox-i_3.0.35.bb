@@ -1,5 +1,6 @@
 include recipes-kernel/linux/linux-imx.inc
 
+SUMMARY = "Boundary Devices Kernel 3.0.35 supported by SolidRun with additional machine specific patches"
 SRCREV = "be699c6777f376b5f28e60d8d65942ac94b39908"
 LOCALVERSION = "-4.1.0-cubox-i+yocto"
 SRCBRANCH ?= "imx_3.0.35_4.1.0"

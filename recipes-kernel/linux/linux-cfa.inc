@@ -1,4 +1,4 @@
-DESCRIPTION = "Linux kernel for Crystalfontz boards"
+SUMMARY = "Linux kernel for Crystalfontz boards"
 SECTion = "kernel"
 LICENSE = "GPLv2"
 

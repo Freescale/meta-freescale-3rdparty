@@ -1,7 +1,7 @@
 # Copyright (C) 2013 Marek Vasut <marex@denx.de>
 # Released under the MIT license (see COPYING.MIT for the terms)
 
-DESCRIPTION = "DENX mainline based Linux kernel"
+SUMMARY = "DENX mainline based Linux kernel"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 DEPENDS += "lzop-native"

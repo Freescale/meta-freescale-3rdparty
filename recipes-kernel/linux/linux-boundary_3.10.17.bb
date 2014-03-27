@@ -4,7 +4,7 @@
 require recipes-kernel/linux/linux-imx.inc
 require recipes-kernel/linux/linux-dtb.inc
 
-DESCRIPTION = "Linux kernel for Boundary Devices boards"
+SUMMARY = "Linux kernel for Boundary Devices boards"
 
 SRC_URI = "git://github.com/boundarydevices/linux-imx6.git;branch=${SRCBRANCH} \
            file://defconfig"

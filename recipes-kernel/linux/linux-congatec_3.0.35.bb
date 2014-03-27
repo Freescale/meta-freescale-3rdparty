@@ -2,6 +2,7 @@
 # Copyright (C) 2012-2014 O.S. Systems Software LTDA.
 # Released under the MIT license (see COPYING.MIT for the terms)
 
+SUMMARY = "Linux Kernel based on Freescale Linux kernel to add support for Congatec boards"
 include recipes-kernel/linux/linux-imx.inc
 
 # Revision of 4.1.0 branch
