@@ -1,8 +1,6 @@
 # Copyright (C) 2013-2014 Timesys Corporation
 # Released under the MIT license (see COPYING.MIT for the terms)
 
-DESCRIPTION = "Linux Kernel with added drivers and board support for Vybrid-based platforms."
-
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
 SRCBRANCH_pcl052 = "3.0-pcl052"
