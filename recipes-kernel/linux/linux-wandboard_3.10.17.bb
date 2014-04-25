@@ -6,9 +6,9 @@ require recipes-kernel/linux/linux-dtb.inc
 
 DEPENDS += "lzop-native bc-native"
 
-# Wandboard branch - based on 3.10.17_1.0.0_beta from Freescale git
-SRCBRANCH = "wandboard_imx_3.10.17_1.0.0_beta"
-SRCREV = "4a8ad4e16bbc17be82e95ffcd4241e21d441efbd"
+# Wandboard branch - based on 3.10.17_1.0.0_ga from Freescale git
+SRCBRANCH = "wandboard_imx_3.10.17_1.0.0_ga"
+SRCREV = "9d567e4f285e80bc332e79f0636259bc05a4ee3b"
 LOCALVERSION = "-1.0.0-wandboard"
 
 
