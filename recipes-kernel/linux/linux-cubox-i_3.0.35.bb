@@ -1,7 +1,7 @@
 include recipes-kernel/linux/linux-imx.inc
 
-SUMMARY = "Boundary Devices Kernel 3.0.35 supported by SolidRun with additional machine specific patches"
-SRCREV = "be699c6777f376b5f28e60d8d65942ac94b39908"
+SUMMARY = "Freescale Kernel 3.0.35 supported by SolidRun with additional machine specific patches"
+SRCREV = "6fc170bb7bba5917a1515bfa3dc78c091dfbcde3"
 LOCALVERSION = "-4.1.0-cubox-i+yocto"
 SRCBRANCH ?= "imx_3.0.35_4.1.0"
 
@@ -9,11 +9,11 @@ SRCBRANCH ?= "imx_3.0.35_4.1.0"
 # are already included in the kernel repository:
 #   drm-vivante-Add-00-sufix-in-returned-bus-Id.patch
 #   0001-perf-tools-Fix-getrusage-related-build-failure-on-gl.patch
+#   0002-ARM-7668-1-fix-memset-related-crashes-caused-by-rece.patch
+#   0003-ARM-7670-1-fix-the-memset-fix.patch
 SRC_URI = "git://github.com/SolidRun/linux-imx6.git;branch=${SRCBRANCH} \
            file://defconfig \
            file://epdc-Rename-mxcfb_epdc_kernel.h-to-mxc_epdc.h.patch \
-           file://0002-ARM-7668-1-fix-memset-related-crashes-caused-by-rece.patch \
-           file://0003-ARM-7670-1-fix-the-memset-fix.patch \
            file://0004-ENGR00271136-Fix-build-break-when-CONFIG_CLK_DEBUG-i.patch \
            file://0005-ENGR00271359-Add-Multi-touch-support.patch \
            file://0006-Add-support-for-DVI-monitors.patch \
