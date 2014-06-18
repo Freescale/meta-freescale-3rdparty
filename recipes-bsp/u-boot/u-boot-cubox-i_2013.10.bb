@@ -7,7 +7,7 @@ PROVIDES += "u-boot"
 
 PV = "v2013.10+git${SRCPV}"
 
-SRCREV = "ed888a1e885eda9e8d8313e6bd09c521f193f29d"
+SRCREV = "e313a3a86ee97d5e3c3d9667c951775159f595b8"
 SRC_URI = " \
     git://github.com/SolidRun/u-boot-imx6.git;branch=imx6 \
     file://uEnv.txt \
