@@ -4,7 +4,7 @@ DEPENDS = "u-boot-mkimage-native"
 
 PV = "v2014.01+git${SRCPV}"
 
-SRCREV = "6d00ef4bba6fdfa7897cba631df6c0781992b847"
+SRCREV = "aed9475361820a65e37ed936c833322cbbc0f2b5"
 SRCBRANCH = "v2014.04-20140419"
 SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git;branch=${SRCBRANCH}"
 
