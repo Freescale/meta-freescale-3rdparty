@@ -12,35 +12,25 @@ S = "${WORKDIR}/git"
 
 inherit deploy
 
+BOOTSCRIPT = "${S}/board/boundary/${MACHINE}/6x_bootscript-yocto.txt"
+BOOTSCRIPT_nitrogen6x-lite = "${S}/board/boundary/nit6xlite/6x_bootscript-yocto.txt"
+
+UPGRADESCRIPT = "${S}/board/boundary/${MACHINE}/6x_upgrade.txt"
+UPGRADESCRIPT_nitrogen6x-lite = "${S}/board/boundary/nitrogen6x/6x_upgrade.txt"
+
 do_mkimage () {
-
-    boarddir=nitrogen6x;
-    if test "${MACHINE}" = "nitrogen6x-lite"; then
-            boarddir=nit6xlite;
-    fi
-
     # allow deploy to use the ${MACHINE} name to simplify things
     if [ ! -d board/boundary/${MACHINE} ]; then
         mkdir board/boundary/${MACHINE}
     fi
-    bootscript=board/boundary/${boarddir}/6x_bootscript-yocto.txt;
-    if ! [ -f $bootscript ]; then
-        bootscript=board/boundary/${boarddir}/6x_bootscript-yocto.txt;
-    fi
-    echo "bootscript == $bootscript"
 
-    upgradescript=board/boundary/${boarddir}/6x_upgrade.txt;
-    if ! [ -f $upgradescript ]; then
-        upgradescript=board/boundary/nitrogen6x/6x_upgrade.txt;
-    fi
+    uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
+                  -n "boot script" -d ${BOOTSCRIPT} \
+                  board/boundary/${MACHINE}/6x_bootscript
 
-    uboot-mkimage  -A arm -O linux -T script -C none -a 0 -e 0 \
-                   -n "boot script" -d $bootscript \
-                   board/boundary/${MACHINE}/6x_bootscript
-
-    uboot-mkimage  -A arm -O linux -T script -C none -a 0 -e 0 \
-                   -n "upgrade script" -d $upgradescript \
-                   board/boundary/${MACHINE}/6x_upgrade
+    uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
+                  -n "upgrade script" -d ${UPGRADESCRIPT} \
+                  board/boundary/${MACHINE}/6x_upgrade
 }
 
 addtask mkimage after do_compile before do_install
