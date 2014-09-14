@@ -9,9 +9,9 @@ SUMMARY = "Linux kernel for Boundary Devices boards"
 SRC_URI = "git://github.com/boundarydevices/linux-imx6.git;branch=${SRCBRANCH} \
            file://defconfig"
 
-LOCALVERSION = "-1.0.0_ga+yocto"
-SRCBRANCH = "boundary-imx_3.10.17_1.0.0_ga"
-SRCREV = "62ef71f3f6dc199ecc533c5aea7a88b74e5bf449"
+LOCALVERSION = "-1.0.1_ga+yocto"
+SRCBRANCH = "boundary-imx_3.10.17_1.0.1_ga"
+SRCREV = "50c5697b77294672adc48e80e45864edf35c680b"
 DEPENDS += "lzop-native "
 COMPATIBLE_MACHINE = "(mx6)"
 COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite)"
