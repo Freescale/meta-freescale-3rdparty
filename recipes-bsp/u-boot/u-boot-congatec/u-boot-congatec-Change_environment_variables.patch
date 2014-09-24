@@ -1,0 +1,46 @@
+From 6a87d9cc6bed6956683f7e6305b337a29502b147 Mon Sep 17 00:00:00 2001
+From: Alex de Cabo <alejandro.de-cabo-garcia@congatec.com>
+Date: Tue, 23 Sep 2014 15:17:56 +0200
+Subject: [PATCH] u-boot-congatec: Change environment variables
+
+Changes the loadfdt, loaduimage and mmcroot variables to be
+Yocto community standard compatible
+---
+ include/configs/cgt_qmx6.h        | 4 ++--
+ include/configs/cgt_qmx6_common.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/include/configs/cgt_qmx6.h b/include/configs/cgt_qmx6.h
+index c3278e5..e636ce7 100644
+--- a/include/configs/cgt_qmx6.h
++++ b/include/configs/cgt_qmx6.h
+@@ -20,8 +20,8 @@
+ #define CONFIG_MACH_TYPE	4122
+ #define CONFIG_MXC_UART_BASE	UART2_BASE
+ #define CONFIG_CONSOLE_DEV		"ttymxc1"
+-#define CONFIG_MMCROOT			"/dev/mmcblk0p1"
+-#define CONFIG_BOOTFS			"ext2"
++#define CONFIG_MMCROOT			"/dev/mmcblk0p2"
++#define CONFIG_BOOTFS			"fat"
+ 
+ #include "cgt_qmx6_common.h"
+ #include <asm/arch/imx-regs.h>
+diff --git a/include/configs/cgt_qmx6_common.h b/include/configs/cgt_qmx6_common.h
+index 31a7b7e..b234e46 100644
+--- a/include/configs/cgt_qmx6_common.h
++++ b/include/configs/cgt_qmx6_common.h
+@@ -170,9 +170,9 @@
+ 	"bootscript=echo Running bootscript from mmc ...; " \
+ 		"source\0" \
+ 	"loaduimage=" \
+-		CONFIG_BOOTFS "load mmc ${mmcdev}:${mmcpart} ${loadaddr} boot/${uimage}\0" \
++		CONFIG_BOOTFS "load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${uimage}\0" \
+ 	"loadfdt=" \
+-		CONFIG_BOOTFS "load mmc ${mmcdev}:${mmcpart} ${fdt_addr} boot/${fdt_file}\0" \
++		CONFIG_BOOTFS "load mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0" \
+ 	"mmcboot=echo Booting from mmc ...; " \
+ 		"run mmcargs; " \
+ 		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
+-- 
+1.9.1
+
