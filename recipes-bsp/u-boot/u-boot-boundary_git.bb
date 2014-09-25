@@ -6,10 +6,10 @@ COMPATIBLE_MACHINE = "(imx6qsabrelite|nitrogen6x)"
 
 PROVIDES = "u-boot"
 
-PV = "v2014.04+git${SRCPV}"
+PV = "v2014.07+git${SRCPV}"
 
-SRCREV = "4dfca8881f318f0d346b575ffbe93aa12755c4e9"
-SRCBRANCH = "v2014.04-20140419"
+SRCREV = "f870252376c47011a78cd8c35fdf904001d6c41e"
+SRCBRANCH = "v2014.07-20140914"
 SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git;branch=${SRCBRANCH}"
 
 S = "${WORKDIR}/git"
