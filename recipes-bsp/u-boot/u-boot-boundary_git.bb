@@ -1,5 +1,6 @@
 require recipes-bsp/u-boot/u-boot.inc
 
+DESCRIPTION = "u-boot for Boundary Devices boards."
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=025bf9f768cbcb1a165dbe1a110babfb"
 COMPATIBLE_MACHINE = "(imx6qsabrelite|nitrogen6x)"

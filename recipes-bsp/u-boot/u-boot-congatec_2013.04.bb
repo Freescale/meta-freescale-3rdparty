@@ -2,6 +2,7 @@
 
 require recipes-bsp/u-boot/u-boot.inc
 
+DESCRIPTION = "u-boot which includes support for Congatec Boards."
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
 

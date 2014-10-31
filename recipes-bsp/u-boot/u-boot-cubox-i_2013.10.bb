@@ -1,5 +1,6 @@
 require recipes-bsp/u-boot/u-boot.inc
 
+DESCRIPTION = "u-boot which includes support for SolidRun boards such as Cubox-i."
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=bc069111b5e5b1ed8bed98ae73b596ec"
 
