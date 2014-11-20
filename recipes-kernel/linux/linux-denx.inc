@@ -19,4 +19,4 @@ SRCBRANCH ?= "master"
 SRC_URI = "git://git.denx.de/linux-denx.git;branch=${SRCBRANCH} \
            file://defconfig"
 
-LOCALVERSION = "-denx"
+LOCALVERSION = "-master"

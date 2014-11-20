@@ -8,10 +8,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 require recipes-kernel/linux/linux-imx.inc
 
 # Put a local version until we have a true SRCREV to point to
-LOCALVERSION ?= "+yocto"
 SCMVERSION ?= "y"
 
 SRCBRANCH ??= "master"
+LOCALVERSION ?= "-${SRCBRANCH}"
 
 # Allow override of WANDBOARD_GITHUB_MIRROR to make use of
 # local repository easier
