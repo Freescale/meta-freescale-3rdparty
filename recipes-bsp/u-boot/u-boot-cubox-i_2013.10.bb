@@ -10,6 +10,7 @@ PV = "v2013.10+git${SRCPV}"
 SRCREV = "a06fada55acffacfc9ea174a6980b5bce76a2aeb"
 SRC_URI = " \
     git://github.com/SolidRun/u-boot-imx6.git;branch=imx6 \
+    file://0001-imx6-Fix-SD-offset-to-align-with-mainline-value.patch \
     file://uEnv.txt \
     "
 
