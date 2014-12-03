@@ -1,0 +1,32 @@
+From 64aa2dafcde88f3bdeabe7a8c335b05587b5db5e Mon Sep 17 00:00:00 2001
+From: Otavio Salvador <otavio@ossystems.com.br>
+Date: Wed, 3 Dec 2014 14:47:09 -0200
+Subject: [PATCH] imx6: Fix SD offset to align with mainline value
+Organization: O.S. Systems Software LTDA.
+
+The intended value was 69K but the sector number was wrong, fix it to
+proper value as it aligns it with U-Boot mainline.
+
+Upstream-Status: Pending
+
+Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+---
+ include/configs/imx6_spl.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/imx6_spl.h b/include/configs/imx6_spl.h
+index 4f8efd3..f2ad031 100644
+--- a/include/configs/imx6_spl.h
++++ b/include/configs/imx6_spl.h
+@@ -40,7 +40,7 @@
+ /* #define CONFIG_SPL_SATA_SUPPORT */
+ 
+ #define CONFIG_SPL_MMC_SUPPORT
+-#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	84 /* offset 69KB */
++#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	138 /* offset 69KB */
+ #define CONFIG_SYS_MMCSD_RAW_MODE_KERNEL_SECTOR	0 /* offset 69KB */
+ #define CONFIG_SYS_MMCSD_RAW_MODE_ARGS_SECTOR	0 /* offset 69KB */
+ #define CONFIG_SYS_MMCSD_RAW_MODE_ARGS_SECTORS	0 /* offset 69KB */
+-- 
+2.1.1
+
