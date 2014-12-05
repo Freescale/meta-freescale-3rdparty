@@ -1,0 +1,29 @@
+From b457fdd8a0a299b13659b3e1e89aa0ffc9c5d9d4 Mon Sep 17 00:00:00 2001
+From: Alex de Cabo <alejandro.de-cabo-garcia@congatec.com>
+Date: Thu, 4 Dec 2014 09:55:29 +0100
+Subject: [PATCH] u-boot-congatec: Change environment mmcroot variable
+
+Since Yocto 1.8 include new GPU drivers which require
+3.10.31 kernel this patch modifies the variable mmcroot
+due to on the new kernel version the naming of SD devices
+changes.
+---
+ include/configs/cgt_qmx6.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/cgt_qmx6.h b/include/configs/cgt_qmx6.h
+index e636ce7..547dc7a 100644
+--- a/include/configs/cgt_qmx6.h
++++ b/include/configs/cgt_qmx6.h
+@@ -20,7 +20,7 @@
+ #define CONFIG_MACH_TYPE	4122
+ #define CONFIG_MXC_UART_BASE	UART2_BASE
+ #define CONFIG_CONSOLE_DEV		"ttymxc1"
+-#define CONFIG_MMCROOT			"/dev/mmcblk0p2"
++#define CONFIG_MMCROOT			"/dev/mmcblk1p2"
+ #define CONFIG_BOOTFS			"fat"
+ 
+ #include "cgt_qmx6_common.h"
+-- 
+1.9.1
+
