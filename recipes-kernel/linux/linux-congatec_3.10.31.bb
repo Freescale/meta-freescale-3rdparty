@@ -13,7 +13,7 @@ SRC_URI = "git://git.congatec.com/arm/qmx6_kernel.git;protocol=http;branch=${SRC
            file://defconfig \
 "
 
-SRCREV = "d18ae52fb37b2ca391cb50434f14bee28ff94144"
+SRCREV = "4571a1748729add12c191d3717e26e1c3a915404"
 LOCALVERSION = "-1.1.0-beta2_qmx6"
 
 COMPATIBLE_MACHINE = "(cgtqmx6)"
