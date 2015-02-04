@@ -14,4 +14,4 @@ KERNEL_DEVICETREE = "imx23-olinuxino.dtb"
 SDCARD_ROOTFS ?= "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.ext3"
 IMAGE_FSTYPES ?= "tar.bz2 ext3 uboot.mxsboot-sdcard sdcard"
 
-MACHINE_FEATURES = "apm usbgadget usbhost vfat alsa"
+MACHINE_FEATURES = "apm usbgadget usbhost vfat"
