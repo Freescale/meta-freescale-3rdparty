@@ -11,7 +11,7 @@ PROVIDES += "u-boot"
 
 PV = "2013.04"
 
-SRCREV = "99e13cda437daccd322727359313f5be34b66a76"
+SRCREV = "da45c17308845960330a5f24c77cbe86e1bb3177"
 SRCBRANCH = "cgt_imx_v2013.04_3.10.17_1.0.2"
 
 SRC_URI = "git://git.congatec.com/arm/qmx6_uboot.git;protocol=http;branch=${SRCBRANCH} \
