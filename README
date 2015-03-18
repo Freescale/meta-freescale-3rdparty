@@ -35,3 +35,13 @@ When creating a patch of the last commit, use
 To send it to the community, use
 
     git send-email --to meta-freescale@yoctoproject.org <generated patch>
+
+Patches are normally intended for the master branch.
+
+Patches for other branches should be sent separately so they can be tracked
+individually in Patchwork and should have the branch name in brackets.
+
+For example, use this to generate a patch for branch 'dizzy':
+
+    git format-patch -s \
+	--subject-prefix='meta-freescale][meta-fsl-arm-extra][dizzy][PATCH' -1
