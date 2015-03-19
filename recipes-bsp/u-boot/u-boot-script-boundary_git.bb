@@ -13,6 +13,7 @@ S = "${WORKDIR}/git"
 inherit deploy
 
 BOOTSCRIPT ?= "${S}/board/boundary/${MACHINE}/6x_bootscript-yocto.txt"
+BOOTSCRIPT_imx6qsabrelite ?= "${S}/board/boundary/nitrogen6x/6x_bootscript-yocto.txt"
 BOOTSCRIPT_nitrogen6x-lite ?= "${S}/board/boundary/nit6xlite/6x_bootscript-yocto.txt"
 
 UPGRADESCRIPT = "${S}/board/boundary/nitrogen6x/6x_upgrade.txt"
