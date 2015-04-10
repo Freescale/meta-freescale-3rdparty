@@ -1,0 +1,39 @@
+From dbc95624603467b1a963475aaa980cb2347d4871 Mon Sep 17 00:00:00 2001
+From: Otavio Salvador <otavio@ossystems.com.br>
+Date: Fri, 10 Apr 2015 11:49:54 -0300
+Subject: [PATCH] build: Fix out of tree build
+Organization: O.S. Systems Software LTDA.
+
+Upstream-Status: Pending
+
+Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+---
+ Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 2b963c2..7eb9dae 100644
+--- a/Makefile
++++ b/Makefile
+@@ -464,7 +464,8 @@ $(obj)u-boot.img:	$(obj)u-boot.bin
+ 		-d $< $@
+ 
+ $(obj)u-boot.pn$(CONFIG_QMX6_PN).imx:	$(obj)u-boot.bin
+-		$(CC) -E -x c $(CONFIG_IMX_CONFIG) -I./include -o $(obj)imxcfg.imx
++		$(CC) -E -x c $(CONFIG_IMX_CONFIG) -I$(TOPDIR)/arch/$(ARCH)/include \
++			-I$(TOPDIR)/include -I$(obj)include -o $(obj)imxcfg.imx
+ 		$(obj)tools/mkimage -n  $(obj)imxcfg.imx -T imximage \
+ 		-e $(CONFIG_SYS_TEXT_BASE) -d $< $@
+ 
+@@ -778,7 +779,7 @@ unconfig:
+ 
+ %_config::	unconfig
+ 	@$(MKCONFIG) -A $(@:_config=)
+-	@sed -n 's/^#define CONFIG_QMX6_PN[ \t]/ pn/p' $(obj)include/config.h > localversion-qmx6-pn
++	@sed -n 's/^#define CONFIG_QMX6_PN[ \t]/ pn/p' $(obj)include/config.h > $(obj)localversion-qmx6-pn
+ 
+ 
+ sinclude $(obj).boards.depend
+-- 
+2.1.4
+
