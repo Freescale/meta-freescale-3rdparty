@@ -1,0 +1,30 @@
+From cdf878ae149301273767ed4f5052def1529c6cfa Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 9 Apr 2015 13:27:01 +0300
+Subject: [PATCH 56/59] i2c: fix i2c_of include
+
+The OF helpers have been moved to the core.
+As a result the i2c_of.h does not exist anymore.
+Fix i2c_of include with respect to the latest core implementation.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ sound/soc/fsl/imx-wm8731.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/fsl/imx-wm8731.c b/sound/soc/fsl/imx-wm8731.c
+index c0833cf..7248042 100644
+--- a/sound/soc/fsl/imx-wm8731.c
++++ b/sound/soc/fsl/imx-wm8731.c
+@@ -16,7 +16,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
+-#include <linux/of_i2c.h>
++#include <linux/i2c.h>
+ #include <linux/clk.h>
+ #include <sound/soc.h>
+ #include <sound/pcm_params.h>
+-- 
+1.7.9.5
+

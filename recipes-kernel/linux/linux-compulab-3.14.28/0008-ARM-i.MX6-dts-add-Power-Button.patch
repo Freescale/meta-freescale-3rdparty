@@ -1,0 +1,36 @@
+From a15ad25075d0d78f4462521260902c0f03d6a343 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Tue, 24 Jun 2014 15:35:52 +0300
+Subject: [PATCH 08/59] ARM: i.MX6: dts: add "Power Button"
+
+Add "Power Button" by means of GPIO
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 3f73b83..0abb116 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -87,6 +87,16 @@
+       };
+    };
+ 
++   gpio-keys {
++	compatible = "gpio-keys";
++	power {
++		label = "Power Button";
++		gpios = <&gpio1 29 1>;
++		linux,code = <116>; /* KEY_POWER */
++		gpio-key,wakeup;
++	};
++   };
++
+    aliases {
+ 	mxcfb0 = &mxcfb1;
+ 	mxcfb1 = &mxcfb2;
+-- 
+1.7.9.5
+

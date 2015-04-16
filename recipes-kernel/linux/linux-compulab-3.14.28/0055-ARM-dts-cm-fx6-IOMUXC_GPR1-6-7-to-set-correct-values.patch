@@ -1,0 +1,47 @@
+From 8aa5e04aeeb40323b6f7615b500058c02115d17f Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Mon, 30 Mar 2015 11:29:07 +0300
+Subject: [PATCH 55/59] ARM: dts: cm-fx6: IOMUXC_GPR1/6/7 to set correct
+ values
+
+Add IOMUXC_GPR1/6/7 registers to the iomux default pinctrl group.
+The IOMUXC_GPR1 register must have default value in order to let the SoC boot up after a warm reboot.
+IOMUXC_GPR6/7 registers must have a correct value for the ipu QoS priority.
+Otherwise the SoC reports on:
+1) the interrupt that is a result of a time out error during a read access via DIx.
+2) a new frame starts before the previous end-of-frame event.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi |    8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi b/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi
+index d17a4d1..cff8d4e 100644
+--- a/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi
+@@ -11,6 +11,10 @@
+  * http://www.gnu.org/copyleft/gpl.html
+  */
+ 
++#define MX6QDL_GPR1	0x04 0x04 0x000 0x0 0x0
++#define MX6QDL_GPR6	0x18 0x18 0x000 0x0 0x0
++#define MX6QDL_GPR7	0x1c 0x1c 0x000 0x0 0x0
++
+ / {
+ 	memory {
+ 		reg = <0x10000000 0x20000000>;
+@@ -187,6 +191,10 @@
+ 	hog {
+ 		pinctrl_hog: hoggrp {
+ 			fsl,pins = <
++				MX6QDL_GPR1 0x48400005
++				/* ipu3 QoS */
++				MX6QDL_GPR6 0x007f007f
++				MX6QDL_GPR7 0x007f007f
+ 				/* SATA PWR */
+ 				MX6QDL_PAD_ENET_TX_EN__GPIO1_IO28 0x80000000
+ 				MX6QDL_PAD_EIM_A22__GPIO2_IO16 0x80000000
+-- 
+1.7.9.5
+

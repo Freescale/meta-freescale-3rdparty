@@ -1,0 +1,67 @@
+From 0c263e8ce8ff9a47bc336ed10d7144d7f673ed05 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 15 Jan 2015 13:52:37 +0200
+Subject: [PATCH 29/59] ARM: i.MX6: dts: change issd gpio order
+
+Change the order in which GPIOs are toggled in SATA init sequence to
+accomodate both SanDisk and Phison SSDs.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dtsi |   23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+index 12eed61..dd91190 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+@@ -82,6 +82,16 @@
+ 			startup-delay-us = <10000>;
+ 		};
+ 
++		reg_sata_ldo_en: sata_ldo_en {
++			compatible = "regulator-fixed";
++			regulator-name = "cm_fx6_sata_ldo_en";
++			regulator-min-microvolt = <3300000>;
++			regulator-max-microvolt = <3300000>;
++			gpio = <&gpio2 16 0>;
++			startup-delay-us = <100>;
++			enable-active-high;
++		};
++
+ 		reg_sata_phy_slp: sata_phy_slp {
+ 			compatible = "regulator-fixed";
+ 			regulator-name = "cm_fx6_sata_phy_slp";
+@@ -90,6 +100,7 @@
+ 			gpio = <&gpio3 23 0>;
+ 			startup-delay-us = <100>;
+ 			enable-active-high;
++			vin-supply = <&reg_sata_ldo_en>;
+ 		};
+ 
+ 		reg_sata_nrstdly: sata_nrstdly {
+@@ -133,20 +144,10 @@
+ 			gpio = <&gpio5 2 0>;
+ 			startup-delay-us = <100>;
+ 			enable-active-high;
++			regulator-boot-on;
+ 			vin-supply = <&reg_sata_nstandby1>;
+ 		};
+ 
+-		reg_sata_ldo_en: sata_ldo_en {
+-			compatible = "regulator-fixed";
+-			regulator-name = "cm_fx6_sata_ldo_en";
+-			regulator-min-microvolt = <3300000>;
+-			regulator-max-microvolt = <3300000>;
+-			gpio = <&gpio2 16 0>;
+-			startup-delay-us = <100>;
+-			enable-active-high;
+-			regulator-boot-on;
+-			vin-supply = <&reg_sata_nstandby2>;
+-		};
+ 	};
+ 
+ 	aliases {
+-- 
+1.7.9.5
+

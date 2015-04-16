@@ -1,0 +1,29 @@
+From 6c5e8a2dc899ae44e3ae1007ec1a1be4c6cb0f86 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 26 Feb 2015 16:45:42 +0200
+Subject: [PATCH 42/59] ARM: dts: cm-fx6: enable can bus
+
+Enable can bus.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-sbc-fx6.dts |    6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6.dts b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+index 63f91a6..2432f34 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+@@ -50,3 +50,9 @@
+ 	mode_str ="KD050C-WVGA";
+ 	status = "okay";
+ };
++
++&flexcan1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexcan1_1>;
++	status = "okay";
++};
+-- 
+1.7.9.5
+

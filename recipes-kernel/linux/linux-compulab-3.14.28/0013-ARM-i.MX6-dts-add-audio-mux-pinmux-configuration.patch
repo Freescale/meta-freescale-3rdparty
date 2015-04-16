@@ -1,0 +1,47 @@
+From 6a962cb469afddc96a37dce883af88a29a53a30c Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Sun, 20 Jul 2014 10:57:39 +0300
+Subject: [PATCH 13/59] ARM: i.MX6: dts: add audio mux pinmux configuration
+
+Add audio mux pinmux configuration and enable audio mux.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 286b03e..776e0d8 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -373,6 +373,17 @@
+ 	>;
+      };
+ 
++	/* pins for audmux */
++	pinctrl_audmux: audmuxgrp {
++		fsl,pins = <
++			MX6QDL_PAD_SD2_CMD__AUD4_RXC   0x17059
++			MX6QDL_PAD_SD2_DAT0__AUD4_RXD  0x17059
++			MX6QDL_PAD_SD2_DAT3__AUD4_TXC  0x17059
++			MX6QDL_PAD_SD2_DAT2__AUD4_TXD  0x17059
++			MX6QDL_PAD_SD2_DAT1__AUD4_TXFS 0x17059
++	>;
++	};
++
+ 	/* pins for uart2 */
+ 	pinctrl_uart2: uart2grp {
+ 		fsl,pins = <
+@@ -575,3 +586,9 @@
+ 	pinctrl-0 = <&pinctrl_spdif>;
+ 	status = "okay";
+ };
++
++&audmux {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_audmux>;
++	status = "okay";
++};
+-- 
+1.7.9.5
+

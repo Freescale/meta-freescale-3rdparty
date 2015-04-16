@@ -1,0 +1,31 @@
+From 7b953812d9804bbce9f2b8f21ca5e72229272eb6 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 24 Jul 2014 16:11:29 +0300
+Subject: [PATCH 17/59] ARM: i.MX6: dts: enable v4l2 output
+
+Enable v4l2 output.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |    5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 050795b..2e04224 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -227,6 +227,11 @@
+ 	status = "okay";
+    };
+ 
++   v4l2_out {
++	compatible = "fsl,mxc_v4l2_output";
++	status = "okay";
++   };
++
+ };
+ 
+ &iomuxc {
+-- 
+1.7.9.5
+

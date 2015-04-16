@@ -1,0 +1,50 @@
+From 0d82c1831d3fe3cf53e6b8d0435ff6bd621e07d2 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Sun, 20 Jul 2014 10:42:20 +0300
+Subject: [PATCH 09/59] ARM: i.MX6: dts: Enable uart2 as a serial console
+
+Enable ttymxc1 for use as a serial console:
+1) Add the correct uart2 pinmux configuration.
+2) Disable uart2 dte mode.
+	It allows running 'getty' and 'login' on the ttymxc1.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |   14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 0abb116..16cefe0 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -287,6 +287,16 @@
+ 	>;
+      };
+ 
++	/* pins for uart2 */
++	pinctrl_uart2: uart2grp {
++		fsl,pins = <
++			MX6QDL_PAD_GPIO_7__UART2_TX_DATA 0x1b0b1
++			MX6QDL_PAD_GPIO_8__UART2_RX_DATA 0x1b0b1
++			MX6QDL_PAD_SD4_DAT5__UART2_RTS_B 0x1b0b1
++			MX6QDL_PAD_SD4_DAT6__UART2_CTS_B 0x1b0b1
++	>;
++	};
++
+    };
+ };
+ 
+@@ -389,8 +399,8 @@
+ /* rear serial console */
+ &uart2 {
+    pinctrl-names = "default";
+-   pinctrl-0 = <&pinctrl_uart2_2>;
+-   fsl,dte-mode;
++   pinctrl-0 = <&pinctrl_uart2>;
++   /* fsl,dte-mode; */
+    fsl,uart-has-rtscts;
+    dma-names = "rx", "tx";
+    dmas = <&sdma 27 4 0>, <&sdma 28 4 0>;
+-- 
+1.7.9.5
+

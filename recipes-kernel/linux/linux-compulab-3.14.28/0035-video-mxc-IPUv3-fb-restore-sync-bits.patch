@@ -1,0 +1,114 @@
+From db8c584359449958872973912001bd845438c487 Mon Sep 17 00:00:00 2001
+From: Dmitry Lifshitz <lifshitz@compulab.co.il>
+Date: Thu, 12 Feb 2015 16:59:53 +0200
+Subject: [PATCH 35/59] video: mxc: IPUv3 fb: restore sync bits
+
+Freescale framebuffer driver uses some driver-specific
+proprietary bits in the sync field (like pixel clock polarity).
+
+Xorg driver discards unknown sync bits in the fb_var_screeninfo
+structure. As the results of dropping the proprietary sync bits
+some displays shows various artifacts.
+
+Fix the bug by hacking mxcfb_set_par() callback.
+
+Before applying new var parameters, try to find a match in the mode
+list, skipping proprietary sync bits (FB_MXC_SYNC_MASK).
+
+If the entry is found, copy its FB_MXC_SYNC_MASK bits.
+
+Signed-off-by: Dmitry Lifshitz <lifshitz@compulab.co.il>
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ drivers/video/mxc/mxc_ipuv3_fb.c |   38 ++++++++++++++++++++++++++++++++++++++
+ include/linux/mxcfb.h            |   11 +++++++++++
+ 2 files changed, 49 insertions(+)
+
+diff --git a/drivers/video/mxc/mxc_ipuv3_fb.c b/drivers/video/mxc/mxc_ipuv3_fb.c
+index 1fbfc9d..d24241a 100644
+--- a/drivers/video/mxc/mxc_ipuv3_fb.c
++++ b/drivers/video/mxc/mxc_ipuv3_fb.c
+@@ -428,6 +428,28 @@ static bool mxcfb_need_to_set_par(struct fb_info *fbi)
+ 			sizeof(struct fb_var_screeninfo));
+ }
+ 
++static struct fb_videomode *mxc_match_mode(const struct fb_var_screeninfo *var,
++					  struct list_head *head)
++{
++	struct list_head *pos;
++	struct fb_modelist *modelist;
++	struct fb_videomode *m, mode;
++
++	fb_var_to_videomode(&mode, var);
++	list_for_each(pos, head) {
++		modelist = list_entry(pos, struct fb_modelist, list);
++		m = &modelist->mode;
++
++		mode.sync &= ~FB_MXC_SYNC_MASK;
++		mode.sync |= m->sync & FB_MXC_SYNC_MASK;
++
++		if (fb_mode_is_equal(m, &mode))
++			return m;
++	}
++
++	return NULL;
++}
++
+ /*
+  * Set framebuffer parameters and change the operating mode.
+  *
+@@ -583,6 +605,7 @@ static int mxcfb_set_par(struct fb_info *fbi)
+ 
+ 	if (!mxc_fbi->overlay) {
+ 		uint32_t out_pixel_fmt;
++		struct fb_videomode *sync_mode;
+ 
+ 		memset(&sig_cfg, 0, sizeof(sig_cfg));
+ 		if (fbi->var.vmode & FB_VMODE_INTERLACED)
+@@ -596,6 +619,21 @@ static int mxcfb_set_par(struct fb_info *fbi)
+ 			sig_cfg.Hsync_pol = true;
+ 		if (fbi->var.sync & FB_SYNC_VERT_HIGH_ACT)
+ 			sig_cfg.Vsync_pol = true;
++
++		/*
++		 * Try to find  matching all parameters, except
++		 * FB_MXC_SYNC_MASK bits in the .sync field.
++		 */
++		sync_mode = mxc_match_mode(&fbi->var, &fbi->modelist);
++		/*
++		 * If entry exists in the mode list and FB_MXC_SYNC_MASK
++		 * bits are empty in the fbi->var.sync (most probably cleared
++		 * by the user space application) then copy it from the found
++		 * mode list entry.
++		 */
++		if (sync_mode && !(fbi->var.sync & FB_MXC_SYNC_MASK))
++			fbi->var.sync = sync_mode->sync;
++
+ 		if (!(fbi->var.sync & FB_SYNC_CLK_LAT_FALL))
+ 			sig_cfg.clk_pol = true;
+ 		if (fbi->var.sync & FB_SYNC_DATA_INVERT)
+diff --git a/include/linux/mxcfb.h b/include/linux/mxcfb.h
+index 67db5ee..e63aa2c 100644
+--- a/include/linux/mxcfb.h
++++ b/include/linux/mxcfb.h
+@@ -23,6 +23,17 @@
+ 
+ #include <uapi/linux/mxcfb.h>
+ 
++#define FB_SYNC_OE_LOW_ACT	0x80000000
++#define FB_SYNC_CLK_LAT_FALL	0x40000000
++#define FB_SYNC_DATA_INVERT	0x20000000
++#define FB_SYNC_CLK_IDLE_EN	0x10000000
++#define FB_SYNC_SHARP_MODE	0x08000000
++#define FB_SYNC_SWAP_RGB	0x04000000
++
++#define FB_MXC_SYNC_MASK	(FB_SYNC_OE_LOW_ACT | FB_SYNC_CLK_LAT_FALL | \
++				 FB_SYNC_DATA_INVERT | FB_SYNC_CLK_IDLE_EN | \
++				 FB_SYNC_SHARP_MODE | FB_SYNC_SWAP_RGB)
++
+ extern struct fb_videomode mxcfb_modedb[];
+ extern int mxcfb_modedb_sz;
+ 
+-- 
+1.7.9.5
+

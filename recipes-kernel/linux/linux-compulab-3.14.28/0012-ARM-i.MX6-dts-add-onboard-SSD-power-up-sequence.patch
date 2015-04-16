@@ -1,0 +1,92 @@
+From bf5a6721257ec96c1626f295851014b373a3a20a Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Sun, 20 Jul 2014 10:54:43 +0300
+Subject: [PATCH 12/59] ARM: i.MX6: dts: add onboard SSD power up sequence
+
+Add onboard SSD power up sequence.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |   66 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 0dfffa9..286b03e 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -85,6 +85,72 @@
+          gpio = <&gpio6 16 0>;
+          startup-delay-us = <10000>;
+       };
++
++      reg_sata_phy_slp: sata_phy_slp {
++	      compatible = "regulator-fixed";
++	      regulator-name = "cm_fx6_sata_phy_slp";
++	      regulator-min-microvolt = <3300000>;
++	      regulator-max-microvolt = <3300000>;
++	      gpio = <&gpio3 23 0>;
++	      startup-delay-us = <100>;
++	      enable-active-high;
++      };
++
++      reg_sata_nrstdly: sata_nrstdly {
++	      compatible = "regulator-fixed";
++	      regulator-name = "cm_fx6_sata_nrstdly";
++	      regulator-min-microvolt = <3300000>;
++	      regulator-max-microvolt = <3300000>;
++	      gpio = <&gpio6 6 0>;
++	      startup-delay-us = <100>;
++	      enable-active-high;
++	      vin-supply = <&reg_sata_phy_slp>;
++      };
++
++      reg_sata_pwren: sata_pwren {
++	      compatible = "regulator-fixed";
++	      regulator-name = "cm_fx6_sata_pwren";
++	      regulator-min-microvolt = <3300000>;
++	      regulator-max-microvolt = <3300000>;
++	      gpio = <&gpio1 28 0>;
++	      startup-delay-us = <100>;
++	      enable-active-high;
++	      vin-supply = <&reg_sata_nrstdly>;
++      };
++
++      reg_sata_nstandby1: sata_nstandby1 {
++	      compatible = "regulator-fixed";
++	      regulator-name = "cm_fx6_sata_nstandby1";
++	      regulator-min-microvolt = <3300000>;
++	      regulator-max-microvolt = <3300000>;
++	      gpio = <&gpio3 20 0>;
++	      startup-delay-us = <100>;
++	      enable-active-high;
++	      vin-supply = <&reg_sata_pwren>;
++      };
++
++      reg_sata_nstandby2: sata_nstandby2 {
++	      compatible = "regulator-fixed";
++	      regulator-name = "cm_fx6_sata_nstandby2";
++	      regulator-min-microvolt = <3300000>;
++	      regulator-max-microvolt = <3300000>;
++	      gpio = <&gpio5 2 0>;
++	      startup-delay-us = <100>;
++	      enable-active-high;
++	      vin-supply = <&reg_sata_nstandby1>;
++      };
++
++      reg_sata_ldo_en: sata_ldo_en {
++	      compatible = "regulator-fixed";
++	      regulator-name = "cm_fx6_sata_ldo_en";
++	      regulator-min-microvolt = <3300000>;
++	      regulator-max-microvolt = <3300000>;
++	      gpio = <&gpio2 16 0>;
++	      startup-delay-us = <100>;
++	      enable-active-high;
++	      regulator-boot-on;
++	      vin-supply = <&reg_sata_nstandby2>;
++      };
+    };
+ 
+    gpio-keys {
+-- 
+1.7.9.5
+

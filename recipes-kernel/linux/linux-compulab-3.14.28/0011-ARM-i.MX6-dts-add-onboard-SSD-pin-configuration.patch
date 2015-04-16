@@ -1,0 +1,46 @@
+From 811721a51deec0f751d98ba438d763c4b9d1f736 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Sun, 20 Jul 2014 10:53:32 +0300
+Subject: [PATCH 11/59] ARM: i.MX6: dts: add onboard SSD pin configuration
+
+Add onboard SSD pin configuration.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |   20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 592db30..0dfffa9 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -153,6 +153,26 @@
+ };
+ 
+ &iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hog>;
++
++	hog {
++		pinctrl_hog: hoggrp {
++			fsl,pins = <
++				/* SATA PWR */
++				MX6QDL_PAD_ENET_TX_EN__GPIO1_IO28 0x80000000
++				MX6QDL_PAD_EIM_A22__GPIO2_IO16 0x80000000
++				MX6QDL_PAD_EIM_D20__GPIO3_IO20 0x80000000
++				MX6QDL_PAD_EIM_A25__GPIO5_IO02 0x80000000
++				/* SATA CTRL */
++				MX6QDL_PAD_ENET_TXD0__GPIO1_IO30 0x80000000
++				MX6QDL_PAD_EIM_D29__GPIO3_IO29 0x80000000
++				MX6QDL_PAD_EIM_A23__GPIO6_IO06 0x80000000
++				MX6QDL_PAD_EIM_D23__GPIO3_IO23 0x80000000
++			>;
++		};
++	};
++
+    imx6q-cm-fx6 {
+        /* pins for eth0 */
+       pinctrl_enet: enetgrp {
+-- 
+1.7.9.5
+

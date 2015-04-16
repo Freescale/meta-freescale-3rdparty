@@ -1,0 +1,47 @@
+From b59a9dad52a2c53b9921d2e8ecb98dd92ee0bd6b Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Wed, 25 Mar 2015 17:39:07 +0200
+Subject: [PATCH 53/59] ARM: dts: cm-fx6: change the hdmi_core ipu connection
+
+Change the hdmi_core ipu connection in order to
+allow using the second IPU on quad SBC-FX6 boards with ldb devices.
+SBC-FX6m boards still use an IPU per port.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-sbc-fx6m.dts  |    6 ++++++
+ arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi |    4 ++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+index 19bf948..dd8c1c0 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+@@ -21,3 +21,9 @@
+ 	model = "CompuLab CM-FX6 on SBC-FX6m";	
+ 	compatible = "compulab,cm-fx6", "compulab,sbc-fx6m", "fsl,imx6q";
+ };
++
++&hdmi_core {
++	ipu_id = <1>;
++	disp_id = <0>;
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi b/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi
+index 31086b7..4f02e30 100644
+--- a/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi
+@@ -544,8 +544,8 @@
+ };
+ 
+ &hdmi_core {
+-	ipu_id = <1>;
+-	disp_id = <0>;
++	ipu_id = <0>;
++	disp_id = <1>;
+ 	status = "okay";
+ };
+ 
+-- 
+1.7.9.5
+

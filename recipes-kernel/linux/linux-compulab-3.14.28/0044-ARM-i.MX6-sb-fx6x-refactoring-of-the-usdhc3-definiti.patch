@@ -1,0 +1,84 @@
+From 6773725e718bd458147b9e66fa1b9edb95f8dd91 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 5 Mar 2015 09:59:32 +0200
+Subject: [PATCH 44/59] ARM: i.MX6: sb-fx6x: refactoring of the usdhc3
+ definition
+
+Add uhs pinctrl state for usdhc3.
+This is needed for supporting ultra high speed cards.
+
+Add cd/wp definitions.
+Add a missing property no-1-8-v.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-sb-fx6x.dtsi |   32 ++++++++++++++++++++++++++++++--
+ arch/arm/boot/dts/imx6q-sbc-fx6.dts  |    1 +
+ 2 files changed, 31 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
+index 41237c7..372a3c1 100644
+--- a/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
++++ b/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
+@@ -53,6 +53,30 @@
+ 				MX6QDL_PAD_SD3_DAT1__SD3_DATA1 0x17059
+ 				MX6QDL_PAD_SD3_DAT2__SD3_DATA2 0x17059
+ 				MX6QDL_PAD_SD3_DAT3__SD3_DATA3 0x17059
++				MX6QDL_PAD_SD3_DAT4__GPIO7_IO01 0x80000000
++				MX6QDL_PAD_SD3_DAT5__GPIO7_IO00 0x80000000
++			>;
++		};
++
++		pinctrl_usdhc3_100mhz: usdhc3grp-100mhz { /* 100Mhz */
++			fsl,pins = <
++				MX6QDL_PAD_SD3_CMD__SD3_CMD 0x170B9
++				MX6QDL_PAD_SD3_CLK__SD3_CLK 0x100B9
++				MX6QDL_PAD_SD3_DAT0__SD3_DATA0 0x170B9
++				MX6QDL_PAD_SD3_DAT1__SD3_DATA1 0x170B9
++				MX6QDL_PAD_SD3_DAT2__SD3_DATA2 0x170B9
++				MX6QDL_PAD_SD3_DAT3__SD3_DATA3 0x170B9
++			>;
++		};
++
++		pinctrl_usdhc3_200mhz: usdhc3grp-200mhz { /* 200Mhz */
++			fsl,pins = <
++				MX6QDL_PAD_SD3_CMD__SD3_CMD 0x170F9
++				MX6QDL_PAD_SD3_CLK__SD3_CLK 0x100F9
++				MX6QDL_PAD_SD3_DAT0__SD3_DATA0 0x170F9
++				MX6QDL_PAD_SD3_DAT1__SD3_DATA1 0x170F9
++				MX6QDL_PAD_SD3_DAT2__SD3_DATA2 0x170F9
++				MX6QDL_PAD_SD3_DAT3__SD3_DATA3 0x170F9
+ 			>;
+ 		};
+ 
+@@ -77,8 +101,12 @@
+ 
+ /* mmc */
+ &usdhc3 {
+-	pinctrl-names = "default";
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+ 	pinctrl-0 = <&pinctrl_usdhc3>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
++	cd-gpios = <&gpio7 1 0>;
++	no-1-8-v;
+ 	vmmc-supply = <&reg_3p3v>;
+ 	status = "disabled";
+-};
+\ No newline at end of file
++};
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6.dts b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+index 2432f34..cd5c011 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+@@ -33,6 +33,7 @@
+ };
+ 
+ &usdhc3 {
++	wp-gpios = <&gpio7 0 0>;
+ 	status = "okay";
+ };
+ 
+-- 
+1.7.9.5
+

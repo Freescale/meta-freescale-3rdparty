@@ -1,0 +1,67 @@
+From 0afe8320732c2609015af4c0b474cede18f81f24 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Sun, 20 Jul 2014 11:02:28 +0300
+Subject: [PATCH 14/59] ARM: i.MX6: dts: add analog audio support
+
+1) Add i2c analog audion device node definition.
+2) Add wm8731 codec node definition.
+3) Enable ssi2 in master mode.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |   25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 776e0d8..9f5da43 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -168,6 +168,15 @@
+ 	mxcfb1 = &mxcfb2;
+    };
+ 
++	sound {
++		compatible = "fsl,imx6q-cm-fx6-wm8731",
++			  "fsl,imx-audio-wm8731";
++		model = "wm8731-audio";
++		ssi-controller = <&ssi2>;
++		audio-codec = <&codec>;
++		audio-routing = "LOUT", "ROUT", "LLINEIN", "RLINEIN";
++	};
++
+    sound-hdmi {
+ 	compatible = "fsl,imx6q-audio-hdmi",
+ 		"fsl,imx-audio-hdmi";
+@@ -487,6 +496,17 @@
+       reg = <0x50>;
+       pagesize = <16>;
+    };
++
++	codec: wm8731@1a {
++		compatible = "wlf,wm8731";
++		reg = <0x1a>;
++		clocks = <&clks 173>, <&clks 158>;
++		clock-names = "pll4", "imx-ssi.1";
++		AVDD-supply = <&pu_dummy>;
++		HPVDD-supply = <&pu_dummy>;
++		DCVDD-supply = <&pu_dummy>;
++		DBVDD-supply = <&pu_dummy>;
++	};
+ };
+ 
+ /* eth1 */ 
+@@ -556,6 +576,11 @@
+    status = "okay";
+ };
+ 
++&ssi2 {
++	fsl,mode = "i2s-master";
++	status = "okay";
++};
++
+ &mxcfb1 {
+ 	status = "okay";
+ };
+-- 
+1.7.9.5
+

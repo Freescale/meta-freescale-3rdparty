@@ -1,0 +1,30 @@
+From 5fd7676d1ed0b1147d17304fe93f6e65df824fe3 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Tue, 27 Jan 2015 15:54:24 +0200
+Subject: [PATCH 30/59] ARM: i.MX6: dts: add missing WiFi/BT pinmuxes
+
+Set a correct mux mode for both:
+WLAN_BT_nPD and WLAN_BT_nRESET.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dtsi |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+index dd91190..3b1a046 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+@@ -239,6 +239,9 @@
+ 				MX6QDL_PAD_EIM_D23__GPIO3_IO23 0x80000000
+ 				/* POWER_BUTTON */
+ 				MX6QDL_PAD_ENET_TXD1__GPIO1_IO29 0x80000000
++				/* WIFI_PWR_RST */
++				MX6QDL_PAD_GPIO_17__GPIO7_IO12	0x80000000
++				MX6QDL_PAD_NANDF_CS3__GPIO6_IO16 0x80000000
+ 			>;
+ 		};
+ 	};
+-- 
+1.7.9.5
+

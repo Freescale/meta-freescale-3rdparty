@@ -1,0 +1,570 @@
+From feeb12eb1567043d60246cceb805a28d82d2c78e Mon Sep 17 00:00:00 2001
+From: Igor Grinberg <grinberg@compulab.co.il>
+Date: Mon, 23 Mar 2015 09:50:04 +0200
+Subject: [PATCH 47/59] ARM: i.MX6: dts: rename the sb-fx6 board files
+
+In preparation for DL/S support addition, we rename the files to better
+describe the content and reuse the same DT code.
+Rename the sb-fx6 board files' names
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+[grinberg@compulab.co.il: added a bit more descriptive commit message]
+Signed-off-by: Igor Grinberg <grinberg@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-sb-fx6.dtsi    |   60 -----------------
+ arch/arm/boot/dts/imx6q-sb-fx6m.dtsi   |   66 -------------------
+ arch/arm/boot/dts/imx6q-sb-fx6x.dtsi   |  110 --------------------------------
+ arch/arm/boot/dts/imx6q-sbc-fx6.dts    |    4 +-
+ arch/arm/boot/dts/imx6q-sbc-fx6m.dts   |    4 +-
+ arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi  |   60 +++++++++++++++++
+ arch/arm/boot/dts/imx6qdl-sb-fx6m.dtsi |   66 +++++++++++++++++++
+ arch/arm/boot/dts/imx6qdl-sb-fx6x.dtsi |  110 ++++++++++++++++++++++++++++++++
+ 8 files changed, 240 insertions(+), 240 deletions(-)
+ delete mode 100644 arch/arm/boot/dts/imx6q-sb-fx6.dtsi
+ delete mode 100644 arch/arm/boot/dts/imx6q-sb-fx6m.dtsi
+ delete mode 100644 arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-sb-fx6m.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-sb-fx6x.dtsi
+
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6.dtsi
+deleted file mode 100644
+index 4d030f9..0000000
+--- a/arch/arm/boot/dts/imx6q-sb-fx6.dtsi
++++ /dev/null
+@@ -1,60 +0,0 @@
+-/*
+- * Copyright 2014 CompuLab Ltd.
+- *
+- * Author: Valentin Raevsky <valentin@compulab.co.il>
+- *
+- * The code contained herein is licensed under the GNU General Public
+- * License. You may obtain a copy of the GNU General Public License
+- * Version 2 or later at the following locations:
+- *
+- * http://www.opensource.org/licenses/gpl-license.html
+- * http://www.gnu.org/copyleft/gpl.html
+- */
+-
+-/ {
+-	i2cmux {
+-		compatible = "i2c-mux-gpio";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		mux-gpios = <&gpio1 2 0>;
+-		i2c-parent = <&i2c1>;
+-
+-		i2c@0 {
+-			reg = <0>;
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			pca9555@26 {
+-			      compatible = "nxp,pca9555";
+-			      gpio-controller;
+-			      #gpio-cells = <2>;
+-			      reg = <0x26>;
+-			};
+-
+-			hx8526@4a {
+-			      compatible = "himax,himax_ts";
+-			      reg = <0x4a>;
+-			      gpio_intr = <&gpio1 4 0>;
+-			};
+-
+-			eeprom@50 {
+-				compatible = "at24,24c02";
+-				reg = <0x50>;
+-				pagesize = <16>;
+-			};
+-
+-		};
+-
+-		i2c@1 {
+-			reg = <1>;
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			dvi: edid@50 {
+-				compatible = "fsl,imx6-hdmi-i2c";
+-				reg = <0x50>;
+-			};
+-		};
+-
+-	};
+-};
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi
+deleted file mode 100644
+index 5e6c859..0000000
+--- a/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi
++++ /dev/null
+@@ -1,66 +0,0 @@
+-/*
+- * Copyright 2014 CompuLab Ltd.
+- *
+- * Author: Valentin Raevsky <valentin@compulab.co.il>
+- *
+- * The code contained herein is licensed under the GNU General Public
+- * License. You may obtain a copy of the GNU General Public License
+- * Version 2 or later at the following locations:
+- *
+- * http://www.opensource.org/licenses/gpl-license.html
+- * http://www.gnu.org/copyleft/gpl.html
+- */
+-
+-/ {
+-	eth@pcie {
+-		compatible = "intel,i211";
+-		local-mac-address = [FF FF FF FF FF FF];
+-		status = "okay";
+-	};
+-
+-	gpio-keys {
+-		compatible = "gpio-keys";
+-		power {
+-			label = "Power Button";
+-			gpios = <&gpio1 29 1>;
+-			linux,code = <116>; /* KEY_POWER */
+-			gpio-key,wakeup;
+-		};
+-	};
+-
+-	i2cmux {
+-		compatible = "i2c-mux-gpio";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		mux-gpios = <&gpio1 2 0>;
+-		i2c-parent = <&i2c1>;
+-
+-		i2c@0 {
+-			reg = <0>;
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			eeprom@50 {
+-				compatible = "at24,24c02";
+-				reg = <0x50>;
+-				pagesize = <16>;
+-			};
+-
+-			rtc@56 {
+-				compatible = "emmicro,em3027";
+-				reg = <0x56>;
+-			};
+-		};
+-
+-		i2c@1 {
+-			reg = <1>;
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			dvi: edid@50 {
+-				compatible = "fsl,imx6-hdmi-i2c";
+-				reg = <0x50>;
+-			};
+-		};
+-	};
+-};
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
+deleted file mode 100644
+index 01f73ae..0000000
+--- a/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
++++ /dev/null
+@@ -1,110 +0,0 @@
+-/*
+- * Copyright 2014 CompuLab Ltd.
+- *
+- * Author: Valentin Raevsky <valentin@compulab.co.il>
+- *
+- * The code contained herein is licensed under the GNU General Public
+- * License. You may obtain a copy of the GNU General Public License
+- * Version 2 or later at the following locations:
+- *
+- * http://www.opensource.org/licenses/gpl-license.html
+- * http://www.gnu.org/copyleft/gpl.html
+- */
+-
+-/ {
+-	regulators {
+-		compatible = "simple-bus";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-
+-		/* regulator for mmc */
+-		reg_3p3v: 3p3v {
+-			compatible = "regulator-fixed";
+-			regulator-name = "3P3V";
+-			regulator-min-microvolt = <3300000>;
+-			regulator-max-microvolt = <3300000>;
+-			regulator-always-on;
+-		};
+-	};
+-
+-};
+-
+-&iomuxc {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_hog>, <&pinctrl_dvi0>;
+-
+-	imx6q-sb-fx6x {
+-		/* pins for i2c1 */
+-		pinctrl_i2c1: i2c1grp {
+-			fsl,pins = <
+-				MX6QDL_PAD_EIM_D21__I2C1_SCL 0x4001b8b1
+-				MX6QDL_PAD_EIM_D28__I2C1_SDA 0x4001b8b1
+-			>;
+-		};
+-
+-		/* pins for mmc */
+-		pinctrl_usdhc3: usdhc3grp {
+-			fsl,pins = <
+-				MX6QDL_PAD_SD3_CMD__SD3_CMD    0x17059
+-				MX6QDL_PAD_SD3_CLK__SD3_CLK    0x10059
+-				MX6QDL_PAD_SD3_DAT0__SD3_DATA0 0x17059
+-				MX6QDL_PAD_SD3_DAT1__SD3_DATA1 0x17059
+-				MX6QDL_PAD_SD3_DAT2__SD3_DATA2 0x17059
+-				MX6QDL_PAD_SD3_DAT3__SD3_DATA3 0x17059
+-				MX6QDL_PAD_SD3_DAT4__GPIO7_IO01 0x80000000
+-				MX6QDL_PAD_SD3_DAT5__GPIO7_IO00 0x80000000
+-			>;
+-		};
+-
+-		pinctrl_usdhc3_100mhz: usdhc3grp-100mhz { /* 100Mhz */
+-			fsl,pins = <
+-				MX6QDL_PAD_SD3_CMD__SD3_CMD 0x170B9
+-				MX6QDL_PAD_SD3_CLK__SD3_CLK 0x100B9
+-				MX6QDL_PAD_SD3_DAT0__SD3_DATA0 0x170B9
+-				MX6QDL_PAD_SD3_DAT1__SD3_DATA1 0x170B9
+-				MX6QDL_PAD_SD3_DAT2__SD3_DATA2 0x170B9
+-				MX6QDL_PAD_SD3_DAT3__SD3_DATA3 0x170B9
+-			>;
+-		};
+-
+-		pinctrl_usdhc3_200mhz: usdhc3grp-200mhz { /* 200Mhz */
+-			fsl,pins = <
+-				MX6QDL_PAD_SD3_CMD__SD3_CMD 0x170F9
+-				MX6QDL_PAD_SD3_CLK__SD3_CLK 0x100F9
+-				MX6QDL_PAD_SD3_DAT0__SD3_DATA0 0x170F9
+-				MX6QDL_PAD_SD3_DAT1__SD3_DATA1 0x170F9
+-				MX6QDL_PAD_SD3_DAT2__SD3_DATA2 0x170F9
+-				MX6QDL_PAD_SD3_DAT3__SD3_DATA3 0x170F9
+-			>;
+-		};
+-
+-		/* pins for dvi/ts */
+-		pinctrl_dvi0: dvi0grp {
+-			fsl,pins = <
+-				/* DVI_DDC_SEL */
+-				MX6QDL_PAD_GPIO_2__GPIO1_IO02 0x80000000
+-				/* SB-FX6 Himax TS PENDOWN or SB-FX6m DVI HPD */
+-				MX6QDL_PAD_GPIO_4__GPIO1_IO04 0x80000000
+-			>;
+-		};
+-	};
+-};
+-
+-/* i2c1 */
+-&i2c1 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_i2c1>;
+-	status = "disabled";
+-};
+-
+-/* mmc */
+-&usdhc3 {
+-	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+-	pinctrl-0 = <&pinctrl_usdhc3>;
+-	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
+-	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
+-	cd-gpios = <&gpio7 1 0>;
+-	no-1-8-v;
+-	vmmc-supply = <&reg_3p3v>;
+-	status = "disabled";
+-};
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6.dts b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+index 84a6d23..9d31d15 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+@@ -14,8 +14,8 @@
+ /dts-v1/;
+ #include "imx6q.dtsi"
+ #include "imx6q-cm-fx6.dtsi"
+-#include "imx6q-sb-fx6x.dtsi"
+-#include "imx6q-sb-fx6.dtsi"
++#include "imx6qdl-sb-fx6x.dtsi"
++#include "imx6qdl-sb-fx6.dtsi"
+ 
+ / {
+    model = "CompuLab CM-FX6 on SBC-FX6";
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+index 817da28..a98f1a2 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+@@ -14,8 +14,8 @@
+ /dts-v1/;
+ #include "imx6q.dtsi"
+ #include "imx6q-cm-fx6.dtsi"
+-#include "imx6q-sb-fx6x.dtsi"
+-#include "imx6q-sb-fx6m.dtsi"
++#include "imx6qdl-sb-fx6x.dtsi"
++#include "imx6qdl-sb-fx6m.dtsi"
+ 
+ / {
+ 	model = "CompuLab CM-FX6 on SBC-FX6m";	
+diff --git a/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi b/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
+new file mode 100644
+index 0000000..4d030f9
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
+@@ -0,0 +1,60 @@
++/*
++ * Copyright 2014 CompuLab Ltd.
++ *
++ * Author: Valentin Raevsky <valentin@compulab.co.il>
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++/ {
++	i2cmux {
++		compatible = "i2c-mux-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		mux-gpios = <&gpio1 2 0>;
++		i2c-parent = <&i2c1>;
++
++		i2c@0 {
++			reg = <0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			pca9555@26 {
++			      compatible = "nxp,pca9555";
++			      gpio-controller;
++			      #gpio-cells = <2>;
++			      reg = <0x26>;
++			};
++
++			hx8526@4a {
++			      compatible = "himax,himax_ts";
++			      reg = <0x4a>;
++			      gpio_intr = <&gpio1 4 0>;
++			};
++
++			eeprom@50 {
++				compatible = "at24,24c02";
++				reg = <0x50>;
++				pagesize = <16>;
++			};
++
++		};
++
++		i2c@1 {
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			dvi: edid@50 {
++				compatible = "fsl,imx6-hdmi-i2c";
++				reg = <0x50>;
++			};
++		};
++
++	};
++};
+diff --git a/arch/arm/boot/dts/imx6qdl-sb-fx6m.dtsi b/arch/arm/boot/dts/imx6qdl-sb-fx6m.dtsi
+new file mode 100644
+index 0000000..5e6c859
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6qdl-sb-fx6m.dtsi
+@@ -0,0 +1,66 @@
++/*
++ * Copyright 2014 CompuLab Ltd.
++ *
++ * Author: Valentin Raevsky <valentin@compulab.co.il>
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++/ {
++	eth@pcie {
++		compatible = "intel,i211";
++		local-mac-address = [FF FF FF FF FF FF];
++		status = "okay";
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		power {
++			label = "Power Button";
++			gpios = <&gpio1 29 1>;
++			linux,code = <116>; /* KEY_POWER */
++			gpio-key,wakeup;
++		};
++	};
++
++	i2cmux {
++		compatible = "i2c-mux-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		mux-gpios = <&gpio1 2 0>;
++		i2c-parent = <&i2c1>;
++
++		i2c@0 {
++			reg = <0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			eeprom@50 {
++				compatible = "at24,24c02";
++				reg = <0x50>;
++				pagesize = <16>;
++			};
++
++			rtc@56 {
++				compatible = "emmicro,em3027";
++				reg = <0x56>;
++			};
++		};
++
++		i2c@1 {
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			dvi: edid@50 {
++				compatible = "fsl,imx6-hdmi-i2c";
++				reg = <0x50>;
++			};
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/imx6qdl-sb-fx6x.dtsi b/arch/arm/boot/dts/imx6qdl-sb-fx6x.dtsi
+new file mode 100644
+index 0000000..01f73ae
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6qdl-sb-fx6x.dtsi
+@@ -0,0 +1,110 @@
++/*
++ * Copyright 2014 CompuLab Ltd.
++ *
++ * Author: Valentin Raevsky <valentin@compulab.co.il>
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++/ {
++	regulators {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		/* regulator for mmc */
++		reg_3p3v: 3p3v {
++			compatible = "regulator-fixed";
++			regulator-name = "3P3V";
++			regulator-min-microvolt = <3300000>;
++			regulator-max-microvolt = <3300000>;
++			regulator-always-on;
++		};
++	};
++
++};
++
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hog>, <&pinctrl_dvi0>;
++
++	imx6q-sb-fx6x {
++		/* pins for i2c1 */
++		pinctrl_i2c1: i2c1grp {
++			fsl,pins = <
++				MX6QDL_PAD_EIM_D21__I2C1_SCL 0x4001b8b1
++				MX6QDL_PAD_EIM_D28__I2C1_SDA 0x4001b8b1
++			>;
++		};
++
++		/* pins for mmc */
++		pinctrl_usdhc3: usdhc3grp {
++			fsl,pins = <
++				MX6QDL_PAD_SD3_CMD__SD3_CMD    0x17059
++				MX6QDL_PAD_SD3_CLK__SD3_CLK    0x10059
++				MX6QDL_PAD_SD3_DAT0__SD3_DATA0 0x17059
++				MX6QDL_PAD_SD3_DAT1__SD3_DATA1 0x17059
++				MX6QDL_PAD_SD3_DAT2__SD3_DATA2 0x17059
++				MX6QDL_PAD_SD3_DAT3__SD3_DATA3 0x17059
++				MX6QDL_PAD_SD3_DAT4__GPIO7_IO01 0x80000000
++				MX6QDL_PAD_SD3_DAT5__GPIO7_IO00 0x80000000
++			>;
++		};
++
++		pinctrl_usdhc3_100mhz: usdhc3grp-100mhz { /* 100Mhz */
++			fsl,pins = <
++				MX6QDL_PAD_SD3_CMD__SD3_CMD 0x170B9
++				MX6QDL_PAD_SD3_CLK__SD3_CLK 0x100B9
++				MX6QDL_PAD_SD3_DAT0__SD3_DATA0 0x170B9
++				MX6QDL_PAD_SD3_DAT1__SD3_DATA1 0x170B9
++				MX6QDL_PAD_SD3_DAT2__SD3_DATA2 0x170B9
++				MX6QDL_PAD_SD3_DAT3__SD3_DATA3 0x170B9
++			>;
++		};
++
++		pinctrl_usdhc3_200mhz: usdhc3grp-200mhz { /* 200Mhz */
++			fsl,pins = <
++				MX6QDL_PAD_SD3_CMD__SD3_CMD 0x170F9
++				MX6QDL_PAD_SD3_CLK__SD3_CLK 0x100F9
++				MX6QDL_PAD_SD3_DAT0__SD3_DATA0 0x170F9
++				MX6QDL_PAD_SD3_DAT1__SD3_DATA1 0x170F9
++				MX6QDL_PAD_SD3_DAT2__SD3_DATA2 0x170F9
++				MX6QDL_PAD_SD3_DAT3__SD3_DATA3 0x170F9
++			>;
++		};
++
++		/* pins for dvi/ts */
++		pinctrl_dvi0: dvi0grp {
++			fsl,pins = <
++				/* DVI_DDC_SEL */
++				MX6QDL_PAD_GPIO_2__GPIO1_IO02 0x80000000
++				/* SB-FX6 Himax TS PENDOWN or SB-FX6m DVI HPD */
++				MX6QDL_PAD_GPIO_4__GPIO1_IO04 0x80000000
++			>;
++		};
++	};
++};
++
++/* i2c1 */
++&i2c1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c1>;
++	status = "disabled";
++};
++
++/* mmc */
++&usdhc3 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc3>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
++	cd-gpios = <&gpio7 1 0>;
++	no-1-8-v;
++	vmmc-supply = <&reg_3p3v>;
++	status = "disabled";
++};
+-- 
+1.7.9.5
+

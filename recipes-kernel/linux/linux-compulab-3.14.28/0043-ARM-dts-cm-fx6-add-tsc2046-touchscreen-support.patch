@@ -1,0 +1,85 @@
+From 5439887f65973766007f69f56277bfc7bd50494f Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Wed, 25 Feb 2015 20:18:34 +0200
+Subject: [PATCH 43/59] ARM: dts: cm-fx6: add tsc2046 touchscreen support
+
+Add tsc2046 touchscreen support.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dtsi |   45 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+index 5ca8993..704ef4b 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+@@ -148,6 +148,13 @@
+ 			vin-supply = <&reg_sata_nstandby1>;
+ 		};
+ 
++		tsc2046reg: tsc2046-reg {
++			compatible = "regulator-fixed";
++			regulator-name = "tsc2046-reg";
++			regulator-min-microvolt = <3300000>;
++			regulator-max-microvolt = <3300000>;
++		};
++
+ 	};
+ 
+ 	aliases {
+@@ -393,6 +400,14 @@
+ 			>;
+ 		};
+ 
++		/* pins for tsc2046 pendown */
++		pinctrl_tsc2046: tsc2046grp {
++			fsl,pins = <
++				 /* tsc2046 PENDOWN */
++				MX6QDL_PAD_SD4_DAT7__GPIO2_IO15 0x80000000
++			>;
++		};
++
+ 		/* pins for pcie */
+ 		pinctrl_pcie: pciegrp {
+ 			fsl,pins = <
+@@ -471,6 +486,36 @@
+ 			reg = <0x100000 0x100000>;
+ 		};
+ 	};
++
++	/* touch controller */
++	touch:	tsc2046@1 {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_tsc2046>;
++
++		compatible = "ti,tsc2046";
++		vcc-supply = <&tsc2046reg>;
++
++		reg = <1>;	/* CS1 */
++		spi-max-frequency = <1500000>;
++
++		interrupt-parent = <&gpio2>;
++		interrupts = <15 0>;
++		pendown-gpio = <&gpio2 15 0>;
++
++		ti,x-min = /bits/ 16 <0x0>;
++		ti,x-max = /bits/ 16 <0x0fff>;
++		ti,y-min = /bits/ 16 <0x0>;
++		ti,y-max = /bits/ 16 <0x0fff>;
++
++		ti,x-plate-ohms = /bits/ 16 <180>;
++		ti,pressure-max = /bits/ 16 <255>;
++
++		ti,debounce-max = /bits/ 16 <30>;
++		ti,debounce-tol = /bits/ 16 <10>;
++		ti,debounce-rep = /bits/ 16 <1>;
++
++		linux,wakeup;
++	};
+ };
+ 
+ /* eth0 */
+-- 
+1.7.9.5
+

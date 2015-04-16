@@ -1,0 +1,28 @@
+From b223d8ffc36e39f88c1b9014ca6bbaecd9022508 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Wed, 3 Sep 2014 10:48:29 +0300
+Subject: [PATCH 25/59] ARM: i.MX6: dts: add local-mac-address field for fec.
+
+Add local-mac-address field for fec.
+The board U-Boot is in charge to fill this field with a correct value.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6qdl.dtsi |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/imx6qdl.dtsi b/arch/arm/boot/dts/imx6qdl.dtsi
+index 732f2d2..f4f3de3 100644
+--- a/arch/arm/boot/dts/imx6qdl.dtsi
++++ b/arch/arm/boot/dts/imx6qdl.dtsi
+@@ -944,6 +944,7 @@
+ 					 <&clks IMX6QDL_CLK_ENET>,
+ 					 <&clks IMX6QDL_CLK_ENET_REF>;
+ 				clock-names = "ipg", "ahb", "ptp";
++				local-mac-address = [FF FF FF FF FF FF];
+ 				status = "disabled";
+ 			};
+ 
+-- 
+1.7.9.5
+

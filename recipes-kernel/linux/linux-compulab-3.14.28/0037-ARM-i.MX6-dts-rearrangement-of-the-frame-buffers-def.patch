@@ -1,0 +1,70 @@
+From fbf61cbe1472b3c719b7cd67c03c0736096dbeb1 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Wed, 18 Feb 2015 18:53:01 +0200
+Subject: [PATCH 37/59] ARM: i.MX6: dts: rearrangement of the frame buffers
+ definitions
+
+Add a correct frame buffers' definitions
+with regard to the board configuration.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dtsi  |    8 --------
+ arch/arm/boot/dts/imx6q-sbc-fx6.dts  |    8 ++++++++
+ arch/arm/boot/dts/imx6q-sbc-fx6m.dts |    8 ++++++++
+ 3 files changed, 16 insertions(+), 8 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+index 3b1a046..7d39f50 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+@@ -524,14 +524,6 @@
+ 	status = "okay";
+ };
+ 
+-&mxcfb1 {
+-	status = "okay";
+-};
+-
+-&mxcfb2 {
+-	status = "okay";
+-};
+-
+ &hdmi_core {
+ 	ipu_id = <1>;
+ 	disp_id = <0>;
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6.dts b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+index 5febb69..8e7432d 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+@@ -41,3 +41,11 @@
+ 	pinctrl-0 = <&pinctrl_pwm3_1>;
+ 	status = "okay";
+ };
++
++&mxcfb1 {
++	status = "okay";
++};
++
++&mxcfb2 {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+index 31d0e8c..0005eca 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+@@ -58,3 +58,11 @@
+ 	fsl,uart-has-rtscts;
+ 	status = "okay";
+ };
++
++&mxcfb1 {
++	status = "okay";
++};
++
++&mxcfb2 {
++	status = "okay";
++};
+-- 
+1.7.9.5
+

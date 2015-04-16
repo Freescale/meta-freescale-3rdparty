@@ -1,0 +1,36 @@
+From e7e09deee3c3ac74e3d429cf8af2effade1152c7 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Sun, 28 Dec 2014 15:05:21 +0200
+Subject: [PATCH 26/59] ARM: mxs: change usb phy test clock gating.
+
+This change proposes to invert test clock gating.
+This solution has fixed usb hub suspend resume loop issue.
+---
+ drivers/usb/phy/phy-mxs-usb.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
+index 97556b5..fffa67d 100644
+--- a/drivers/usb/phy/phy-mxs-usb.c
++++ b/drivers/usb/phy/phy-mxs-usb.c
+@@ -239,7 +239,7 @@ static void __mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool disconnect)
+ 
+ 	if (disconnect)
+ 		writel_relaxed(BM_USBPHY_DEBUG_CLKGATE,
+-			base + HW_USBPHY_DEBUG_CLR);
++			base + HW_USBPHY_DEBUG_SET);
+ 
+ 	if (mxs_phy->port_id == 0) {
+ 		reg = disconnect ? ANADIG_USB1_LOOPBACK_SET
+@@ -257,7 +257,7 @@ static void __mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool disconnect)
+ 
+ 	if (!disconnect)
+ 		writel_relaxed(BM_USBPHY_DEBUG_CLKGATE,
+-			base + HW_USBPHY_DEBUG_SET);
++			base + HW_USBPHY_DEBUG_CLR);
+ 
+ 	/* Delay some time, and let Linestate be SE0 for controller */
+ 	if (disconnect)
+-- 
+1.7.9.5
+

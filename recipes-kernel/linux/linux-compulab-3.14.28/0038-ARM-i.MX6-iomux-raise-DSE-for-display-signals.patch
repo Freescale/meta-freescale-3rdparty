@@ -1,0 +1,73 @@
+From 18d516509c4acc54d0d8b6ce3019d721db81334a Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Wed, 11 Feb 2015 18:15:42 +0200
+Subject: [PATCH 38/59] ARM: i.MX6: iomux: raise DSE for display signals
+
+While drive strength of display signals is configured for 120 Ohm, some
+displays exhibit artifacts.
+Typical drive strength should be around 50 Ohm.
+To fix the the visual artifacts, we raise the drive strength to 48 Ohm.
+
+Signed-off-by: Igor Grinberg <grinberg@compulab.co.il>
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dtsi |   36 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+index 7d39f50..9a956ac 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+@@ -210,7 +210,7 @@
+ 		disp_id = <0>;
+ 		default_ifmt = "RGB24";
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_ipu1_1>;
++		pinctrl-0 = <&pinctrl_ipu1_lcd>;
+ 		status = "okay";
+ 	};
+ 
+@@ -268,6 +268,40 @@
+ 			>;
+ 		};
+ 
++		pinctrl_ipu1_lcd: ipu1grp-lcd {
++			fsl,pins = <
++				MX6QDL_PAD_DI0_DISP_CLK__IPU1_DI0_DISP_CLK 0x38
++				MX6QDL_PAD_DI0_PIN15__IPU1_DI0_PIN15       0x38
++				MX6QDL_PAD_DI0_PIN2__IPU1_DI0_PIN02        0x38
++				MX6QDL_PAD_DI0_PIN3__IPU1_DI0_PIN03        0x38
++				MX6QDL_PAD_DI0_PIN4__IPU1_DI0_PIN04        0x80000028
++				MX6QDL_PAD_DISP0_DAT0__IPU1_DISP0_DATA00   0x38
++				MX6QDL_PAD_DISP0_DAT1__IPU1_DISP0_DATA01   0x38
++				MX6QDL_PAD_DISP0_DAT2__IPU1_DISP0_DATA02   0x38
++				MX6QDL_PAD_DISP0_DAT3__IPU1_DISP0_DATA03   0x38
++				MX6QDL_PAD_DISP0_DAT4__IPU1_DISP0_DATA04   0x38
++				MX6QDL_PAD_DISP0_DAT5__IPU1_DISP0_DATA05   0x38
++				MX6QDL_PAD_DISP0_DAT6__IPU1_DISP0_DATA06   0x38
++				MX6QDL_PAD_DISP0_DAT7__IPU1_DISP0_DATA07   0x38
++				MX6QDL_PAD_DISP0_DAT8__IPU1_DISP0_DATA08   0x38
++				MX6QDL_PAD_DISP0_DAT9__IPU1_DISP0_DATA09   0x38
++				MX6QDL_PAD_DISP0_DAT10__IPU1_DISP0_DATA10  0x38
++				MX6QDL_PAD_DISP0_DAT11__IPU1_DISP0_DATA11  0x38
++				MX6QDL_PAD_DISP0_DAT12__IPU1_DISP0_DATA12  0x38
++				MX6QDL_PAD_DISP0_DAT13__IPU1_DISP0_DATA13  0x38
++				MX6QDL_PAD_DISP0_DAT14__IPU1_DISP0_DATA14  0x38
++				MX6QDL_PAD_DISP0_DAT15__IPU1_DISP0_DATA15  0x38
++				MX6QDL_PAD_DISP0_DAT16__IPU1_DISP0_DATA16  0x38
++				MX6QDL_PAD_DISP0_DAT17__IPU1_DISP0_DATA17  0x38
++				MX6QDL_PAD_DISP0_DAT18__IPU1_DISP0_DATA18  0x38
++				MX6QDL_PAD_DISP0_DAT19__IPU1_DISP0_DATA19  0x38
++				MX6QDL_PAD_DISP0_DAT20__IPU1_DISP0_DATA20  0x38
++				MX6QDL_PAD_DISP0_DAT21__IPU1_DISP0_DATA21  0x38
++				MX6QDL_PAD_DISP0_DAT22__IPU1_DISP0_DATA22  0x38
++				MX6QDL_PAD_DISP0_DAT23__IPU1_DISP0_DATA23  0x38
++			>;
++		};
++
+ 		/* pins for spi */
+ 		pinctrl_ecspi1: ecspi1grp {
+ 			fsl,pins = <
+-- 
+1.7.9.5
+

@@ -1,0 +1,79 @@
+From da2c6c15b0db7f361b0db50b93b0d2df98ad81a4 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Tue, 5 Aug 2014 15:04:44 +0300
+Subject: [PATCH 19/59] igb: Define the device mac address in device tree
+
+1) Define the device mac address node in the device tree.
+2) Make the driver read the mac address from the device tree node.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts        |    6 ++++++
+ drivers/net/ethernet/intel/igb/igb_main.c |   27 +++++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 1613c32..0e2558f 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -233,6 +233,12 @@
+ 	status = "okay";
+    };
+ 
++   eth@pcie {
++	compatible = "intel,i211";
++	local-mac-address = [00 1C 1D 1E 1F 20];
++	status = "okay";
++   };
++
+ };
+ 
+ &iomuxc {
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index 2472835..5f93765 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -2185,6 +2185,30 @@ static s32 igb_init_i2c(struct igb_adapter *adapter)
+ 	return status;
+ }
+ 
++
++/**
++ *  igb_read_mac_addr_dts - Read mac addres from the device tree
++ *  blob
++ *  @adapter: pointer to adapter structure
++ **/
++static void igb_read_mac_addr_dts(struct e1000_hw *hw)
++{
++	struct device_node *dn;
++	const uint8_t *mac;
++
++	dn = of_find_compatible_node(NULL, NULL, "intel,i211");
++
++	if (!dn)
++		return;
++
++	mac = of_get_property(dn, "local-mac-address", NULL);
++
++	if (mac)
++		memcpy(hw->mac.addr, mac, ETH_ALEN);
++
++	return;
++}
++
+ /**
+  *  igb_probe - Device Initialization Routine
+  *  @pdev: PCI device information struct
+@@ -2387,6 +2411,9 @@ static int igb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	if (hw->mac.ops.read_mac_addr(hw))
+ 		dev_err(&pdev->dev, "NVM Read Error\n");
+ 
++	if (!is_valid_ether_addr(hw->mac.addr))
++		igb_read_mac_addr_dts(hw);
++
+ 	if (!is_valid_ether_addr(hw->mac.addr)) {
+ 		dev_info(&pdev->dev, "Random MAC Address\n");
+ 		random_ether_addr(hw->mac.addr);
+-- 
+1.7.9.5
+

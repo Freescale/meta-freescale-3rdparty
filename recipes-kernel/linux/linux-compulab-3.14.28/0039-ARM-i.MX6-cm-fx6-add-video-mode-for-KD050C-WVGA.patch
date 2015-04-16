@@ -1,0 +1,46 @@
+From 9cc3784253ae0104f22cdd487e6d4065b3308f0b Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 12 Feb 2015 16:54:04 +0200
+Subject: [PATCH 39/59] ARM: i.MX6: cm-fx6: add video mode for KD050C-WVGA
+
+Add video mode for KD050C-WVGA, update the lcdif_modedb with
+the correct parameters for KD050C-WVGA.
+Change mode string for second frame buffer.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-sbc-fx6.dts |    1 +
+ drivers/video/mxc/mxc_lcdif.c       |    6 ++++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6.dts b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+index 8e7432d..63f91a6 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+@@ -47,5 +47,6 @@
+ };
+ 
+ &mxcfb2 {
++	mode_str ="KD050C-WVGA";
+ 	status = "okay";
+ };
+diff --git a/drivers/video/mxc/mxc_lcdif.c b/drivers/video/mxc/mxc_lcdif.c
+index d635edd..ae6ac42 100644
+--- a/drivers/video/mxc/mxc_lcdif.c
++++ b/drivers/video/mxc/mxc_lcdif.c
+@@ -48,6 +48,12 @@ static struct fb_videomode lcdif_modedb[] = {
+ 	FB_SYNC_CLK_LAT_FALL,
+ 	FB_VMODE_NONINTERLACED,
+ 	0,},
++	{
++	/* 800x480 @ 60 Hz , pixel clk @ 32MHz */
++	"KD050C-WVGA", 60, 800, 480, 30000, 40, 40, 13, 29, 48, 3,
++	FB_SYNC_CLK_LAT_FALL,
++	FB_VMODE_NONINTERLACED,
++	0,},
+ };
+ static int lcdif_modedb_sz = ARRAY_SIZE(lcdif_modedb);
+ 
+-- 
+1.7.9.5
+

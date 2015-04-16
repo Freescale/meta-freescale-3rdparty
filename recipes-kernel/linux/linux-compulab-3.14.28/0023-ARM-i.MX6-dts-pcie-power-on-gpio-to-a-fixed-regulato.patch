@@ -1,0 +1,46 @@
+From dbd1cd2da1f43bde17e66b95128533d1658ece09 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Wed, 20 Aug 2014 14:48:09 +0300
+Subject: [PATCH 23/59] ARM: i.MX6: dts: pcie power-on-gpio to a fixed
+ regulator
+
+Define pcie power-on-gpio as a fixed regulator.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dtsi |   12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+index 0aa4461..27f9567 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+@@ -42,6 +42,16 @@
+ 			enable-active-high;
+ 		};
+ 
++		/* regulator1 for pcie power-on-gpio */
++		pcie_power_on_gpio: regulator-pcie-power-on-gpio {
++			compatible = "regulator-fixed";
++			regulator-name = "regulator-pcie-power-on-gpio";
++			regulator-min-microvolt = <3300000>;
++			regulator-max-microvolt = <3300000>;
++			gpio = <&gpio2 24 0>;
++			enable-active-high;
++		};
++
+ 		/* regulator for usb hub1 */
+ 		reg_usb_h1_vbus: usb_h1_vbus {
+ 			compatible = "regulator-fixed";
+@@ -445,7 +455,7 @@
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_pcie>;
+ 	reset-gpio = <&gpio1 26 0>;
+-	power-on-gpio = <&gpio2 24 0>;
++	vdd-supply = <&pcie_power_on_gpio>;
+ 	status = "okay";
+ };
+ 
+-- 
+1.7.9.5
+

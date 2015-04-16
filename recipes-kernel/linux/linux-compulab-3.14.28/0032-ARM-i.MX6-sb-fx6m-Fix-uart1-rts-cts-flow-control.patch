@@ -1,0 +1,53 @@
+From 071b13a32ba25d50adf4f552e71339edce00e1f9 Mon Sep 17 00:00:00 2001
+From: Igor Grinberg <grinberg@compulab.co.il>
+Date: Mon, 23 Feb 2015 15:54:13 +0200
+Subject: [PATCH 32/59] ARM: i.MX6: sb-fx6m: Fix uart1 rts/cts flow control
+
+According to the board schematics uart1 works in DCE mode only.
+Remove the DCEDTE mode flag in the uart1 properties.
+
+Set a correct value in the IOMUXC_UART2_UART_RTS_B_SELECT_INPUT register.
+This value lets connect RTS_B pad to ipp_uart_rts_b when UART is in DCE mode.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+[grinberg@compulab.co.il: removed remnant include from previous patch
+version]
+Signed-off-by: Igor Grinberg <grinberg@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-sbc-fx6m.dts |   13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+index cf2a0eb..8afb83d 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+@@ -19,6 +19,14 @@
+ 	model = "CompuLab CM-FX6 on SBC-FX6m";	
+ 	compatible = "compulab,cm-fx6", "compulab,sbc-fx6m", "fsl,imx6q";
+ 
++	iomux_uart2: pinmux@20E0924 {
++		compatible = "pinctrl-single";
++		reg = <0x20E0000 0x924>;	/* Single register */
++		#address-cells = <1>;
++		#size-cells = <0>;
++		pinctrl-single,register-width = <32>;
++		pinctrl-single,function-mask = <0x4>;
++	};
+ };
+ 
+ &iomuxc {
+@@ -52,9 +60,6 @@
+ &uart2 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_uart2>;
+-	/* fsl,dte-mode; */
+ 	fsl,uart-has-rtscts;
+-	dma-names = "rx", "tx";
+-	dmas = <&sdma 27 4 0>, <&sdma 28 4 0>;
+ 	status = "okay";
+-};
+\ No newline at end of file
++};
+-- 
+1.7.9.5
+

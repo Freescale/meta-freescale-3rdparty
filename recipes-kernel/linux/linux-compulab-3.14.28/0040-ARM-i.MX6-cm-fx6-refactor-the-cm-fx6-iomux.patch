@@ -1,0 +1,54 @@
+From e3f8a9bf6c298da7919353e364e0873425005033 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 19 Feb 2015 15:45:07 +0200
+Subject: [PATCH 40/59] ARM: i.MX6: cm-fx6: refactor the cm-fx6 iomux
+
+Move Marvell Power On and Reset GPIOs into a separate group.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dtsi |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+index 9a956ac..412e03b 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+@@ -239,9 +239,6 @@
+ 				MX6QDL_PAD_EIM_D23__GPIO3_IO23 0x80000000
+ 				/* POWER_BUTTON */
+ 				MX6QDL_PAD_ENET_TXD1__GPIO1_IO29 0x80000000
+-				/* WIFI_PWR_RST */
+-				MX6QDL_PAD_GPIO_17__GPIO7_IO12	0x80000000
+-				MX6QDL_PAD_NANDF_CS3__GPIO6_IO16 0x80000000
+ 			>;
+ 		};
+ 	};
+@@ -387,6 +384,15 @@
+ 			>;
+ 		};
+ 
++		/* pins for wifi/bt */
++		pinctrl_mrvl1: mrvl1grp {
++			fsl,pins = <
++				/* WIFI_PWR_RST */
++				MX6QDL_PAD_GPIO_17__GPIO7_IO12	0x80000000
++				MX6QDL_PAD_NANDF_CS3__GPIO6_IO16 0x80000000
++			>;
++		};
++
+ 		/* pins for pcie */
+ 		pinctrl_pcie: pciegrp {
+ 			fsl,pins = <
+@@ -546,7 +552,7 @@
+ /* wifi/bt */
+ &usdhc1 {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_usdhc1>;
++	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_mrvl1>;
+ 	non-removable;
+ 	vmmc-supply = <&awnh387_npoweron>;
+ 	vmmc_aux-supply = <&awnh387_wifi_nreset>;
+-- 
+1.7.9.5
+

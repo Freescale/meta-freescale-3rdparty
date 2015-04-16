@@ -1,0 +1,172 @@
+From 38a739ee4a93cbf436a4d3dfbe9f9fc729177392 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Wed, 18 Feb 2015 18:25:23 +0200
+Subject: [PATCH 33/59] ARM: i.MX6: dts: add i2cmux support for SBC-FX6 boards
+
+Add i2cmux support for SBC-FX6 boards.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-sb-fx6.dtsi  |   50 +++++++++++++++++++++++++++++++++-
+ arch/arm/boot/dts/imx6q-sb-fx6m.dtsi |   36 ++++++++++++++++++++++++
+ arch/arm/boot/dts/imx6q-sb-fx6x.dtsi |    6 +---
+ arch/arm/boot/dts/imx6q-sbc-fx6.dts  |    2 +-
+ arch/arm/boot/dts/imx6q-sbc-fx6m.dts |    5 ----
+ 5 files changed, 87 insertions(+), 12 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6.dtsi
+index acfc572..fc4f347a 100644
+--- a/arch/arm/boot/dts/imx6q-sb-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-sb-fx6.dtsi
+@@ -11,4 +11,52 @@
+  * http://www.gnu.org/copyleft/gpl.html
+  */
+ 
+-#include "imx6q-sb-fx6x.dtsi"
+\ No newline at end of file
++#include "imx6q-sb-fx6x.dtsi"
++
++/ {
++	i2cmux {
++		compatible = "i2c-mux-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		mux-gpios = <&gpio1 2 0>;
++		i2c-parent = <&i2c1>;
++
++		i2c@0 {
++			reg = <0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			pca9555@26 {
++			      compatible = "nxp,pca9555";
++			      gpio-controller;
++			      #gpio-cells = <2>;
++			      reg = <0x26>;
++			};
++
++			hx8526@4a {
++			      compatible = "himax,himax_ts";
++			      reg = <0x4a>;
++			      gpio_intr = <&gpio1 4 0>;
++			};
++
++			eeprom@50 {
++				compatible = "at24,24c02";
++				reg = <0x50>;
++				pagesize = <16>;
++			};
++
++		};
++
++		i2c@1 {
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			dvi: edid@50 {
++				compatible = "fsl,imx6-hdmi-i2c";
++				reg = <0x50>;
++			};
++		};
++
++	};
++};
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi
+index 5a488f8..a6cc8dd 100644
+--- a/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi
++++ b/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi
+@@ -29,4 +29,40 @@
+ 			gpio-key,wakeup;
+ 		};
+ 	};
++
++	i2cmux {
++		compatible = "i2c-mux-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		mux-gpios = <&gpio1 2 0>;
++		i2c-parent = <&i2c1>;
++
++		i2c@0 {
++			reg = <0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			eeprom@50 {
++				compatible = "at24,24c02";
++				reg = <0x50>;
++				pagesize = <16>;
++			};
++
++			rtc@56 {
++				compatible = "emmicro,em3027";
++				reg = <0x56>;
++			};
++		};
++
++		i2c@1 {
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			dvi: edid@50 {
++				compatible = "fsl,imx6-hdmi-i2c";
++				reg = <0x50>;
++			};
++		};
++	};
+ };
+\ No newline at end of file
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
+index 9f67b3e..ae70c87 100644
+--- a/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
++++ b/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
+@@ -59,11 +59,7 @@
+ &i2c1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_i2c1>;
+-	eeprom@50 {
+-		compatible = "at24,24c02";
+-		reg = <0x50>;
+-		pagesize = <16>;
+-	};
++	status = "disabled";
+ };
+ 
+ /* mmc */
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6.dts b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+index 6f6ad33..4bba196 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+@@ -12,7 +12,7 @@
+ */
+ 
+ /dts-v1/;
+-#include "imx6q-sb-fx6x.dtsi"
++#include "imx6q-sb-fx6.dtsi"
+ #include "imx6q-cm-fx6.dtsi"
+ 
+ / {
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+index 8afb83d..31d0e8c 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+@@ -43,13 +43,8 @@
+ 	};
+ };
+ 
+-
+ &i2c1 {
+ 	status = "okay";
+-	rtc@56 {
+-		compatible = "emmicro,em3027";
+-		reg = <0x56>;
+-	};
+ };
+ 
+ &usdhc3 {
+-- 
+1.7.9.5
+

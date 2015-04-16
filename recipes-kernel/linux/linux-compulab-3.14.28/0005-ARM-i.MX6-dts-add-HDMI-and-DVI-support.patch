@@ -1,0 +1,101 @@
+From 80e3270f42e72dc01f8c2235fbdaf5fa94dd6fce Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Mon, 23 Jun 2014 13:53:35 +0300
+Subject: [PATCH 05/59] ARM: i.MX6: dts: add HDMI and DVI support
+
+Add HDMI and DVI support on IPU1 and IPU2, define two frame buffers.
+Enable starting X with fbdev.
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |   65 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 64 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 1f06d95..018c3b1 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -86,6 +86,44 @@
+          startup-delay-us = <10000>;
+       };
+    };
++
++   aliases {
++	mxcfb0 = &mxcfb1;
++	mxcfb1 = &mxcfb2;
++   };
++
++   mxcfb1: fb@0 {
++	compatible = "fsl,mxc_sdc_fb";
++	disp_dev = "hdmi";
++	interface_pix_fmt = "RGB24";
++	mode_str ="1920x1080M@60";
++	default_bpp = <24>;
++	int_clk = <0>;
++	late_init = <0>;
++	status = "disabled";
++   };
++
++   mxcfb2: fb@1 {
++	compatible = "fsl,mxc_sdc_fb";
++	disp_dev = "lcd";
++	interface_pix_fmt = "RGB24";
++	mode_str ="1920x1080M@60";
++	default_bpp = <24>;
++	int_clk = <0>;
++	late_init = <0>;
++	status = "disabled";
++   };
++
++    lcd@0 {
++	compatible = "fsl,lcd";
++	ipu_id = <0>;
++	disp_id = <0>;
++	default_ifmt = "RGB24";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_ipu1_1>;
++	status = "okay";
++   };
++
+ };
+ 
+ &iomuxc {
+@@ -287,7 +325,7 @@
+ &i2c2 {
+    pinctrl-names = "default";
+    pinctrl-0 = <&pinctrl_i2c2>;
+-   status = "okay";
++   /* status = "okay"; */
+ };
+ 
+ /* i2c3 */
+@@ -366,3 +404,28 @@
+    vmmc-supply = <&reg_3p3v>;
+    status = "okay";
+ };
++
++&mxcfb1 {
++	status = "okay";
++};
++
++&mxcfb2 {
++	status = "okay";
++};
++
++&hdmi_core {
++	ipu_id = <1>;
++	disp_id = <0>;
++	status = "okay";
++};
++
++&hdmi_video {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hdmi_hdcp_1>;
++	fsl,hdcp;
++	status = "okay";
++};
++
++&hdmi_audio {
++/*	status = "okay"; */
++};
+-- 
+1.7.9.5
+

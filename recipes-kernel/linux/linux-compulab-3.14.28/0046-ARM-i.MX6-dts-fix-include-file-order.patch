@@ -1,0 +1,129 @@
+From 1ba89a208ecf8096a1b9a0fd1867d4227e04a1e8 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Sun, 22 Mar 2015 11:15:08 +0200
+Subject: [PATCH 46/59] ARM: i.MX6: dts: fix include file order
+
+Fix include file order.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts   |    3 ++-
+ arch/arm/boot/dts/imx6q-cm-fx6.dtsi  |    2 --
+ arch/arm/boot/dts/imx6q-sb-fx6.dtsi  |    2 --
+ arch/arm/boot/dts/imx6q-sb-fx6m.dtsi |    4 +---
+ arch/arm/boot/dts/imx6q-sb-fx6x.dtsi |    2 --
+ arch/arm/boot/dts/imx6q-sbc-fx6.dts  |    4 +++-
+ arch/arm/boot/dts/imx6q-sbc-fx6m.dts |    4 +++-
+ 7 files changed, 9 insertions(+), 12 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index a0e423b..14c2d6a 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -12,9 +12,10 @@
+  */
+ 
+ /dts-v1/;
++#include "imx6q.dtsi"
+ #include "imx6q-cm-fx6.dtsi"
+ 
+ / {
+ 	model = "CompuLab CM-FX6";
+ 	compatible = "compulab,cm-fx6", "fsl,imx6q";
+-};
+\ No newline at end of file
++};
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+index 8175cee..f53d94e 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+@@ -11,8 +11,6 @@
+  * http://www.gnu.org/copyleft/gpl.html
+  */
+ 
+-#include "imx6q.dtsi"
+-
+ / {
+ 	memory {
+ 		reg = <0x10000000 0x80000000>;
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6.dtsi
+index fc4f347a..4d030f9 100644
+--- a/arch/arm/boot/dts/imx6q-sb-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-sb-fx6.dtsi
+@@ -11,8 +11,6 @@
+  * http://www.gnu.org/copyleft/gpl.html
+  */
+ 
+-#include "imx6q-sb-fx6x.dtsi"
+-
+ / {
+ 	i2cmux {
+ 		compatible = "i2c-mux-gpio";
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi
+index a6cc8dd..5e6c859 100644
+--- a/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi
++++ b/arch/arm/boot/dts/imx6q-sb-fx6m.dtsi
+@@ -11,8 +11,6 @@
+  * http://www.gnu.org/copyleft/gpl.html
+  */
+ 
+-#include "imx6q-sb-fx6x.dtsi"
+-
+ / {
+ 	eth@pcie {
+ 		compatible = "intel,i211";
+@@ -65,4 +63,4 @@
+ 			};
+ 		};
+ 	};
+-};
+\ No newline at end of file
++};
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
+index 372a3c1..01f73ae 100644
+--- a/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
++++ b/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
+@@ -11,8 +11,6 @@
+  * http://www.gnu.org/copyleft/gpl.html
+  */
+ 
+-#include "imx6q.dtsi"
+-
+ / {
+ 	regulators {
+ 		compatible = "simple-bus";
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6.dts b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+index cd5c011..84a6d23 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+@@ -12,8 +12,10 @@
+ */
+ 
+ /dts-v1/;
+-#include "imx6q-sb-fx6.dtsi"
++#include "imx6q.dtsi"
+ #include "imx6q-cm-fx6.dtsi"
++#include "imx6q-sb-fx6x.dtsi"
++#include "imx6q-sb-fx6.dtsi"
+ 
+ / {
+    model = "CompuLab CM-FX6 on SBC-FX6";
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+index 0005eca..817da28 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6m.dts
+@@ -12,8 +12,10 @@
+ */
+ 
+ /dts-v1/;
+-#include "imx6q-sb-fx6m.dtsi"
++#include "imx6q.dtsi"
+ #include "imx6q-cm-fx6.dtsi"
++#include "imx6q-sb-fx6x.dtsi"
++#include "imx6q-sb-fx6m.dtsi"
+ 
+ / {
+ 	model = "CompuLab CM-FX6 on SBC-FX6m";	
+-- 
+1.7.9.5
+

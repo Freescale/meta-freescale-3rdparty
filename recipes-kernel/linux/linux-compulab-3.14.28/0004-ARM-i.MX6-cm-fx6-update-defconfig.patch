@@ -1,0 +1,27 @@
+From f02b927b88856dde0ec988705e6445159bb272ae Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Sun, 22 Jun 2014 18:03:27 +0300
+Subject: [PATCH 04/59] ARM: i.MX6: cm-fx6: update defconfig
+
+Enable EM3027 RTC
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/configs/cm_fx6_defconfig |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/configs/cm_fx6_defconfig b/arch/arm/configs/cm_fx6_defconfig
+index 92c3da1..eb6d9cb 100644
+--- a/arch/arm/configs/cm_fx6_defconfig
++++ b/arch/arm/configs/cm_fx6_defconfig
+@@ -347,6 +347,7 @@ CONFIG_LEDS_TRIGGERS=y
+ CONFIG_LEDS_TRIGGER_GPIO=y
+ CONFIG_RTC_CLASS=y
+ CONFIG_RTC_INTF_DEV_UIE_EMUL=y
++CONFIG_RTC_DRV_EM3027=y
+ CONFIG_RTC_DRV_MC13XXX=y
+ CONFIG_RTC_DRV_MXC=y
+ CONFIG_RTC_DRV_SNVS=y
+-- 
+1.7.9.5
+

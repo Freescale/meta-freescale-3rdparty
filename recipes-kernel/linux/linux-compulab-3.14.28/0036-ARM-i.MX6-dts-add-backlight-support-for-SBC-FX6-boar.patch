@@ -1,0 +1,48 @@
+From ed1cec186cd961a9d910bfc4817b925173a0081d Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Wed, 18 Feb 2015 18:48:26 +0200
+Subject: [PATCH 36/59] ARM: i.MX6: dts: add backlight support for SBC-FX6
+ boards
+
+Add backlight support for SBC-FX6 boards.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-sbc-fx6.dts |   16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-sbc-fx6.dts b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+index 4bba196..5febb69 100644
+--- a/arch/arm/boot/dts/imx6q-sbc-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-sbc-fx6.dts
+@@ -18,6 +18,14 @@
+ / {
+    model = "CompuLab CM-FX6 on SBC-FX6";
+    compatible = "compulab,cm-fx6", "compulab,sbc-fx6", "fsl,imx6q";
++
++	backlight {
++		compatible = "pwm-backlight";
++		pwms = <&pwm3 0 5000000>;
++		brightness-levels = <0 4 8 16 32 64 128 255>;
++		default-brightness-level = <7>;
++	};
++
+ };
+ 
+ &i2c1 {
+@@ -26,4 +34,10 @@
+ 
+ &usdhc3 {
+ 	status = "okay";
+-};
+\ No newline at end of file
++};
++
++&pwm3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm3_1>;
++	status = "okay";
++};
+-- 
+1.7.9.5
+

@@ -1,0 +1,52 @@
+From 7cadcbd1a95de480f3412c56f6a3567ba213091a Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 31 Jul 2014 16:27:38 +0300
+Subject: [PATCH 18/59] ARM: i.MX6: dts: some small changes in the dts file
+
+1) Fixed the color depth value for both frame buffers.
+2) Added a missing OTG pinmux definition.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 2e04224..1613c32 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -200,7 +200,7 @@
+ 	disp_dev = "hdmi";
+ 	interface_pix_fmt = "RGB24";
+ 	mode_str ="1920x1080M@60";
+-	default_bpp = <24>;
++	default_bpp = <32>;
+ 	int_clk = <0>;
+ 	late_init = <0>;
+ 	status = "disabled";
+@@ -211,12 +211,13 @@
+ 	disp_dev = "lcd";
+ 	interface_pix_fmt = "RGB24";
+ 	mode_str ="1920x1080M@60";
+-	default_bpp = <24>;
++	default_bpp = <32>;
+ 	int_clk = <0>;
+ 	late_init = <0>;
+ 	status = "disabled";
+    };
+ 
++
+     lcd@0 {
+ 	compatible = "fsl,lcd";
+ 	ipu_id = <0>;
+@@ -354,6 +355,7 @@
+       pinctrl_usbotg: usbotggrp {
+          fsl,pins = <
+             MX6QDL_PAD_ENET_RX_ER__USB_OTG_ID 0x17059
++            MX6QDL_PAD_EIM_D22__GPIO3_IO22 0x80000000
+          >;
+       };
+ 
+-- 
+1.7.9.5
+

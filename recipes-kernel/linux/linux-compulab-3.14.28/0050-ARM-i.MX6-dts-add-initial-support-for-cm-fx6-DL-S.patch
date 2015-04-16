@@ -1,0 +1,53 @@
+From 7f9cb189d94d973ce8f8211794fc3cb20171ed1a Mon Sep 17 00:00:00 2001
+From: Igor Grinberg <grinberg@compulab.co.il>
+Date: Mon, 23 Mar 2015 10:15:50 +0200
+Subject: [PATCH 50/59] ARM: i.MX6: dts: add initial support for cm-fx6 DL/S
+
+Add initial support for cm-fx6 DL/S modules.
+
+This patch configures:
+1) serial console
+2) hearbeat led
+3) FreeScale NIC
+4) pcie
+5) Intel I210 NIC
+6) Analog audio wm8731-audio
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+[grinberg@compulab.co.il: fix dtsi file name as per previous patch]
+Signed-off-by: Igor Grinberg <grinberg@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6dl-cm-fx6.dts |   21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx6dl-cm-fx6.dts
+
+diff --git a/arch/arm/boot/dts/imx6dl-cm-fx6.dts b/arch/arm/boot/dts/imx6dl-cm-fx6.dts
+new file mode 100644
+index 0000000..d33d14c
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dl-cm-fx6.dts
+@@ -0,0 +1,21 @@
++/*
++ * Copyright 2015 CompuLab Ltd.
++ *
++ * Author: Valentin Raevsky <valentin@compulab.co.il>
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++/dts-v1/;
++#include "imx6dl.dtsi"
++#include "imx6qdl-cm-fx6.dtsi"
++
++/ {
++	model = "CompuLab CM-FX6";
++	compatible = "compulab,cm-fx6", "fsl,imx6dl";
++};
+-- 
+1.7.9.5
+

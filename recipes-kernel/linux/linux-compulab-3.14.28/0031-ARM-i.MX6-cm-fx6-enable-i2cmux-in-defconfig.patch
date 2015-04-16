@@ -1,0 +1,29 @@
+From 9c4cc9ad875d6dbbf099b3eb3cf145e8e32c8fa1 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 12 Feb 2015 13:41:56 +0200
+Subject: [PATCH 31/59] ARM: i.MX6: cm-fx6: enable i2cmux in defconfig
+
+Enable i2cmux in defconfig.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/configs/cm_fx6_defconfig |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm/configs/cm_fx6_defconfig b/arch/arm/configs/cm_fx6_defconfig
+index 210062b..7d753ae 100644
+--- a/arch/arm/configs/cm_fx6_defconfig
++++ b/arch/arm/configs/cm_fx6_defconfig
+@@ -232,6 +232,9 @@ CONFIG_FSL_OTP=y
+ CONFIG_MXS_VIIM=y
+ # CONFIG_I2C_COMPAT is not set
+ CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_MUX=y
++CONFIG_I2C_MUX_GPIO=y
++CONFIG_I2C_MUX_PCA954x=y
+ # CONFIG_I2C_HELPER_AUTO is not set
+ CONFIG_I2C_ALGOPCF=m
+ CONFIG_I2C_ALGOPCA=m
+-- 
+1.7.9.5
+

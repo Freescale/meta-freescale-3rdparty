@@ -1,0 +1,40 @@
+From 608c9ed0c20fe1258b8982e3ce452482aa1c002e Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Mon, 23 Jun 2014 15:29:21 +0300
+Subject: [PATCH 06/59] ARM: i.MX6: dts: add HDMI-Audio support
+
+Add HDMI-Audio support.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 018c3b1..76b4b0c 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -92,6 +92,13 @@
+ 	mxcfb1 = &mxcfb2;
+    };
+ 
++   sound-hdmi {
++	compatible = "fsl,imx6q-audio-hdmi",
++		"fsl,imx-audio-hdmi";
++	model = "imx-audio-hdmi";
++	hdmi-controller = <&hdmi_audio>;
++   };
++
+    mxcfb1: fb@0 {
+ 	compatible = "fsl,mxc_sdc_fb";
+ 	disp_dev = "hdmi";
+@@ -427,5 +434,5 @@
+ };
+ 
+ &hdmi_audio {
+-/*	status = "okay"; */
++	status = "okay";
+ };
+-- 
+1.7.9.5
+

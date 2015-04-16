@@ -1,0 +1,55 @@
+From 82c104998b3e0c8c55c3ddab4d41d8a012e40307 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Mon, 23 Mar 2015 11:47:54 +0200
+Subject: [PATCH 52/59] ARM: dts: cm-fx6: add build targets for cm-fx6 flavour
+ boards.
+
+Add build targets for cm-fx6 flavour boards.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+
+Conflicts:
+
+	arch/arm/boot/dts/Makefile
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/Makefile |    6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 699bf8f..0d6813e 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -153,6 +153,7 @@ dtb-$(CONFIG_ARCH_MXC) += \
+ 	imx53-mba53.dtb \
+ 	imx53-qsb.dtb \
+ 	imx53-smd.dtb \
++	imx6dl-cm-fx6.dtb \
+ 	imx6dl-cubox-i.dtb \
+ 	imx6dl-hummingboard.dtb \
+ 	imx6dl-sabreauto.dtb \
+@@ -164,8 +165,11 @@ dtb-$(CONFIG_ARCH_MXC) += \
+ 	imx6dl-sabresd-ldo.dtb \
+ 	imx6dl-sabresd-pf200.dtb \
+ 	imx6dl-sabresd-hdcp.dtb \
++	imx6dl-sbc-fx6.dtb \
++	imx6dl-sbc-fx6m.dtb \
+ 	imx6dl-wandboard.dtb \
+ 	imx6q-arm2.dtb \
++	imx6q-cm-fx6.dtb \
+ 	imx6q-cubox-i.dtb \
+ 	imx6q-phytec-pbab01.dtb \
+ 	imx6q-sabreauto.dtb \
+@@ -179,6 +183,8 @@ dtb-$(CONFIG_ARCH_MXC) += \
+ 	imx6q-sabresd-uart.dtb \
+ 	imx6q-sabresd-hdcp.dtb \
+ 	imx6q-sabresd-ldo.dtb \
++	imx6q-sbc-fx6.dtb \
++	imx6q-sbc-fx6m.dtb \
+ 	imx6q-sbc6x.dtb \
+ 	imx6q-udoo.dtb \
+ 	imx6q-wandboard.dtb \
+-- 
+1.7.9.5
+

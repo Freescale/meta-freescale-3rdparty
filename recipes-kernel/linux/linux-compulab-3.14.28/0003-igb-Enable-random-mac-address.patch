@@ -1,0 +1,32 @@
+From 0a691facfb253b42cdaeaedd77477d13c6fa99f8 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 15 May 2014 17:26:30 +0300
+Subject: [PATCH 03/59] igb: Enable random mac address
+
+Enable random mac address in order to let the driver up
+if eeprom values are incorrect.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ drivers/net/ethernet/intel/igb/igb_main.c |    5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index 206e79d..2472835 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -2387,6 +2387,11 @@ static int igb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	if (hw->mac.ops.read_mac_addr(hw))
+ 		dev_err(&pdev->dev, "NVM Read Error\n");
+ 
++	if (!is_valid_ether_addr(hw->mac.addr)) {
++		dev_info(&pdev->dev, "Random MAC Address\n");
++		random_ether_addr(hw->mac.addr);
++	}
++
+ 	memcpy(netdev->dev_addr, hw->mac.addr, netdev->addr_len);
+ 
+ 	if (!is_valid_ether_addr(netdev->dev_addr)) {
+-- 
+1.7.9.5
+

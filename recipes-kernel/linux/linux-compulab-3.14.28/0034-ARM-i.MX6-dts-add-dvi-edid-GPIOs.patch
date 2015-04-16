@@ -1,0 +1,46 @@
+From 23349ee1dfee32db88d3a493fc7c8aaeb8e72868 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Thu, 12 Feb 2015 13:49:31 +0200
+Subject: [PATCH 34/59] ARM: i.MX6: dts: add dvi edid GPIOs
+
+Add dvi edid GPIOs.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-sb-fx6x.dtsi |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi b/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
+index ae70c87..41237c7 100644
+--- a/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
++++ b/arch/arm/boot/dts/imx6q-sb-fx6x.dtsi
+@@ -32,6 +32,9 @@
+ };
+ 
+ &iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hog>, <&pinctrl_dvi0>;
++
+ 	imx6q-sb-fx6x {
+ 		/* pins for i2c1 */
+ 		pinctrl_i2c1: i2c1grp {
+@@ -52,6 +55,16 @@
+ 				MX6QDL_PAD_SD3_DAT3__SD3_DATA3 0x17059
+ 			>;
+ 		};
++
++		/* pins for dvi/ts */
++		pinctrl_dvi0: dvi0grp {
++			fsl,pins = <
++				/* DVI_DDC_SEL */
++				MX6QDL_PAD_GPIO_2__GPIO1_IO02 0x80000000
++				/* SB-FX6 Himax TS PENDOWN or SB-FX6m DVI HPD */
++				MX6QDL_PAD_GPIO_4__GPIO1_IO04 0x80000000
++			>;
++		};
+ 	};
+ };
+ 
+-- 
+1.7.9.5
+

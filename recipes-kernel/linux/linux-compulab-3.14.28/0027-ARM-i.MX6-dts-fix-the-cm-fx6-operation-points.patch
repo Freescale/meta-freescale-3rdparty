@@ -1,0 +1,51 @@
+From 246fc4a1169a2ef6fa2582e72bdf3d9c9dc451c2 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Tue, 30 Dec 2014 13:55:58 +0200
+Subject: [PATCH 27/59] ARM: i.MX6: dts: fix the cm-fx6 operation points.
+
+Fix the cm-fx6 operation points. Remove settings for 1.2GHz.
+The current ldo settings do not allow 1.2GHz cpu frequency.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dtsi |   19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+index 27f9567..12eed61 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dtsi
+@@ -380,6 +380,23 @@
+ 	};
+ };
+ 
++&cpu0 {
++	operating-points = <
++		/* kHz    uV */
++		996000  1250000
++		852000  1250000
++		792000  1150000
++		396000  975000
++	>;
++	fsl,soc-operating-points = <
++		/* ARM kHz  SOC-PU uV */
++		996000        1250000
++		852000        1250000
++		792000        1175000
++		396000        1175000
++	>;
++};
++
+ /* spi */
+ &ecspi1 {
+ 	fsl,spi-num-chipselects = <2>;
+@@ -538,4 +555,4 @@
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_audmux>;
+ 	status = "okay";
+-};
+\ No newline at end of file
++};
+-- 
+1.7.9.5
+

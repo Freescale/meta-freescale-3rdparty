@@ -1,0 +1,44 @@
+From 11f421d3b4a9f4b1d256fa6bc6b6b9c313cf1b93 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Sun, 20 Jul 2014 10:51:44 +0300
+Subject: [PATCH 10/59] ARM: i.MX6: dts: add pcie power/reset gpio definition
+
+Add pcie power/reset gpio definition.
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6q-cm-fx6.dts |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-cm-fx6.dts b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+index 16cefe0..592db30 100644
+--- a/arch/arm/boot/dts/imx6q-cm-fx6.dts
++++ b/arch/arm/boot/dts/imx6q-cm-fx6.dts
+@@ -297,6 +297,13 @@
+ 	>;
+ 	};
+ 
++	/* pins for pcie */
++	pinctrl_pcie: pciegrp {
++		fsl,pins = <
++			MX6QDL_PAD_ENET_RXD1__GPIO1_IO26 0x80000000
++			MX6QDL_PAD_EIM_CS1__GPIO2_IO24 0x80000000
++	>;
++     };
+    };
+ };
+ 
+@@ -387,7 +394,10 @@
+ 
+ /* eth1 */ 
+ &pcie {
++   pinctrl-names = "default";
++   pinctrl-0 = <&pinctrl_pcie>;
+    reset-gpio = <&gpio1 26 0>;
++   power-on-gpio = <&gpio2 24 0>;
+    status = "okay";
+ };
+ 
+-- 
+1.7.9.5
+

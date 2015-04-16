@@ -1,0 +1,90 @@
+From e8ab6bcb80954c1b7874c288375defe73242458d Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Wed, 25 Mar 2015 17:55:09 +0200
+Subject: [PATCH 54/59] ARM: i.MX6: dts: add ldb support for SBC-FX6 boards
+
+Add ldb support for SBC-FX6 boards.
+LVDS1/0 ports of the SBC-FX6 are configured.
+LVDS0 - IPU1:DISP0 - fb3
+LVDS1 - IPU1:DISP1 - fb5
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi |   24 ++++++++++++++++++++++++
+ arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi |   18 ++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi b/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi
+index 4f02e30..d17a4d1 100644
+--- a/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-cm-fx6.dtsi
+@@ -92,6 +92,8 @@
+ 	aliases {
+ 		mxcfb0 = &mxcfb1;
+ 		mxcfb1 = &mxcfb2;
++		mxcfb2 = &mxcfb3;
++		mxcfb3 = &mxcfb4;
+ 	};
+ 
+ 	sound {
+@@ -140,6 +142,28 @@
+ 		status = "disabled";
+ 	};
+ 
++	mxcfb3: fb@2 {
++		compatible = "fsl,mxc_sdc_fb";
++		disp_dev = "ldb";
++		interface_pix_fmt = "RGB666";
++		mode_str ="1366x768M-18@60";
++		default_bpp = <16>;
++		int_clk = <0>;
++		late_init = <0>;
++		status = "disabled";
++	};
++
++	mxcfb4: fb@3 {
++		compatible = "fsl,mxc_sdc_fb";
++		disp_dev = "ldb";
++		interface_pix_fmt = "RGB666";
++		mode_str ="1280x800M-18@60";
++		default_bpp = <16>;
++		int_clk = <0>;
++		late_init = <0>;
++		status = "disabled";
++	};
++
+ 	lcd@0 {
+ 		compatible = "fsl,lcd";
+ 		ipu_id = <0>;
+diff --git a/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi b/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
+index 129e88e..85836d7 100644
+--- a/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
+@@ -90,6 +90,24 @@
+ 	status = "okay";
+ };
+ 
++&mxcfb3 {
++	status = "okay";
++};
++
++&mxcfb4 {
++	status = "okay";
++};
++
++&ldb {
++	ipu_id = <1>;
++	disp_id = <0>;
++	ext_ref = <1>;
++	mode = "sep0";
++	sec_ipu_id = <1>;
++	sec_disp_id = <1>;
++	status = "okay";
++};
++
+ &flexcan1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_flexcan1_1>;
+-- 
+1.7.9.5
+
