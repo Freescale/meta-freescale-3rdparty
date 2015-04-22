@@ -1,0 +1,141 @@
+setenv _bscriptver "v1.01"
+
+echo "## Gateworks Ventana Yocto Bootscript ${_bscriptver} ####################"
+
+## First: Memory Allocations ###################################################
+if test -z "${mem}" ; then
+    echo "Detected ${mem_mb}MB DRAM - adjusting CMA memory allocation..."
+
+    # Freescale doesn't provide a 'best practice' for choosing CMA. We determine
+    # it using following formula (please customize mem to your own req's):
+    #  cma=min(((${mem_mb}/2) - round(${mem_mb}*.125))M, 384M)
+    if itest.s "x${mem_mb}" == "x256" ; then
+        setenv mem "cma=96M"
+    elif itest.s "x${mem_mb}" == "x512" ; then
+        setenv mem "cma=192M"
+    elif itest.s "x${mem_mb}" == "x1024" ; then
+        setenv mem "cma=384M"
+    elif itest.s "x${mem_mb}" == "x2048" ; then
+        setenv mem "cma=384M"
+    elif itest.s "x${mem_mb}" == "x4096" ; then
+        setenv mem "cma=384M"
+    else
+        echo "Unable to pigeonhole memory. Defaulting CMA to 96M."
+        setenv mem "cma=96M"
+    fi
+fi
+
+if itest.s "x${mem}" == "xNA" ; then
+    echo "Leaving CMA alone..."
+else
+    setenv extra "${extra}" "${mem}"
+    echo "Memory configuration used from env mem: $mem"
+fi
+
+## Second: Video Options #######################################################
+if test -z "${video}" ; then
+    # locally used variables
+    setenv fb_num 0
+    setenv lvds_flag
+    setenv hdmi_flag
+    setenv cvbs_flag
+    setenv max_disp 3 # 0-3 displays
+
+    # Detect displays if req'd (HDMI->LVDS->CVBS)
+    if test -z "$display" ; then
+        if test -z "$panel" ; then
+            # Start detection scheme
+            i2c dev 2
+            if hdmidet ; then # HDMI
+                setenv display "$display" "HDMI"
+                echo "HDMI Detected"
+            fi
+            if i2c probe 0x04 ; then # Freescale MXC-LVDS1
+                setenv display "$display" "LVDS"
+                echo "LVDS Detected"
+            fi
+            if i2c probe 0x14 ; then # DLC800FIGT3
+                setenv display "$display" "LVDS"
+                echo "LVDS Detected"
+            fi
+            if i2c probe 0x38 ; then # DLC700JMGT4
+                setenv display "$display" "LVDS"
+                echo "LVDS Detected"
+            fi
+        fi
+    fi
+
+    echo "Display(s) to configure: ${display}"
+
+    # Configure displays
+    for disp in ${display} ; do
+        if itest.s "x${disp}" == "xHDMI" ; then
+            if test -z "$hdmi_flag" ; then # Only allow one HDMI display
+                setenv hdmi_flag 1
+                test -n "$hdmi" || hdmi=1080p
+                if itest.s "x${hdmi}" == "x1080p" ; then
+                    setenv hdmi "1920x1080M@60"
+                elif itest.s "x${hdmi}" == "x720p" ; then
+                    setenv hdmi "1280x720M@60"
+                elif itest.s "x${hdmi}" == "x480p" ; then
+                    setenv hdmi "720x480M@60"
+                fi
+                setenv video "$video" "video=mxcfb${fb_num}:dev=hdmi,${hdmi},if=RGB24,bpp=32"
+
+                echo "Setting HDMI Display to mxcfb${fb_num}"
+                setexpr fb_num $fb_num + 1
+            fi
+        elif itest.s "x${disp}" == "xLVDS" ; then
+            if test -z "$lvds_flag" ; then # Only allow one LVDS display
+                setenv lvds_flag 1
+                setenv video "$video" "video=mxcfb${fb_num}:dev=ldb,bpp=32,if=RGB666"
+
+                echo "Setting LVDS Display to mxcfb${fb_num}"
+                setexpr fb_num $fb_num + 1
+            fi
+        elif itest.s "x${disp}" == "xCVBS" ; then
+            if test -z "$cvbs_flag" ; then # Only allow one CVBS display
+                setenv cvbs_flag 1
+                setenv video "$video" "video=mxcfb${fb_num}:dev=adv739x,BT656-NTSC,if=BT656,fbpix=RGB565,bpp=32"
+
+                echo "Setting CVBS Display to mxcfb${fb_num}"
+                setexpr fb_num $fb_num + 1
+            fi
+        else
+            echo "${disp} is an unsupported display type (HDMI|LVDS|CVBS)."
+        fi
+    done
+
+    # Add CVBS display if !(HDMI || LVDS || CVBS || DISPLAY || PANEL)
+    if test -z "$hdmi_flag" ; then
+        if test -z "$lvds_flag" ; then
+            if test -z "$cvbs_flag" ; then
+                if test -z "$display" ; then
+                    if test -z "$panel" ; then
+                        setenv cvbs_flag 1
+                        setenv video "$video" "video=mxcfb${fb_num}:dev=adv739x,BT656-NTSC,if=BT656,fbpix=RGB565,bpp=32"
+
+                        echo "Defaulting CVBS Display to mxcfb${fb_num}"
+                        setexpr fb_num $fb_num + 1
+                    fi
+                fi
+            fi
+        fi
+    fi
+
+    # Mark the rest of the displays to 'off' if panel is not set
+    if test -z "$panel" ; then
+        while test "$fb_num" -le "$max_disp" ; do
+            setenv video "$video" "video=mxcfb${fb_num}:off"
+            setexpr fb_num $fb_num + 1
+        done
+    fi
+
+    # Set only if video is set
+    if test -n "$video" ; then
+        setenv video "${video}"
+    fi
+fi
+echo "Video configuration used from env video: $video"
+
+echo "## End Gateworks Ventana Yocto Bootscript ${_bscriptver} ################"
