@@ -8,7 +8,7 @@ with full support for the i.MX6 features."
 DEPENDS += "lzop-native bc-native"
 
 SRCBRANCH ?= "linux-linaro-lsk-v3.14-mx6"
-SRCREV = "4a2f77e014b8cdd10af1aac0db40f582be027f51"
+SRCREV = "ea83bda1b403d745c67fbf6ea307d05ca138577f"
 LOCALVERSION ?= "-${SRCBRANCH}"
 
 SRC_URI = "git://github.com/SolidRun/linux-imx6-3.14.git;branch=${SRCBRANCH} \
