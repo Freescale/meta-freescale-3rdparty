@@ -77,4 +77,3 @@ noise_cal_ref_2g=53
 noise_cal_po_2g=0
 noise_cal_ref_5g=52
 noise_cal_po_5g=5,0,0
-
