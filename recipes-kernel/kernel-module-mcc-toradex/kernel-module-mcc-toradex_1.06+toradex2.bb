@@ -13,7 +13,7 @@ inherit module
 SRC_URI = "git://github.com/toradex/mcc-kmod.git;protocol=git;branch=${SRCBRANCH}"
 
 SRCBRANCH = "master"
-SRCREV = "6a089386787e0540c30cc12fe774f3481c82051c"
+SRCREV = "d68c842ff871c7930c59366cf76b54c52a045a90"
 
 S = "${WORKDIR}/git"
 
