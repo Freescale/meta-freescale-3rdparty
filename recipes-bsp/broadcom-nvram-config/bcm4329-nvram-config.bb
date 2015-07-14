@@ -5,4 +5,4 @@ include broadcom-nvram-config.inc
 
 CHIP_MODEL = "4329"
 
-COMPATIBLE_MACHINE = "(wandboard-dual|wandboard-quad|cubox-i)"
+COMPATIBLE_MACHINE = "(wandboard|cubox-i)"
