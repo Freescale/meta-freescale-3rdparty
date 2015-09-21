@@ -1,6 +1,7 @@
 # Common definitions for cfa-10036 boards
 
-include conf/machine/include/mxs-base.inc
+include conf/machine/include/imx-base.inc
+include conf/machine/include/tune-arm926ejs.inc
 
 SOC_FAMILY = "mxs:mx28:cfa10036"
 
