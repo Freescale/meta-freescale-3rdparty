@@ -1,0 +1,20 @@
+From 119e027174cde26d8243c52993a35283df4e4920 Mon Sep 17 00:00:00 2001
+From: Anthony Felice <tony.felice@timesys.com>
+Date: Mon, 26 Oct 2015 13:07:23 -0400
+Subject: [PATCH] arm: dts: vf610-phycore-rdk.dts: rename to vf610-pcm052.dts
+
+Rename vf610-phycore-rdk.dts to match upstream U-Boot.
+
+Signed-off-by: Anthony Felice <tony.felice@timesys.com>
+---
+ arch/arm/boot/dts/{vf610-phycore-rdk.dts => vf610-pcm052.dts} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename arch/arm/boot/dts/{vf610-phycore-rdk.dts => vf610-pcm052.dts} (100%)
+
+diff --git a/arch/arm/boot/dts/vf610-phycore-rdk.dts b/arch/arm/boot/dts/vf610-pcm052.dts
+similarity index 100%
+rename from arch/arm/boot/dts/vf610-phycore-rdk.dts
+rename to arch/arm/boot/dts/vf610-pcm052.dts
+-- 
+1.9.1
+
