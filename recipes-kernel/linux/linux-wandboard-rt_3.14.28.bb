@@ -10,7 +10,7 @@ DEPENDS += "lzop-native bc-native"
 # Wandboard branch - based on 3.14.28_1.0.0_ga from Freescale git
 
 SRCBRANCH = "wandboard_imx_3.14.28_1.0.0_ga"
-SRCREV = "08f5291c18379a90cd1706e89cdb16288a4cdfe2"
+SRCREV = "e2df0421a0a73fa2effb1e866bc3b2d8cb1b5acf"
 LOCALVERSION = "_1.0.0_ga-wandboard"
 
 SRC_URI += "\
