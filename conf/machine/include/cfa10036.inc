@@ -1,11 +1,13 @@
 # Common definitions for cfa-10036 boards
 
+IMAGE_FSTYPES_mxs ?= "tar.bz2 ext3 barebox.mxsboot-sdcard sdcard"
 include conf/machine/include/imx-base.inc
 include conf/machine/include/tune-arm926ejs.inc
 
 SOC_FAMILY = "mxs:mx28:cfa10036"
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-cfa"
+PREFERRED_PROVIDER_virtual/bootloader ?= "barebox"
 
 IMAGE_BOOTLOADER = "barebox"
 BAREBOX_BINARY = "barebox"
@@ -19,7 +21,6 @@ KERNEL_DEVICETREE = "imx28-cfa10036.dtb"
 IMAGE_INSTALL_append = " kernel-image kernel-devicetree"
 
 SDCARD_ROOTFS ?= "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.ext3"
-IMAGE_FSTYPES ?= "tar.bz2 ext3 barebox.mxsboot-sdcard sdcard"
 
 SERIAL_CONSOLE = "115200 ttyAMA0"
 
