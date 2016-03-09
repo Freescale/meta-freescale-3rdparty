@@ -42,9 +42,9 @@ index 699bf8f..0d6813e 100644
  	imx6q-phytec-pbab01.dtb \
  	imx6q-sabreauto.dtb \
 @@ -179,6 +183,8 @@ dtb-$(CONFIG_ARCH_MXC) += \
- 	imx6q-sabresd-uart.dtb \
- 	imx6q-sabresd-hdcp.dtb \
+ 	imx6q-sabresd-enetirq.dtb \
  	imx6q-sabresd-ldo.dtb \
+ 	imx6q-sabresd-hdcp.dtb \
 +	imx6q-sbc-fx6.dtb \
 +	imx6q-sbc-fx6m.dtb \
  	imx6q-sbc6x.dtb \

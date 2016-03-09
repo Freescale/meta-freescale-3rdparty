@@ -1,13 +1,13 @@
 require recipes-kernel/linux/linux-imx.inc
 require recipes-kernel/linux/linux-dtb.inc
 
-SUMMARY = "CompuLab 3.14.28 kernel"
+SUMMARY = "CompuLab 3.14.52 kernel"
 DESCRIPTION = "Linux kernel for CompuLab cm-fx6 boards."
 
 DEPENDS += "lzop-native bc-native"
 
-SRCBRANCH = "imx_3.14.28_1.0.0_ga"
-SRCREV = "91cf351a2afc17ac4a260e4d2ad1e32d00925a1b"
+SRCBRANCH = "imx_3.14.52_1.1.0_ga"
+SRCREV = "5f6f0a50e6039370078369ddf380179d59024789"
 LOCALVERSION = "-cm-fx6"
 
 SRC_URI += "file://defconfig \

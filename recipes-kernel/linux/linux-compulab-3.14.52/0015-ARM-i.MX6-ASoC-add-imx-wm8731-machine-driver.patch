@@ -46,17 +46,17 @@ index 144cd69..65f8e6f 100644
  snd-soc-imx-cs42888-objs := imx-cs42888.o
  snd-soc-imx-sgtl5000-objs := imx-sgtl5000.o
 +snd-soc-imx-wm8731-objs := imx-wm8731.o
+ snd-soc-imx-wm8958-objs := imx-wm8958.o
+ snd-soc-imx-wm8960-objs := imx-wm8960.o
  snd-soc-imx-wm8962-objs := imx-wm8962.o
- snd-soc-imx-spdif-objs := imx-spdif.o
- snd-soc-imx-mc13783-objs := imx-mc13783.o
 @@ -69,6 +70,7 @@ obj-$(CONFIG_SND_MXC_SOC_WM1133_EV1) += snd-soc-wm1133-ev1.o
- obj-$(CONFIG_SND_SOC_IMX_CS42888) += snd-soc-imx-cs42888.o
- obj-$(CONFIG_SND_SOC_IMX_SGTL5000) += snd-soc-imx-sgtl5000.o
+ obj-${CONFIG_SND_SOC_IMX_WM8958} += snd-soc-imx-wm8958.o
+ obj-${CONFIG_SND_SOC_IMX_WM8960} += snd-soc-imx-wm8960.o
  obj-$(CONFIG_SND_SOC_IMX_WM8962) += snd-soc-imx-wm8962.o
 +obj-$(CONFIG_SND_SOC_IMX_WM8731) += snd-soc-imx-wm8731.o
+ obj-$(CONFIG_SND_SOC_IMX_SII902X) += snd-soc-imx-sii902x.o
  obj-$(CONFIG_SND_SOC_IMX_SPDIF) += snd-soc-imx-spdif.o
  obj-$(CONFIG_SND_SOC_IMX_MC13783) += snd-soc-imx-mc13783.o
- obj-$(CONFIG_SND_SOC_IMX_HDMI) += snd-soc-imx-hdmi.o
 diff --git a/sound/soc/fsl/imx-wm8731.c b/sound/soc/fsl/imx-wm8731.c
 new file mode 100644
 index 0000000..ba1363f
