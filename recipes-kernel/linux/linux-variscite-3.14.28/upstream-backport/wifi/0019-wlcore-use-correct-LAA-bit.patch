@@ -1,0 +1,30 @@
+From 71a301bb461da1e42e6d2764d99c683289c96f33 Mon Sep 17 00:00:00 2001
+From: Eliad Peller <eliad@wizery.com>
+Date: Fri, 11 Jul 2014 03:01:29 +0300
+Subject: [PATCH] wlcore: use correct LAA bit
+
+The LAA bit is second bit of the MSB, not of the
+third byte.
+
+Signed-off-by: Eliad Peller <eliad@wizery.com>
+Signed-off-by: John W. Linville <linville@tuxdriver.com>
+---
+ drivers/net/wireless/ti/wlcore/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ti/wlcore/main.c b/drivers/net/wireless/ti/wlcore/main.c
+index 1ab6dbd..4c16262 100644
+--- a/drivers/net/wireless/ti/wlcore/main.c
++++ b/drivers/net/wireless/ti/wlcore/main.c
+@@ -5661,7 +5661,7 @@ static void wl12xx_derive_mac_addresses(struct wl1271 *wl, u32 oui, u32 nic)
+ 		memcpy(&wl->addresses[idx], &wl->addresses[0],
+ 		       sizeof(wl->addresses[0]));
+ 		/* LAA bit */
+-		wl->addresses[idx].addr[2] |= BIT(1);
++		wl->addresses[idx].addr[0] |= BIT(1);
+ 	}
+ 
+ 	wl->hw->wiphy->n_addresses = WLCORE_NUM_MAC_ADDRESSES;
+-- 
+1.9.3
+

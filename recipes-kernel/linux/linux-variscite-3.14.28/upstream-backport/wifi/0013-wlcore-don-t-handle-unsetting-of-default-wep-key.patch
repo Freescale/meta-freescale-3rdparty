@@ -1,0 +1,38 @@
+From bf4e5f1ac0e2b277424ec0d035b1fbab46dd66bb Mon Sep 17 00:00:00 2001
+From: Eliad Peller <eliad@wizery.com>
+Date: Mon, 10 Feb 2014 13:47:29 +0200
+Subject: [PATCH 13/18] wlcore: don't handle unsetting of default wep key
+
+mac80211 unsets the default wep key on disassoc.
+The fw doesn't support this notification, so simply
+ignore it.
+
+The actual flow actually triggers fw recovery in some
+cases, as mac80211 unsets the default key only after
+disassoc, when wlvif->sta.hlid, resulting in invalid
+hlid being passed to the fw.
+
+Signed-off-by: Eliad Peller <eliad@wizery.com>
+Signed-off-by: John W. Linville <linville@tuxdriver.com>
+---
+ drivers/net/wireless/ti/wlcore/main.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/net/wireless/ti/wlcore/main.c b/drivers/net/wireless/ti/wlcore/main.c
+index bea2938..d80d40c 100644
+--- a/drivers/net/wireless/ti/wlcore/main.c
++++ b/drivers/net/wireless/ti/wlcore/main.c
+@@ -3472,6 +3472,10 @@ static void wl1271_op_set_default_key_idx(struct ieee80211_hw *hw,
+ 	wl1271_debug(DEBUG_MAC80211, "mac80211 set default key idx %d",
+ 		     key_idx);
+ 
++	/* we don't handle unsetting of default key */
++	if (key_idx == -1)
++		return;
++
+ 	mutex_lock(&wl->mutex);
+ 
+ 	if (unlikely(wl->state != WLCORE_STATE_ON)) {
+-- 
+1.9.3
+

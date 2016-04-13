@@ -1,0 +1,28 @@
+From 96dae59155eb98dd0ba10e8fe5d130f425e406df Mon Sep 17 00:00:00 2001
+From: Giel van Schijndel <me@mortis.eu>
+Date: Wed, 7 Jan 2015 20:38:37 +0100
+Subject: [PATCH] wlcore: fix copy-paste bug: assign from src struct not dest
+
+Signed-off-by: Giel van Schijndel <me@mortis.eu>
+Reported-at: http://www.viva64.com/en/b/0299/
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+---
+ drivers/net/wireless/ti/wlcore/acx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ti/wlcore/acx.c b/drivers/net/wireless/ti/wlcore/acx.c
+index b924cea..f28fa3b 100644
+--- a/drivers/net/wireless/ti/wlcore/acx.c
++++ b/drivers/net/wireless/ti/wlcore/acx.c
+@@ -1725,7 +1725,7 @@ int wl12xx_acx_config_hangover(struct wl1271 *wl)
+ 	acx->decrease_delta = conf->decrease_delta;
+ 	acx->quiet_time = conf->quiet_time;
+ 	acx->increase_time = conf->increase_time;
+-	acx->window_size = acx->window_size;
++	acx->window_size = conf->window_size;
+ 
+ 	ret = wl1271_cmd_configure(wl, ACX_CONFIG_HANGOVER, acx,
+ 				   sizeof(*acx));
+-- 
+1.9.3
+

@@ -1,0 +1,35 @@
+From 5a441f5ff75daf9c3c6657a66e2806a1255f5b84 Mon Sep 17 00:00:00 2001
+From: Barak Bercovitz <barak@wizery.com>
+Date: Mon, 10 Feb 2014 13:47:27 +0200
+Subject: [PATCH 11/18] wlcore: don't stop sched_scan on interface removal
+
+Stopping sched scan on interface removal (during recovery)
+is no longer needed, as sched scanning is automatically
+restarted by mac80211.
+
+Signed-off-by: Barak Bercovitz <barak@wizery.com>
+Signed-off-by: Eliad Peller <eliad@wizery.com>
+Signed-off-by: John W. Linville <linville@tuxdriver.com>
+---
+ drivers/net/wireless/ti/wlcore/main.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/net/wireless/ti/wlcore/main.c b/drivers/net/wireless/ti/wlcore/main.c
+index 73bf251..bea2938 100644
+--- a/drivers/net/wireless/ti/wlcore/main.c
++++ b/drivers/net/wireless/ti/wlcore/main.c
+@@ -2582,10 +2582,8 @@ static void __wl1271_op_remove_interface(struct wl1271 *wl,
+ 		ieee80211_scan_completed(wl->hw, true);
+ 	}
+ 
+-	if (wl->sched_vif == wlvif) {
+-		ieee80211_sched_scan_stopped(wl->hw);
++	if (wl->sched_vif == wlvif)
+ 		wl->sched_vif = NULL;
+-	}
+ 
+ 	if (wl->roc_vif == vif) {
+ 		wl->roc_vif = NULL;
+-- 
+1.9.3
+

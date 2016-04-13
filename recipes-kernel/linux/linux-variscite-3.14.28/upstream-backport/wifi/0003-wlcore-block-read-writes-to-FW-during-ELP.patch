@@ -1,0 +1,46 @@
+From 51ae14d0eae31a7d678c201c9664efbb373f97fa Mon Sep 17 00:00:00 2001
+From: Barak Bercovitz <barak@wizery.com>
+Date: Mon, 10 Feb 2014 13:47:19 +0200
+Subject: [PATCH 03/18] wlcore: block read/writes to FW during ELP
+
+When the chip is in ELP mode read/write to FW is invalid and may cause
+the lower layers to get stuck. The reads/writes concerning ELP wakeup
+are the exception here and are checked for. In addition to blocking the
+IO, produce a warning.
+
+Signed-off-by: Barak Bercovitz <barak@wizery.com>
+Signed-off-by: Eliad Peller <eliad@wizery.com>
+Signed-off-by: John W. Linville <linville@tuxdriver.com>
+---
+ drivers/net/wireless/ti/wlcore/io.h | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/wireless/ti/wlcore/io.h b/drivers/net/wireless/ti/wlcore/io.h
+index 07e3d6a..0305729 100644
+--- a/drivers/net/wireless/ti/wlcore/io.h
++++ b/drivers/net/wireless/ti/wlcore/io.h
+@@ -60,7 +60,9 @@ static inline int __must_check wlcore_raw_write(struct wl1271 *wl, int addr,
+ {
+ 	int ret;
+ 
+-	if (test_bit(WL1271_FLAG_IO_FAILED, &wl->flags))
++	if (test_bit(WL1271_FLAG_IO_FAILED, &wl->flags) ||
++	    WARN_ON((test_bit(WL1271_FLAG_IN_ELP, &wl->flags) &&
++		     addr != HW_ACCESS_ELP_CTRL_REG)))
+ 		return -EIO;
+ 
+ 	ret = wl->if_ops->write(wl->dev, addr, buf, len, fixed);
+@@ -76,7 +78,9 @@ static inline int __must_check wlcore_raw_read(struct wl1271 *wl, int addr,
+ {
+ 	int ret;
+ 
+-	if (test_bit(WL1271_FLAG_IO_FAILED, &wl->flags))
++	if (test_bit(WL1271_FLAG_IO_FAILED, &wl->flags) ||
++	    WARN_ON((test_bit(WL1271_FLAG_IN_ELP, &wl->flags) &&
++		     addr != HW_ACCESS_ELP_CTRL_REG)))
+ 		return -EIO;
+ 
+ 	ret = wl->if_ops->read(wl->dev, addr, buf, len, fixed);
+-- 
+1.9.3
+

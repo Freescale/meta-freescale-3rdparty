@@ -1,0 +1,32 @@
+From 6b27fe51675fd462967b824f63c5c009e9616363 Mon Sep 17 00:00:00 2001
+From: Arik Nemtsov <arik@wizery.com>
+Date: Mon, 10 Feb 2014 13:47:34 +0200
+Subject: [PATCH 18/18] wlcore: add support for STA CSA with chan contexts
+
+TI wl12xx/wl18xx cards support channel switch via a driver specific
+switch_channel op while operating with channel contexts.
+
+Signed-off-by: Arik Nemtsov <arik@wizery.com>
+Signed-off-by: Eliad Peller <eliad@wizery.com>
+Signed-off-by: John W. Linville <linville@tuxdriver.com>
+---
+ drivers/net/wireless/ti/wlcore/main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ti/wlcore/main.c b/drivers/net/wireless/ti/wlcore/main.c
+index 82d5461..7aae5b3 100644
+--- a/drivers/net/wireless/ti/wlcore/main.c
++++ b/drivers/net/wireless/ti/wlcore/main.c
+@@ -5737,7 +5737,8 @@ static int wl1271_init_ieee80211(struct wl1271 *wl)
+ 		IEEE80211_HW_AP_LINK_PS |
+ 		IEEE80211_HW_AMPDU_AGGREGATION |
+ 		IEEE80211_HW_TX_AMPDU_SETUP_IN_HW |
+-		IEEE80211_HW_QUEUE_CONTROL;
++		IEEE80211_HW_QUEUE_CONTROL |
++		IEEE80211_HW_CHANCTX_STA_CSA;
+ 
+ 	wl->hw->wiphy->cipher_suites = cipher_suites;
+ 	wl->hw->wiphy->n_cipher_suites = ARRAY_SIZE(cipher_suites);
+-- 
+1.9.3
+

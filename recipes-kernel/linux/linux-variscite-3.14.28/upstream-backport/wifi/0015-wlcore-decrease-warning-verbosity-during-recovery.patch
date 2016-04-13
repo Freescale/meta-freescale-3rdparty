@@ -1,0 +1,54 @@
+From 1ede95007371c27729383c8977e04abf63874ea8 Mon Sep 17 00:00:00 2001
+From: Arik Nemtsov <arik@wizery.com>
+Date: Mon, 10 Feb 2014 13:47:31 +0200
+Subject: [PATCH 15/18] wlcore: decrease warning verbosity during recovery
+
+Silently ignore repetitive scheduling of recovery work and commands
+being passed to the bus when the HW is not available. This can happen
+many times during recovery and slow it down. It also spams the kernel
+logs.
+
+Signed-off-by: Arik Nemtsov <arik@wizery.com>
+Signed-off-by: Eliad Peller <eliad@wizery.com>
+Signed-off-by: John W. Linville <linville@tuxdriver.com>
+---
+ drivers/net/wireless/ti/wlcore/cmd.c  | 4 ++--
+ drivers/net/wireless/ti/wlcore/main.c | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/wireless/ti/wlcore/cmd.c b/drivers/net/wireless/ti/wlcore/cmd.c
+index 3463a67..40dc30f 100644
+--- a/drivers/net/wireless/ti/wlcore/cmd.c
++++ b/drivers/net/wireless/ti/wlcore/cmd.c
+@@ -60,8 +60,8 @@ static int __wlcore_cmd_send(struct wl1271 *wl, u16 id, void *buf,
+ 	u16 status;
+ 	u16 poll_count = 0;
+ 
+-	if (WARN_ON(wl->state == WLCORE_STATE_RESTARTING &&
+-		    id != CMD_STOP_FWLOGGER))
++	if (unlikely(wl->state == WLCORE_STATE_RESTARTING &&
++		     id != CMD_STOP_FWLOGGER))
+ 		return -EIO;
+ 
+ 	cmd = buf;
+diff --git a/drivers/net/wireless/ti/wlcore/main.c b/drivers/net/wireless/ti/wlcore/main.c
+index 8106c96..a2348b9 100644
+--- a/drivers/net/wireless/ti/wlcore/main.c
++++ b/drivers/net/wireless/ti/wlcore/main.c
+@@ -782,10 +782,11 @@ out:
+ 
+ void wl12xx_queue_recovery_work(struct wl1271 *wl)
+ {
+-	WARN_ON(!test_bit(WL1271_FLAG_INTENDED_FW_RECOVERY, &wl->flags));
+-
+ 	/* Avoid a recursive recovery */
+ 	if (wl->state == WLCORE_STATE_ON) {
++		WARN_ON(!test_bit(WL1271_FLAG_INTENDED_FW_RECOVERY,
++				  &wl->flags));
++
+ 		wl->state = WLCORE_STATE_RESTARTING;
+ 		set_bit(WL1271_FLAG_RECOVERY_IN_PROGRESS, &wl->flags);
+ 		wl1271_ps_elp_wakeup(wl);
+-- 
+1.9.3
+

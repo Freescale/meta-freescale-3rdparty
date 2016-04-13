@@ -1,0 +1,31 @@
+From 5b07d97a381508dfc79bda72778ac27c1bdba320 Mon Sep 17 00:00:00 2001
+From: Yaniv Machani <yanivma@ti.com>
+Date: Mon, 10 Feb 2014 13:47:32 +0200
+Subject: [PATCH 16/18] wlcore: increase timeout to 5000 msecs
+
+dfs configuration command might take longer than
+the current timeout. increase it to 5 seconds.
+
+Signed-off-by: Yaniv Machani <yanivma@ti.com>
+Signed-off-by: Eliad Peller <eliad@wizery.com>
+Signed-off-by: John W. Linville <linville@tuxdriver.com>
+---
+ drivers/net/wireless/ti/wlcore/cmd.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ti/wlcore/cmd.h b/drivers/net/wireless/ti/wlcore/cmd.h
+index 9cb3f44..b084830 100644
+--- a/drivers/net/wireless/ti/wlcore/cmd.h
++++ b/drivers/net/wireless/ti/wlcore/cmd.h
+@@ -207,7 +207,7 @@ enum cmd_templ {
+ #define WL1271_COMMAND_TIMEOUT     2000
+ #define WL1271_CMD_TEMPL_DFLT_SIZE 252
+ #define WL1271_CMD_TEMPL_MAX_SIZE  512
+-#define WL1271_EVENT_TIMEOUT       1500
++#define WL1271_EVENT_TIMEOUT       5000
+ 
+ struct wl1271_cmd_header {
+ 	__le16 id;
+-- 
+1.9.3
+

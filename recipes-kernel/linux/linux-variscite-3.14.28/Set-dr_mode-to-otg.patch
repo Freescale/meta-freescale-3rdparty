@@ -1,0 +1,29 @@
+From 94daa3c228195488521c06e9df0ccb6c0399aa4e Mon Sep 17 00:00:00 2001
+From: Fabio Berton <fabio.berton@ossystems.com.br>
+Date: Mon, 15 Feb 2016 11:31:39 -0200
+Subject: [PATCH] Set dr_mode to otg
+
+By default the OTG is configured to be "host". We need to switch dr_mode to
+"otg", so OTG will work as device.
+
+
+Signed-off-by: Fabio Berton <fabio.berton@ossystems.com.br>
+---
+ arch/arm/boot/dts/imx6qdl-var-som.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-var-som.dtsi b/arch/arm/boot/dts/imx6qdl-var-som.dtsi
+index 6ad3773..8fb1d7e 100755
+--- a/arch/arm/boot/dts/imx6qdl-var-som.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-var-som.dtsi
+@@ -971,7 +971,7 @@
+ #ifdef VAR_SOM_SOLO_VSC
+ 	dr_mode = "otg" ;	/* Use "host" if you would like to use the USB0 type A connector (host mode only on VAR-SOM-SOLO) */
+ #else
+-	dr_mode = "host" ;
++	dr_mode = "otg" ;
+ #endif
+ 	status = "okay";
+ };
+-- 
+2.1.4
