@@ -1,6 +1,5 @@
 # Common definitions for cfa-10036 boards
 
-IMAGE_FSTYPES_mxs ?= "tar.bz2 ext3 barebox.mxsboot-sdcard sdcard"
 include conf/machine/include/imx-base.inc
 include conf/machine/include/tune-arm926ejs.inc
 
@@ -11,6 +10,7 @@ PREFERRED_PROVIDER_virtual/bootloader ?= "barebox"
 
 IMAGE_BOOTLOADER = "barebox"
 BAREBOX_BINARY = "barebox"
+IMAGE_FSTYPES_mxs = "tar.bz2 barebox.mxsboot-sdcard sdcard"
 
 IMXBOOTLETS_MACHINE = "cfa10036"
 
