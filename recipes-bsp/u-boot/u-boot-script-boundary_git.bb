@@ -18,17 +18,17 @@ UPGRADESCRIPT = "${S}/board/boundary/nitrogen6x/6x_upgrade.txt"
 
 do_mkimage () {
     # allow deploy to use the ${MACHINE} name to simplify things
-    if [ ! -d board/boundary/${MACHINE} ]; then
-        mkdir board/boundary/${MACHINE}
+    if [ ! -d ${S}/board/boundary/${MACHINE} ]; then
+        mkdir ${S}/board/boundary/${MACHINE}
     fi
 
     uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
                   -n "boot script" -d ${BOOTSCRIPT} \
-                  board/boundary/${MACHINE}/6x_bootscript
+                  ${S}/board/boundary/${MACHINE}/6x_bootscript
 
     uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
                   -n "upgrade script" -d ${UPGRADESCRIPT} \
-                  board/boundary/${MACHINE}/6x_upgrade
+                  ${S}/board/boundary/${MACHINE}/6x_upgrade
 }
 
 addtask mkimage after do_compile before do_install
