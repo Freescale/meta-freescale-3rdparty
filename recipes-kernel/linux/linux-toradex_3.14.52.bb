@@ -6,8 +6,8 @@ SUMMARY = "Linux kernel for Toradex Freescale i.MX based modules"
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH} \
            file://defconfig"
 
-LOCALVERSION = "-v2.5b2"
-SRCBRANCH = "toradex_imx_3.14.28_1.0.0_ga"
-SRCREV = "8f237ebe42f2cb911245369276a6b3043c2815f2"
+LOCALVERSION = "-v2.6b2.1"
+SRCBRANCH = "toradex_imx_3.14.52_1.1.0_ga"
+SRCREV = "9f2723e14bab4fb558b4a4eb3e941876e2c55e2a"
 DEPENDS += "lzop-native bc-native"
 COMPATIBLE_MACHINE = "(mx6)"
