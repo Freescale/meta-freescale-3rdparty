@@ -1,0 +1,112 @@
+From 03857322243162663a3b760c92b3fab837ba9820 Mon Sep 17 00:00:00 2001
+From: Justin Waters <justin.waters@timesys.com>
+Date: Fri, 15 Jan 2016 10:24:35 -0500
+Subject: [PATCH 3/7] PCI: imx6: Add DT bindings to configure PHY Tx driver
+ settings
+
+The settings in GPR8 are dependent upon the particular layout of the
+hardware platform.  As such, they should be configurable via the device
+tree.
+
+Look up PHY Tx driver settings from the device tree.  Fall back to the
+original hard-coded values if they are not specified in the device tree.
+
+Signed-off-by: Justin Waters <justin.waters@timesys.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Acked-by: Lucas Stach <l.stach@pengutronix.de>
+---
+ .../devicetree/bindings/pci/fsl,imx6q-pcie.txt     |  7 ++++
+ drivers/pci/host/pci-imx6.c                        | 41 +++++++++++++++++++---
+ 2 files changed, 43 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.txt b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.txt
+index 6fbba53..97f863e 100644
+--- a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.txt
++++ b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.txt
+@@ -13,6 +13,13 @@ Required properties:
+ - clock-names: Must include the following additional entries:
+ 	- "pcie_phy"
+ 
++Optional properties:
++- fsl,tx-deemph-gen1: Gen1 De-emphasis value. Default: 20
++- fsl,tx-deemph-gen2-3p5db: Gen2 (3.5db) De-emphasis value. Default: 20
++- fsl,tx-deemph-gen2-6db: Gen2 (6db) De-emphasis value. Default: 20
++- fsl,tx-swing-full: Gen2 TX SWING FULL value. Default: 115
++- fsl,tx-swing-low: TX launch amplitude swing_low value. Default: 115
++
+ Example:
+ 
+ 	pcie@0x01000000 {
+diff --git a/drivers/pci/host/pci-imx6.c b/drivers/pci/host/pci-imx6.c
+index 75f15ce..3bec59a 100644
+--- a/drivers/pci/host/pci-imx6.c
++++ b/drivers/pci/host/pci-imx6.c
+@@ -59,6 +59,11 @@ struct imx6_pcie {
+ 	struct regmap		*reg_src;
+ 	void __iomem		*mem_base;
+ 	struct regulator	*pcie_phy_regulator;
++	u32			tx_deemph_gen1;
++	u32			tx_deemph_gen2_3p5db;
++	u32			tx_deemph_gen2_6db;
++	u32			tx_swing_full;
++	u32			tx_swing_low;
+ };
+ 
+ /* PCIe Root Complex registers (memory-mapped) */
+@@ -477,15 +482,20 @@ static void imx6_pcie_init_phy(struct pcie_port *pp)
+ 				IMX6Q_GPR12_LOS_LEVEL, IMX6Q_GPR12_LOS_LEVEL_9);
+ 
+ 		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR8,
+-				IMX6Q_GPR8_TX_DEEMPH_GEN1, 0 << 0);
++				IMX6Q_GPR8_TX_DEEMPH_GEN1,
++				imx6_pcie->tx_deemph_gen1 << 0);
+ 		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR8,
+-				IMX6Q_GPR8_TX_DEEMPH_GEN2_3P5DB, 0 << 6);
++				IMX6Q_GPR8_TX_DEEMPH_GEN2_3P5DB,
++				imx6_pcie->tx_deemph_gen2_3p5db << 6);
+ 		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR8,
+-				IMX6Q_GPR8_TX_DEEMPH_GEN2_6DB, 20 << 12);
++				IMX6Q_GPR8_TX_DEEMPH_GEN2_6DB,
++				imx6_pcie->tx_deemph_gen2_6db << 12);
+ 		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR8,
+-				IMX6Q_GPR8_TX_SWING_FULL, 127 << 18);
++				IMX6Q_GPR8_TX_SWING_FULL,
++				imx6_pcie->tx_swing_full << 18);
+ 		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR8,
+-				IMX6Q_GPR8_TX_SWING_LOW, 127 << 25);
++				IMX6Q_GPR8_TX_SWING_LOW,
++				imx6_pcie->tx_swing_low << 25);
+ 	}
+ 
+ 	/* configure the device type */
+@@ -1212,6 +1222,27 @@ static int __init imx6_pcie_probe(struct platform_device *pdev)
+ 		return PTR_ERR(imx6_pcie->iomuxc_gpr);
+ 	}
+ 
++	/* Grab PCIe PHY Tx Settings */
++	if (of_property_read_u32(np, "fsl,tx-deemph-gen1",
++				 &imx6_pcie->tx_deemph_gen1))
++		imx6_pcie->tx_deemph_gen1 = 20;
++
++	if (of_property_read_u32(np, "fsl,tx-deemph-gen2-3p5db",
++				 &imx6_pcie->tx_deemph_gen2_3p5db))
++		imx6_pcie->tx_deemph_gen2_3p5db = 20;
++
++	if (of_property_read_u32(np, "fsl,tx-deemph-gen2-6db",
++				 &imx6_pcie->tx_deemph_gen2_6db))
++		imx6_pcie->tx_deemph_gen2_6db = 20;
++
++	if (of_property_read_u32(np, "fsl,tx-swing-full",
++				 &imx6_pcie->tx_swing_full))
++		imx6_pcie->tx_swing_full = 115;
++
++	if (of_property_read_u32(np, "fsl,tx-swing-low",
++				 &imx6_pcie->tx_swing_low))
++		imx6_pcie->tx_swing_low = 115;
++
+ 	if (IS_ENABLED(CONFIG_EP_MODE_IN_EP_RC_SYS)) {
+ 		int i;
+ 		void *test_reg1, *test_reg2;
+-- 
+2.8.1
+

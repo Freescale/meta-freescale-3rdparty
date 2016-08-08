@@ -1,0 +1,85 @@
+From d2b1dd5c8591c6e87b955329615683d0431cfb6e Mon Sep 17 00:00:00 2001
+From: Ken Lin <ken.lin@advantech.com.tw>
+Date: Tue, 26 Jul 2016 11:48:57 +0800
+Subject: [PATCH 3/3] ARM: dts: imx: Add Q7 SUS_S3_OUT control support during
+ suspend/resume
+
+configure Q7 SUS_S3_OUT as GPO and set the correct level during suspend/resume
+---
+ arch/arm/boot/dts/imx6q-dms-ba16.dts | 6 +++++-
+ arch/arm/mach-imx/mach-dms-ba16.c    | 8 ++++++--
+ 2 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-dms-ba16.dts b/arch/arm/boot/dts/imx6q-dms-ba16.dts
+index 533d536..9805aca 100644
+--- a/arch/arm/boot/dts/imx6q-dms-ba16.dts
++++ b/arch/arm/boot/dts/imx6q-dms-ba16.dts
+@@ -260,12 +260,14 @@
+ 	status = "okay";
+ };
+ 
++
+ &hdmi_cec {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_hdmi_cec>;
+-	status = "okay";
++	status = "disabled";
+ };
+ 
++
+ &hdmi_core {
+ 	ipu_id = <1>;
+ 	disp_id = <0>;
+@@ -471,6 +473,8 @@
+ 				MX6QDL_PAD_GPIO_0__GPIO1_IO00  0x80000000	/* BLEN_OUT */
+ 				MX6QDL_PAD_EIM_D22__GPIO3_IO22   0x80000000	/* LVDS_PPEN_OUT */
+ 				MX6QDL_PAD_KEY_COL2__GPIO4_IO10  0x80000000	/* RTC_INT */
++                        	MX6QDL_PAD_KEY_ROW2__GPIO4_IO11  0x1b0b0 	/*SUS_S3_OUT*/
++
+ 			>;
+ 		};
+ 	};
+diff --git a/arch/arm/mach-imx/mach-dms-ba16.c b/arch/arm/mach-imx/mach-dms-ba16.c
+index bc327d5..ac6e6a0 100644
+--- a/arch/arm/mach-imx/mach-dms-ba16.c
++++ b/arch/arm/mach-imx/mach-dms-ba16.c
+@@ -25,7 +25,10 @@
+ #include <linux/reboot.h>
+ #include <linux/delay.h>
+ #include <linux/regulator/machine.h>
++#include <linux/gpio.h>
++#include "hardware.h"
+ 
++#define SUS_S3_OUT      IMX_GPIO_NR(4, 11)
+ static struct i2c_client *da9063_client;
+ 
+ static int dms_ba16_suspend_pm_cb(struct notifier_block *nb,
+@@ -40,7 +43,7 @@ static int dms_ba16_suspend_pm_cb(struct notifier_block *nb,
+ 		 * i2c_smbus_write_byte_data(dms_ba16_client, <REGISTER>, <VALUE>);
+ 		 */
+ 
+-
++		gpio_direction_output(SUS_S3_OUT, 0); /*Set SUS_S3 low during suspend*/
+ 
+ 		break;
+ 	case PM_POST_SUSPEND:
+@@ -57,7 +60,7 @@ static int dms_ba16_suspend_pm_cb(struct notifier_block *nb,
+                 i2c_smbus_write_byte_data(da9063_client,0xA8,0x7d); // VBPERI_A(3.3V)
+ 
+ 
+-
++		gpio_direction_output(SUS_S3_OUT, 1); /*Set SUS_S3 high during resume*/
+ 
+ 		break;
+ 	default:
+@@ -151,6 +154,7 @@ static int platform_i2c_bus_notify(struct notifier_block *nb,
+                  i2c_smbus_write_byte_data(da9063_client,0x24,0x1);  /*BIO_CONT let BIO_B off when supsend*/
+ 
+ 
++		gpio_direction_output(SUS_S3_OUT, 1); /*Set SUS_S3 high when power on*/
+ 
+ 		pm_notifier(dms_ba16_suspend_pm_cb, 0);
+ 
+-- 
+1.9.1
+

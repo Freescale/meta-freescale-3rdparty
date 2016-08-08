@@ -1,0 +1,50 @@
+From 6f2dae2ee19cfc972335511053a5b94cc30879f7 Mon Sep 17 00:00:00 2001
+From: Justin Waters <justin.waters@timesys.com>
+Date: Wed, 2 Mar 2016 11:47:13 -0500
+Subject: [PATCH 2/7] ahci_imx: Make receive DPLL mode configurable
+
+---
+ drivers/ata/ahci_imx.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/ata/ahci_imx.c b/drivers/ata/ahci_imx.c
+index 3fccbed..4a91fe3 100644
+--- a/drivers/ata/ahci_imx.c
++++ b/drivers/ata/ahci_imx.c
+@@ -472,6 +472,13 @@ static const struct reg_value gpr13_rx_eq[] = {
+ 	{ 4000, IMX6Q_GPR13_SATA_RX_EQ_VAL_4_0_DB },
+ };
+ 
++static const struct reg_value gpr13_rx_dpll[] = {
++	{ 0, IMX6Q_GPR13_SATA_RX_DPLL_MODE_1P_1F },
++	{ 1, IMX6Q_GPR13_SATA_RX_DPLL_MODE_2P_2F },
++	{ 2, IMX6Q_GPR13_SATA_RX_DPLL_MODE_1P_4F },
++	{ 3, IMX6Q_GPR13_SATA_RX_DPLL_MODE_2P_4F },
++};
++
+ static const struct reg_property gpr13_props[] = {
+ 	{
+ 		.name = "fsl,transmit-level-mV",
+@@ -497,6 +504,11 @@ static const struct reg_property gpr13_props[] = {
+ 		.name = "fsl,no-spread-spectrum",
+ 		.def_value = IMX6Q_GPR13_SATA_MPLL_SS_EN,
+ 		.set_value = 0,
++	}, {
++		.name = "fsl,receive-dpll-mode",
++		.values = gpr13_rx_dpll,
++		.num_values = ARRAY_SIZE(gpr13_rx_dpll),
++		.def_value = IMX6Q_GPR13_SATA_RX_DPLL_MODE_2P_4F,
+ 	},
+ };
+ 
+@@ -604,7 +616,6 @@ static int imx_ahci_probe(struct platform_device *pdev)
+ 
+ 		imxpriv->phy_params =
+ 				   IMX6Q_GPR13_SATA_RX_LOS_LVL_SATA2M |
+-				   IMX6Q_GPR13_SATA_RX_DPLL_MODE_2P_4F |
+ 				   IMX6Q_GPR13_SATA_SPD_MODE_3P0G |
+ 				   reg_value;
+ 	}
+-- 
+2.8.1
+

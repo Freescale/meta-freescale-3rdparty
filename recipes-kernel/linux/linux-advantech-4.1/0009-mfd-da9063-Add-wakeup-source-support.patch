@@ -1,0 +1,28 @@
+From 93b8c33148ae69e4e060f1fbe66e21c59c91e368 Mon Sep 17 00:00:00 2001
+From: Ken Lin <ken.lin@advantech.com.tw>
+Date: Tue, 26 Jul 2016 11:36:19 +0800
+Subject: [PATCH 2/3] mfd: da9063: Add wakeup source support
+
+Configure da9063 IRQ as a iMx6 wakeup source
+---
+ drivers/mfd/da9063-core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/mfd/da9063-core.c b/drivers/mfd/da9063-core.c
+index af841c1..7ea00a5 100644
+--- a/drivers/mfd/da9063-core.c
++++ b/drivers/mfd/da9063-core.c
+@@ -232,6 +232,10 @@ int da9063_device_init(struct da9063 *da9063, unsigned int irq)
+ 	if (ret)
+ 		dev_err(da9063->dev, "Cannot add MFD cells\n");
+ 
++
++	enable_irq_wake(da9063->chip_irq);
++
++
+ 	return ret;
+ }
+ 
+-- 
+1.9.1
+

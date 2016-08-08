@@ -1,0 +1,114 @@
+From 18fe0924c45d803967a304abe4fb7b143a0a0296 Mon Sep 17 00:00:00 2001
+From: Steve Twiss <stwiss.opensource@diasemi.com>
+Date: Tue, 19 May 2015 11:32:45 +0100
+Subject: [PATCH 5/7] mfd: da9063: Add support for OnKey driver
+
+Add MFD support for the DA9063 OnKey driver
+
+The function da9063_clear_fault_log() is added to mitigate the case of a
+hardware power-cut after a long-long OnKey press. Although there is no
+software intervention in this case (by definition) such a shutdown would
+cause persistent information within the DA9063 FAULT_LOG that would be
+available during the next device restart.
+
+Clearance of this persistent register must be completed after such a
+hardware power-cut operation has happened so that the FAULT_LOG does not
+continue with previous values. The clearance function has been added here
+in the kernel driver because wiping the fault-log cannot be counted on
+outside the Linux kernel.
+
+Signed-off-by: Steve Twiss <stwiss.opensource@diasemi.com>
+[Lee: Removed 'key_power' for Dmitry to take through the Input Tree]
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/mfd/da9063-core.c | 54 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+
+diff --git a/drivers/mfd/da9063-core.c b/drivers/mfd/da9063-core.c
+index facd361..af841c1 100644
+--- a/drivers/mfd/da9063-core.c
++++ b/drivers/mfd/da9063-core.c
+@@ -60,6 +60,7 @@ static struct resource da9063_rtc_resources[] = {
+ 
+ static struct resource da9063_onkey_resources[] = {
+ 	{
++		.name	= "ONKEY",
+ 		.start	= DA9063_IRQ_ONKEY,
+ 		.end	= DA9063_IRQ_ONKEY,
+ 		.flags	= IORESOURCE_IRQ,
+@@ -97,6 +98,7 @@ static const struct mfd_cell da9063_devs[] = {
+ 		.name		= DA9063_DRVNAME_ONKEY,
+ 		.num_resources	= ARRAY_SIZE(da9063_onkey_resources),
+ 		.resources	= da9063_onkey_resources,
++		.of_compatible = "dlg,da9063-onkey",
+ 	},
+ 	{
+ 		.name		= DA9063_DRVNAME_RTC,
+@@ -109,12 +111,64 @@ static const struct mfd_cell da9063_devs[] = {
+ 	},
+ };
+ 
++static int da9063_clear_fault_log(struct da9063 *da9063)
++{
++	int ret = 0;
++	int fault_log = 0;
++
++	ret = regmap_read(da9063->regmap, DA9063_REG_FAULT_LOG, &fault_log);
++	if (ret < 0) {
++		dev_err(da9063->dev, "Cannot read FAULT_LOG.\n");
++		return -EIO;
++	}
++
++	if (fault_log) {
++		if (fault_log & DA9063_TWD_ERROR)
++			dev_dbg(da9063->dev,
++				"Fault log entry detected: DA9063_TWD_ERROR\n");
++		if (fault_log & DA9063_POR)
++			dev_dbg(da9063->dev,
++				"Fault log entry detected: DA9063_POR\n");
++		if (fault_log & DA9063_VDD_FAULT)
++			dev_dbg(da9063->dev,
++				"Fault log entry detected: DA9063_VDD_FAULT\n");
++		if (fault_log & DA9063_VDD_START)
++			dev_dbg(da9063->dev,
++				"Fault log entry detected: DA9063_VDD_START\n");
++		if (fault_log & DA9063_TEMP_CRIT)
++			dev_dbg(da9063->dev,
++				"Fault log entry detected: DA9063_TEMP_CRIT\n");
++		if (fault_log & DA9063_KEY_RESET)
++			dev_dbg(da9063->dev,
++				"Fault log entry detected: DA9063_KEY_RESET\n");
++		if (fault_log & DA9063_NSHUTDOWN)
++			dev_dbg(da9063->dev,
++				"Fault log entry detected: DA9063_NSHUTDOWN\n");
++		if (fault_log & DA9063_WAIT_SHUT)
++			dev_dbg(da9063->dev,
++				"Fault log entry detected: DA9063_WAIT_SHUT\n");
++	}
++
++	ret = regmap_write(da9063->regmap,
++			   DA9063_REG_FAULT_LOG,
++			   fault_log);
++	if (ret < 0)
++		dev_err(da9063->dev,
++			"Cannot reset FAULT_LOG values %d\n", ret);
++
++	return ret;
++}
++
+ int da9063_device_init(struct da9063 *da9063, unsigned int irq)
+ {
+ 	struct da9063_pdata *pdata = da9063->dev->platform_data;
+ 	int model, variant_id, variant_code;
+ 	int ret;
+ 
++	ret = da9063_clear_fault_log(da9063);
++	if (ret < 0)
++		dev_err(da9063->dev, "Cannot clear fault log\n");
++
+ 	if (pdata) {
+ 		da9063->flags = pdata->flags;
+ 		da9063->irq_base = pdata->irq_base;
+-- 
+2.8.1
+
