@@ -12,4 +12,4 @@ SOC_FAMILY = "mxs:mx23:imx233-olinuxino"
 KERNEL_IMAGETYPE = "uImage"
 KERNEL_DEVICETREE = "imx23-olinuxino.dtb"
 
-MACHINE_FEATURES = "apm usbgadget usbhost vfat"
+MACHINE_FEATURES = "usbgadget usbhost vfat"
