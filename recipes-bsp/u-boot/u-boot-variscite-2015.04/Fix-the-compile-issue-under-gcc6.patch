@@ -1,29 +1,26 @@
-From 9012ad08ed7615cf0afaf8fab631239c0f148889 Mon Sep 17 00:00:00 2001
-From: Hans de Goede <hdegoede@redhat.com>
-Date: Sat, 7 Feb 2015 22:52:40 +0100
-Subject: [PATCH 1/2] Add linux/compiler-gcc5.h to fix builds with gcc5
-Organization: O.S. Systems Software LTDA.
+From 5d39bd421fc093e2c852316080538cef85a9e1a0 Mon Sep 17 00:00:00 2001
+From: yocto <yocto@yocto.org>
+Date: Thu, 2 Jun 2016 00:18:33 -0500
+Subject: [PATCH] Fix the compile issue under gcc6
 
-Add linux/compiler-gcc5/h from the kernel sources at:
+Fix the following build error:
+| .../include/linux/compiler-gcc.h:106:30: fatal error: linux/compiler-gcc6.h: No such file or directory
+| #include gcc_header(__GNUC__)
 
-commit 5631b8fba640a4ab2f8a954f63a603fa34eda96b
-Author: Steven Noonan <steven@uplinklabs.net>
-Date:   Sat Oct 25 15:09:42 2014 -0700
+Signed-off-by: Zhenhua Luo <zhenhua.luo@nxp.com>
 
-    compiler/gcc4+: Remove inaccurate comment about 'asm goto' miscompiles
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Upstream-Status: Pending
 ---
- include/linux/compiler-gcc5.h | 65 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 include/linux/compiler-gcc5.h
+ include/linux/compiler-gcc6.h | 66 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 include/linux/compiler-gcc6.h
 
-diff --git a/include/linux/compiler-gcc5.h b/include/linux/compiler-gcc5.h
+diff --git a/include/linux/compiler-gcc6.h b/include/linux/compiler-gcc6.h
 new file mode 100644
-index 0000000..c8c5659
+index 0000000..cdd1cc2
 --- /dev/null
-+++ b/include/linux/compiler-gcc5.h
-@@ -0,0 +1,65 @@
++++ b/include/linux/compiler-gcc6.h
+@@ -0,0 +1,66 @@
 +#ifndef __LINUX_COMPILER_H
 +#error "Please don't include <linux/compiler-gcc5.h> directly, include <linux/compiler.h> instead."
 +#endif
@@ -79,6 +76,7 @@ index 0000000..c8c5659
 + *   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58670
 + *
 + * Work it around via a compiler barrier quirk suggested by Jakub Jelinek.
++ * Fixed in GCC 4.8.2 and later versions.
 + *
 + * (asm goto is automatically volatile - the naming reflects this.)
 + */
@@ -90,5 +88,5 @@ index 0000000..c8c5659
 +#define __HAVE_BUILTIN_BSWAP16__
 +#endif /* CONFIG_ARCH_USE_BUILTIN_BSWAP */
 -- 
-2.7.0
+2.5.0
 
