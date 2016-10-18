@@ -8,8 +8,10 @@ DEPENDS += "lzop-native bc-native"
 
 # Wandboard branch - based on 3.14.28_1.0.0_ga from Freescale git
 
-SRCBRANCH = "wandboard_imx_3.14.28_1.0.0_ga"
-SRCREV = "e2df0421a0a73fa2effb1e866bc3b2d8cb1b5acf"
-LOCALVERSION = "_1.0.0_ga-wandboard"
+SRCBRANCH = "wandboard_imx_4.1.15_1.1.0_ga"
+SRCREV = "8b015473d34019c3e093c257861e9c6f4930400b"
+LOCALVERSION = "_1.1.0_ga-wandboard"
+
+SRC_URI += "file://Fix-the-compile-issue-under-gcc6.patch"
 
 COMPATIBLE_MACHINE = "(wandboard)"
