@@ -10,7 +10,7 @@ URI: git://git.openembedded.org/openembedded-core
 branch: master
 revision: HEAD
 
-URI: git://git.yoctoproject.org/meta-fsl-arm
+URI: git://git.yoctoproject.org/meta-freescale
 branch: master
 revision: HEAD
 
@@ -26,11 +26,11 @@ Mailing list:
 
 Source code:
 
-    https://github.com/Freescale/meta-fsl-arm-extra
+    https://github.com/Freescale/meta-freescale-3rdparty
 
 When creating a patch of the last commit, use
 
-    git format-patch -s --subject-prefix='meta-fsl-arm-extra][PATCH' -1
+    git format-patch -s --subject-prefix='3rdparty][PATCH' -1
 
 To send it to the community, use
 
@@ -41,7 +41,7 @@ Patches are normally intended for the master branch.
 Patches for other branches should be sent separately so they can be tracked
 individually in Patchwork and should have the branch name in brackets.
 
-For example, use this to generate a patch for branch 'dizzy':
+For example, use this to generate a patch for branch 'morty':
 
     git format-patch -s \
-	--subject-prefix='meta-freescale][meta-fsl-arm-extra][dizzy][PATCH' -1
+	--subject-prefix='3rdparty][morty][PATCH' -1
