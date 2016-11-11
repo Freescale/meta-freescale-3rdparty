@@ -13,7 +13,7 @@ SRC_URI = "git://git.congatec.com/arm/imx6_kernel_3.14.git;protocol=http;branch=
            file://Fix-the-compile-issue-under-gcc6.patch \
            file://defconfig"
 
-SRCREV = "f5eee0b0b67b3021676dc9fd47cf95e1dd88b749"
+SRCREV = "311e836f22da59ba682f05973f2a138cd9eececa"
 LOCALVERSION = "-1.0.x-mx6-qmx6"
 
 
