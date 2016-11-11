@@ -10,6 +10,7 @@ DEPENDS += "lzop-native bc-native"
 SRCBRANCH = "cgt_qmx6_3.14-1.0.x-mx6_1.0.0"
 
 SRC_URI = "git://git.congatec.com/arm/imx6_kernel_3.14.git;protocol=http;branch=${SRCBRANCH} \
+           file://Fix-the-compile-issue-under-gcc6.patch \
            file://defconfig"
 
 SRCREV = "f5eee0b0b67b3021676dc9fd47cf95e1dd88b749"
