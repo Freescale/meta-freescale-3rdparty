@@ -1,0 +1,36 @@
+From c22800b44ce62956f10cdbf55f003a278f35ebfe Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@googlemail.com>
+Date: Mon, 14 Nov 2016 10:23:45 +0100
+Subject: [PATCH] mxc_hdmi: mxc_hdmi: allow EDID to select non CEA modes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+I don't want to buy a new monitor to use screen resolutions other than 640*480
+on variscite imx boards.
+
+Upstream-Status: Inappropriate [configuration]
+
+Signed-off-by: Andreas Müller <schnitzeltony@googlemail.com>
+---
+ drivers/video/fbdev/mxc/mxc_hdmi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/video/fbdev/mxc/mxc_hdmi.c b/drivers/video/fbdev/mxc/mxc_hdmi.c
+index c1b5126..dabdc5e 100644
+--- a/drivers/video/fbdev/mxc/mxc_hdmi.c
++++ b/drivers/video/fbdev/mxc/mxc_hdmi.c
+@@ -1801,8 +1801,8 @@ static void mxc_hdmi_edid_rebuild_modelist(struct mxc_hdmi *hdmi)
+ 		mode = &hdmi->fbi->monspecs.modedb[i];
+ 
+ 		if (!(mode->vmode & FB_VMODE_INTERLACED) &&
+-				(mxc_edid_mode_to_vic(mode) != 0)) {
+-
++			mode->xres <= 1920 &&
++			mode->yres <= 1080) {
+ 			dev_dbg(&hdmi->pdev->dev, "Added mode %d:", i);
+ 			dev_dbg(&hdmi->pdev->dev,
+ 				"xres = %d, yres = %d, freq = %d, vmode = %d, flag = %d\n",
+-- 
+2.7.4
+

@@ -13,6 +13,7 @@ SRCREV = "1e7785b94784f23703dabeff3072a0a89e2bc90d"
 SRC_URI = " \
     git://github.com/varigit/linux-2.6-imx.git;protocol=git;branch=${SRCBRANCH} \
     file://Fix-the-compile-issue-under-gcc6.patch \
+    file://0001-mxc_hdmi-mxc_hdmi-allow-EDID-to-select-non-CEA-modes.patch \
     file://defconfig \
 "
 
