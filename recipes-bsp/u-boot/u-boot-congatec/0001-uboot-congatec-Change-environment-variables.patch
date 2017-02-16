@@ -1,0 +1,42 @@
+From ad2098dc02be32e15d1dcf0662d38b148157a62c Mon Sep 17 00:00:00 2001
+From: Alex de Cabo <alejandro.de-cabo-garcia@congatec.com>
+Date: Thu, 16 Feb 2017 09:00:46 +0100
+Subject: [PATCH] uboot-congatec: Change environment variables
+
+Changes the loadfdt, loaduimage and mmcroot variables to be
+Yocto community standard compatible
+---
+ include/configs/cgtqmx6eval.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/include/configs/cgtqmx6eval.h b/include/configs/cgtqmx6eval.h
+index 34118a2..802c5dc 100644
+--- a/include/configs/cgtqmx6eval.h
++++ b/include/configs/cgtqmx6eval.h
+@@ -162,7 +162,7 @@
+ 
+ #define CONFIG_MXC_UART_BASE	UART2_BASE
+ #define CONFIG_CONSOLE_DEV	"ttymxc1"
+-#define CONFIG_MMCROOT		"/dev/mmcblk0p1"
++#define CONFIG_MMCROOT		"/dev/mmcblk0p2"
+ #define CONFIG_SYS_MMC_ENV_DEV		0
+ 
+ #define CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
+@@ -202,11 +202,11 @@
+ 		"video=mxcfb1:dev=${vid_dev1} " \
+ 		"root=${mmcroot}\0" \
+ 	"loadbootscript=" \
+-		"ext2load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
++		"fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
+ 	"bootscript=echo Running bootscript from mmc ...; " \
+ 		"source\0" \
+-	"loadimage=ext2load mmc ${mmcdev}:${mmcpart} ${loadaddr} boot/${image}\0" \
+-	"loadfdt=ext2load mmc ${mmcdev}:${mmcpart} ${fdt_addr_r} boot/${fdtfile}\0" \
++	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
++	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr_r} ${fdtfile}\0" \
+ 	"mmcboot=echo Booting from mmc ...; " \
+ 		"run mmcargs; " \
+ 		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
+-- 
+1.9.1
+
