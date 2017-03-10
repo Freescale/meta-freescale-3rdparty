@@ -33,12 +33,20 @@ do_mkimage () {
 
 addtask mkimage after do_compile before do_install
 
+do_compile[noexec] = "1"
+
+do_install () {
+    install -D -m 644 ${S}/board/boundary/${MACHINE}/6x_bootscript \
+                      ${D}/6x_bootscript
+    install -D -m 644 ${S}/board/boundary/${MACHINE}/6x_upgrade \
+                      ${D}/6x_upgrade
+}
+
 do_deploy () {
-    install -d ${DEPLOYDIR}
-    install ${S}/board/boundary/${MACHINE}/6x_bootscript \
-            ${DEPLOYDIR}/6x_bootscript-${MACHINE}-${PV}-${PR}
-    install ${S}/board/boundary/${MACHINE}/6x_upgrade \
-            ${DEPLOYDIR}/6x_upgrade-${MACHINE}-${PV}-${PR}
+    install -D -m 644 ${D}/6x_bootscript \
+                      ${DEPLOYDIR}/6x_bootscript-${MACHINE}-${PV}-${PR}
+    install -D -m 644 ${D}/6x_upgrade \
+                      ${DEPLOYDIR}/6x_upgrade-${MACHINE}-${PV}-${PR}
 
     cd ${DEPLOYDIR}
     rm -f 6x_bootscript-${MACHINE} 6x_upgrade-${MACHINE}
@@ -48,9 +56,7 @@ do_deploy () {
 
 addtask deploy after do_install before do_build
 
-do_compile[noexec] = "1"
-do_install[noexec] = "1"
-do_populate_sysroot[noexec] = "1"
+FILES_${PN} += "/"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite|nitrogen6sx|nitrogen7)"
