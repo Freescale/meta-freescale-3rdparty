@@ -1,0 +1,36 @@
+From 8a1fbfd7f93b635223525f4932a4d5f31d6735ce Mon Sep 17 00:00:00 2001
+From: Alex de Cabo <alejandro.de-cabo-garcia@congatec.com>
+Date: Fri, 10 Feb 2017 08:53:23 +0100
+Subject: [PATCH] imx6qdl-qmx6: Change bit color depth and pix format
+
+Change the default color depth and pix format to be suitable
+with the LVDS-to-DVI adaptor present in the Conga-QKIT
+---
+ arch/arm/boot/dts/imx6qdl-qmx6.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-qmx6.dtsi b/arch/arm/boot/dts/imx6qdl-qmx6.dtsi
+index 759e066..10d27be 100644
+--- a/arch/arm/boot/dts/imx6qdl-qmx6.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-qmx6.dtsi
+@@ -330,7 +330,7 @@
+ 	mxcfb1: fb@0 {
+ 		compatible = "fsl,mxc_sdc_fb";
+ 		disp_dev = "ldb";
+-		interface_pix_fmt = "RGB666";
++		interface_pix_fmt = "RGB24";
+ 		default_bpp = <16>;
+ 		int_clk = <0>;
+ 		late_init = <0>;
+@@ -752,7 +752,7 @@
+ 
+ 	lvds-channel@0 {
+ 		fsl,data-mapping = "spwg";
+-		fsl,data-width = <18>;
++		fsl,data-width = <24>;
+ 		primary;
+ 		status = "okay";
+ 
+-- 
+1.9.1
+
