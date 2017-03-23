@@ -12,7 +12,8 @@ S = "${WORKDIR}/git"
 
 inherit deploy
 
-BOOTSCRIPT ?= "${S}/board/boundary/nitrogen6x/6x_bootscript-yocto-3.14.txt"
+BOOTSCRIPT ??= "${S}/board/boundary/nitrogen6x/6x_bootscript-yocto-3.14.txt"
+BOOTSCRIPT_use-mainline-bsp ??= "${S}/board/boundary/nitrogen6x/6x_bootscript-mainline.txt"
 
 UPGRADESCRIPT = "${S}/board/boundary/nitrogen6x/6x_upgrade.txt"
 
