@@ -9,7 +9,7 @@ PROVIDES = "u-boot"
 
 PV = "v2016.03+git${SRCPV}"
 
-SRCREV = "d4aa4cce1f7fbd5df8e2cac72996826a8a096dac"
+SRCREV = "568947b9d1dd4e966008fceb4617392a82dc753c"
 SRCBRANCH = "boundary-v2016.03"
 SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git;branch=${SRCBRANCH}"
 
