@@ -15,8 +15,8 @@ SRC_URI = "git://github.com/boundarydevices/linux-imx6.git;branch=${SRCBRANCH} \
            file://defconfig \
 "
 
-SRC_URI[rt-patch.md5sum] = "4afe06f7b58824143a60accb28a5ea3f"
-SRC_URI[rt-patch.sha256sum] = "e51b2c770d259fcfa683b03c2aa549efbadc6122b3d10a7767daf9df1bd863f0"
+SRC_URI[rt-patch.md5sum] = "4763c22c4dcf49ba07cdf60984732fe4"
+SRC_URI[rt-patch.sha256sum] = "a317242e5e79fccc204f170328469e79d1aa663501dc4ec5e425199fb0ac9605"
 
 LOCALVERSION = "-2.0.0_ga+yocto"
 SRCBRANCH = "boundary-imx_4.1.15_2.0.0_ga"
