@@ -7,7 +7,7 @@ DEPENDS = "u-boot-mkimage-native"
 
 PV = "v2015.04+git${SRCPV}"
 
-SRCREV = "1399f2225965bfc8f1d288cd57e677ca21a7a591"
+SRCREV = "040377aefd06c8eef41763868fc9c6df2cbf9b1c"
 SRC_URI = "git://github.com/Gateworks/u-boot-imx6.git;branch=gateworks_v2015.04"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
