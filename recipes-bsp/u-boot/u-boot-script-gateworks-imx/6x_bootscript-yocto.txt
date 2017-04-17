@@ -1,4 +1,4 @@
-setenv _bscriptver "v1.01"
+setenv _bscriptver "v1.07"
 
 echo "## Gateworks Ventana Yocto Bootscript ${_bscriptver} ####################"
 
@@ -10,18 +10,11 @@ if test -z "${mem}" ; then
     # it using following formula (please customize mem to your own req's):
     #  cma=min(((${mem_mb}/2) - round(${mem_mb}*.125))M, 384M)
     if itest.s "x${mem_mb}" == "x256" ; then
-        setenv mem "cma=96M"
+	setenv mem "cma=96M"
     elif itest.s "x${mem_mb}" == "x512" ; then
-        setenv mem "cma=192M"
-    elif itest.s "x${mem_mb}" == "x1024" ; then
-        setenv mem "cma=384M"
-    elif itest.s "x${mem_mb}" == "x2048" ; then
-        setenv mem "cma=384M"
-    elif itest.s "x${mem_mb}" == "x4096" ; then
-        setenv mem "cma=384M"
+	setenv mem "cma=192M"
     else
-        echo "Unable to pigeonhole memory. Defaulting CMA to 96M."
-        setenv mem "cma=96M"
+	setenv mem "cma=384M"
     fi
 fi
 
@@ -41,101 +34,111 @@ if test -z "${video}" ; then
     setenv cvbs_flag
     setenv max_disp 3 # 0-3 displays
 
-    # Detect displays if req'd (HDMI->LVDS->CVBS)
-    if test -z "$display" ; then
-        if test -z "$panel" ; then
-            # Start detection scheme
-            i2c dev 2
-            if hdmidet ; then # HDMI
-                setenv display "$display" "HDMI"
-                echo "HDMI Detected"
-            fi
-            if i2c probe 0x04 ; then # Freescale MXC-LVDS1
-                setenv display "$display" "LVDS"
-                echo "LVDS Detected"
-            fi
-            if i2c probe 0x14 ; then # DLC800FIGT3
-                setenv display "$display" "LVDS"
-                echo "LVDS Detected"
-            fi
-            if i2c probe 0x38 ; then # DLC700JMGT4
-                setenv display "$display" "LVDS"
-                echo "LVDS Detected"
-            fi
-        fi
+    # Default displays to display if displays is empty
+    if test -z "${displays}"; then
+	setenv displays "${display}"
     fi
 
-    echo "Display(s) to configure: ${display}"
+    # Detect HDMI if displays is empty (HDMI)
+    if test -z "${displays}" ; then
+	i2c dev 2
+	if hdmidet ; then # HDMI
+	    setenv displays "HDMI"
+	    echo "HDMI Detected"
+	fi
+    fi
+
+    echo "Display(s) to configure: ${displays}"
 
     # Configure displays
-    for disp in ${display} ; do
-        if itest.s "x${disp}" == "xHDMI" ; then
-            if test -z "$hdmi_flag" ; then # Only allow one HDMI display
-                setenv hdmi_flag 1
-                test -n "$hdmi" || hdmi=1080p
-                if itest.s "x${hdmi}" == "x1080p" ; then
-                    setenv hdmi "1920x1080M@60"
-                elif itest.s "x${hdmi}" == "x720p" ; then
-                    setenv hdmi "1280x720M@60"
-                elif itest.s "x${hdmi}" == "x480p" ; then
-                    setenv hdmi "720x480M@60"
-                fi
-                setenv video "$video" "video=mxcfb${fb_num}:dev=hdmi,${hdmi},if=RGB24,bpp=32"
+    for disp in ${displays} ; do
+	if itest.s "x${disp}" == "xHDMI" ; then
+	    if test -z "${hdmi_flag}" ; then # Only allow one HDMI display
+		setenv hdmi_flag 1
+		test -n "${hdmi}" || hdmi=1080p
+		if itest.s "x${hdmi}" == "x1080p" ; then
+		    setenv hdmi "1920x1080M@60"
+		elif itest.s "x${hdmi}" == "x720p" ; then
+		    setenv hdmi "1280x720M@60"
+		elif itest.s "x${hdmi}" == "x480p" ; then
+		    setenv hdmi "720x480M@60"
+		fi
+		setenv video "${video}" "video=mxcfb${fb_num}:dev=hdmi,${hdmi},if=RGB24,bpp=32"
 
-                echo "Setting HDMI Display to mxcfb${fb_num}"
-                setexpr fb_num $fb_num + 1
-            fi
-        elif itest.s "x${disp}" == "xLVDS" ; then
-            if test -z "$lvds_flag" ; then # Only allow one LVDS display
-                setenv lvds_flag 1
-                setenv video "$video" "video=mxcfb${fb_num}:dev=ldb,bpp=32,if=RGB666"
+		echo "Setting HDMI Display to mxcfb${fb_num}"
+		setexpr fb_num ${fb_num} + 1
+	    fi
 
-                echo "Setting LVDS Display to mxcfb${fb_num}"
-                setexpr fb_num $fb_num + 1
-            fi
-        elif itest.s "x${disp}" == "xCVBS" ; then
-            if test -z "$cvbs_flag" ; then # Only allow one CVBS display
-                setenv cvbs_flag 1
-                setenv video "$video" "video=mxcfb${fb_num}:dev=adv739x,BT656-NTSC,if=BT656,fbpix=RGB565,bpp=32"
+	# Freescale MCIMX-LVDS1 10" XGA Touchscreen Display
+	elif itest.s "x${disp}" == "xHannstar-XGA" ; then
+	    if test -z "${lvds_flag}" ; then # Only allow one LVDS display
+		setenv lvds_flag 1
+		setenv video "${video}" "video=mxcfb${fb_num}:dev=ldb,bpp=32,LDB-XGA,if=RGB666"
 
-                echo "Setting CVBS Display to mxcfb${fb_num}"
-                setexpr fb_num $fb_num + 1
-            fi
-        else
-            echo "${disp} is an unsupported display type (HDMI|LVDS|CVBS)."
-        fi
+		# Configure timings
+		setenv display "Hannstar-XGA"
+
+		echo "Setting Hannstar-XGA Display to mxcfb${fb_num}"
+		setexpr fb_num ${fb_num} + 1
+	    fi
+
+	# GW17029 DLC700JMGT4 7" WSVGA Touchscreen Display
+	elif itest.s "x${disp}" == "xDLC700JMGT4" ; then
+	    if test -z "${lvds_flag}" ; then # Only allow one LVDS display
+		setenv lvds_flag 1
+		setenv video "${video}" "video=mxcfb${fb_num}:dev=ldb,bpp=32,LDB-WSVGA,if=RGB666"
+
+		# Configure timings
+		setenv display "DLC700JMGT4"
+
+		echo "Setting DLC700JMGT4 Display to mxcfb${fb_num}"
+		setexpr fb_num ${fb_num} + 1
+	    fi
+
+	# GW17030 DLC800FIGT3 8" XGA Touchscreen Display"
+	elif itest.s "x${disp}" == "xDLC800FIGT3" ; then
+	    if test -z "${lvds_flag}" ; then # Only allow one LVDS display
+		setenv lvds_flag 1
+		setenv video "${video}" "video=mxcfb${fb_num}:dev=ldb,bpp=32,LDB-XGA,if=RGB666"
+
+		# Configure timings
+		setenv display "DLC800FIGT3"
+
+		echo "Setting DLC800FIGT3 Display to mxcfb${fb_num}"
+		setexpr fb_num ${fb_num} + 1
+	    fi
+
+	elif itest.s "x${disp}" == "xCVBS" ; then
+	    if test -z "${cvbs_flag}" ; then # Only allow one CVBS display
+		setenv cvbs_flag 1
+		setenv video "${video}" "video=mxcfb${fb_num}:dev=adv739x,BT656-NTSC,if=BT656,fbpix=RGB565,bpp=32"
+
+		echo "Setting CVBS Display to mxcfb${fb_num}"
+		setexpr fb_num ${fb_num} + 1
+	    fi
+
+	elif itest.s "x${disp}" == "xnone" ; then
+	    # Reset fb_num to mark all displays to 'off'
+	    setenv fb_num 0
+
+	else
+	    echo "${disp} is an unsupported display type"
+	    echo "Valid Displays: HDMI|Hannstar-XGA|DLC700JMGT4|DLC800FIGT3|CVBS"
+	fi
     done
 
-    # Add CVBS display if !(HDMI || LVDS || CVBS || DISPLAY || PANEL)
-    if test -z "$hdmi_flag" ; then
-        if test -z "$lvds_flag" ; then
-            if test -z "$cvbs_flag" ; then
-                if test -z "$display" ; then
-                    if test -z "$panel" ; then
-                        setenv cvbs_flag 1
-                        setenv video "$video" "video=mxcfb${fb_num}:dev=adv739x,BT656-NTSC,if=BT656,fbpix=RGB565,bpp=32"
-
-                        echo "Defaulting CVBS Display to mxcfb${fb_num}"
-                        setexpr fb_num $fb_num + 1
-                    fi
-                fi
-            fi
-        fi
-    fi
-
-    # Mark the rest of the displays to 'off' if panel is not set
-    if test -z "$panel" ; then
-        while test "$fb_num" -le "$max_disp" ; do
-            setenv video "$video" "video=mxcfb${fb_num}:off"
-            setexpr fb_num $fb_num + 1
-        done
-    fi
+    # Mark the rest of the displays to 'off'
+    while test "${fb_num}" -le "${max_disp}" ; do
+	setenv video "${video}" "video=mxcfb${fb_num}:off"
+	setexpr fb_num ${fb_num} + 1
+    done
 
     # Set only if video is set
-    if test -n "$video" ; then
-        setenv video "${video}"
+    if test -n "${video}" ; then
+	setenv video "${video}"
     fi
 fi
-echo "Video configuration used from env video: $video"
+setenv extra "${extra}" galcore.initgpu3DMinClock=3
+echo "Video configuration used from env video: ${video}"
 
 echo "## End Gateworks Ventana Yocto Bootscript ${_bscriptver} ################"
