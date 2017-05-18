@@ -9,7 +9,7 @@ with additional patches to cover devices specific on WaRP7 board."
 DEPENDS += "lzop-native bc-native"
 
 SRCBRANCH = "4.1-1.0.x-imx"
-SRCREV = "db742e847b1ea1a01c241703014b6f2182fc21a5"
+SRCREV = "a543d1bd884028bed97c06ae4087e051a9176499"
 LOCALVERSION = "-${SRCBRANCH}-warp7"
 
 SRC_URI = "git://github.com/warp7/linux-fslc.git;branch=${SRCBRANCH} \
