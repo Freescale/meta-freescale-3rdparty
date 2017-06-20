@@ -15,6 +15,7 @@ LOCALVERSION = "-1.1.0-ga-wandboard"
 SRC_URI += "\
     file://Fix-the-compile-issue-under-gcc6.patch \
     file://Fix-gcc6-build-error-in-Vivante-driver.patch \
+    file://0001-fix-build-for-gcc7.patch \
 "
 
 COMPATIBLE_MACHINE = "(wandboard)"
