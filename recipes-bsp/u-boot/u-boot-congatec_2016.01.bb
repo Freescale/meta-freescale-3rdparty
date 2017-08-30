@@ -6,7 +6,7 @@ DESCRIPTION = "u-boot which includes support for Congatec Boards."
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://README;md5=587d8d939ae351bb11910921b1eafd42"
 
-PROVIDES = "u-boot"
+PROVIDES += "u-boot"
 
 PV = "2016.01"
 
