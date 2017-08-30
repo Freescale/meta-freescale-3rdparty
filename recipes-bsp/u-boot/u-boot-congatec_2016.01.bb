@@ -15,6 +15,7 @@ SRCBRANCH = "cgt_imx_v2016.01_1.0.0"
 
 SRC_URI = "git://git.congatec.com/arm/qmx6_uboot.git;protocol=http;branch=${SRCBRANCH} \
 	   file://Fix-the-compile-issue-under-gcc6.patch \
+	   file://fix-build-for-gcc7.patch \
 	   file://0001-uboot-congatec-Change-environment-variables.patch \
 "
 
