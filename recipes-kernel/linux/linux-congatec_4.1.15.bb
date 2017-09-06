@@ -3,7 +3,6 @@
 LICENSE = "GPLv2"
 
 require recipes-kernel/linux/linux-imx.inc
-require recipes-kernel/linux/linux-dtb.inc
 
 DEPENDS += "lzop-native bc-native"
 

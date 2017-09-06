@@ -1,5 +1,4 @@
 require recipes-kernel/linux/linux-imx.inc
-require recipes-kernel/linux/linux-dtb.inc
 
 SUMMARY = "Linux kernel for Toradex Freescale i.MX based modules"
 

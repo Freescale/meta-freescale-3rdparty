@@ -2,7 +2,6 @@
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 include linux-wandboard.inc
-require recipes-kernel/linux/linux-dtb.inc
 
 DEPENDS += "lzop-native bc-native"
 

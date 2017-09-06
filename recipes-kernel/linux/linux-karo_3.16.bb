@@ -1,7 +1,6 @@
 SUMMARY = "Linux Kernel for Ka-Ro electronics TX Computer-On-Modules"
 
 require recipes-kernel/linux/linux-imx.inc
-require recipes-kernel/linux/linux-dtb.inc
 
 DEPENDS += "lzop-native bc-native"
 

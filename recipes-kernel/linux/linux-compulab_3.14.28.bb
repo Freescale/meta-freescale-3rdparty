@@ -1,5 +1,4 @@
 require recipes-kernel/linux/linux-imx.inc
-require recipes-kernel/linux/linux-dtb.inc
 
 SUMMARY = "CompuLab 3.14.28 kernel"
 DESCRIPTION = "Linux kernel for CompuLab cm-fx6 boards."

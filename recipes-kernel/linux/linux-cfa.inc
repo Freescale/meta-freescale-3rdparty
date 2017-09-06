@@ -5,7 +5,6 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
 inherit kernel
-require recipes-kernel/linux/linux-dtb.inc
 
 SRC_URI = "git://github.com/crystalfontz/cfa_10036_kernel;branch=${SRCBRANCH} \
            file://defconfig"

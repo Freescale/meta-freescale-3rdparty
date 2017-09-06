@@ -1,7 +1,6 @@
 # adapted from linux-wandboard_3.14.28.bb
 
 include linux-wandboard.inc
-require recipes-kernel/linux/linux-dtb.inc
 
 SUMMARY = "Linux kernel for Wandboard, with added real-time capabilities."
 

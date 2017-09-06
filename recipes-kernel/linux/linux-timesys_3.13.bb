@@ -1,7 +1,6 @@
 # Copyright (C) 2013-2014 Timesys Corporation
 # Released under the MIT license (see COPYING.MIT for the terms)
 require recipes-kernel/linux/linux-imx.inc
-require recipes-kernel/linux/linux-dtb.inc
 
 SUMMARY = "Linux Kernel with added drivers and board support for Vybrid-based platforms"
 
