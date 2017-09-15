@@ -1,0 +1,89 @@
+From d9ff4244846537ccff192c8d10cc5a389193143a Mon Sep 17 00:00:00 2001
+From: Ken Lin <yungching0725@gmail.com>
+Date: Thu, 14 Sep 2017 07:51:52 +0800
+Subject: [PATCH] dms-ba16: watchdog: enable external wdog_b signal
+
+Enable the external wdog_b singal in Q7 to support the platform system reset
+
+Signed-off-by: Ken Lin <yungching0725@gmail.com>
+---
+ arch/arm/boot/dts/imx6q-dms-ba16.dts | 14 +++++++++++++-
+ drivers/watchdog/imx2_wdt.c          | 12 ++++++++++--
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-dms-ba16.dts b/arch/arm/boot/dts/imx6q-dms-ba16.dts
+index 570e4ab5c531..154aa77e4c91 100644
+--- a/arch/arm/boot/dts/imx6q-dms-ba16.dts
++++ b/arch/arm/boot/dts/imx6q-dms-ba16.dts
+@@ -466,7 +466,6 @@
+ 				MX6QDL_PAD_NANDF_D7__GPIO2_IO07 0x80000000	/* GPIO7 */
+ 				MX6QDL_PAD_NANDF_CLE__GPIO6_IO07 0x80000000	/* CAM_PWDN */
+ 				MX6QDL_PAD_GPIO_2__GPIO1_IO02 0x80000000	/* CAM_RST */
+-				MX6QDL_PAD_GPIO_9__WDOG1_B 0x80000000		/* Watchdog out */
+ 				MX6QDL_PAD_GPIO_16__GPIO7_IO11   0x80000000	/* HUB_RESET */
+ 				MX6QDL_PAD_GPIO_18__GPIO7_IO13   0x80000000	/* PMIC Interrupt */
+ 				MX6QDL_PAD_GPIO_19__GPIO4_IO05   0x80000000	/* AR8033 Interrupt */
+@@ -666,6 +665,13 @@
+ 			>;
+ 		};
+ 	};
++	wdog {
++		pinctrl_wdog: wdoggrp {
++			fsl,pins = <
++				MX6QDL_PAD_GPIO_9__WDOG1_B 0x1b0b0		/* Watchdog out */
++			>;
++		};
++	};
+ };
+ 
+ &ldb {
+@@ -797,3 +803,9 @@
+ 	fsl,receive-dpll-mode = <1>;
+ 	status = "okay";
+ };
++
++&wdog1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdog>;
++	fsl,wdog_b;
++};
+diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+index 805df6b33625..decfef3ecd41 100644
+--- a/drivers/watchdog/imx2_wdt.c
++++ b/drivers/watchdog/imx2_wdt.c
+@@ -43,6 +43,8 @@
+ 
+ #define IMX2_WDT_WCR		0x00		/* Control Register */
+ #define IMX2_WDT_WCR_WT		(0xFF << 8)	/* -> Watchdog Timeout Field */
++#define IMX2_WDT_WCR_WDA	(1 << 5)	/* -> WDOG_B assertion */
++#define IMX2_WDT_WCR_SRS	(1 << 4)	/* -> Software Reset Signal */
+ #define IMX2_WDT_WCR_WRE	(1 << 3)	/* -> WDOG Reset Enable */
+ #define IMX2_WDT_WCR_WDE	(1 << 2)	/* -> Watchdog Enable */
+ #define IMX2_WDT_WCR_WDZST	(1 << 0)	/* -> Watchdog timer Suspend */
+@@ -102,7 +104,9 @@ static int imx2_restart_handler(struct notifier_block *this, unsigned long mode,
+ 						    restart_handler);
+ 	/* Assert WDOG_B signal */
+ 	if (wdev->wdog_b)
+-		wcr_enable = 0x14;
++		wcr_enable |= IMX2_WDT_WCR_SRS;
++	else
++		wcr_enable |= IMX2_WDT_WCR_WDA;
+ 
+ 	regmap_write(wdev->regmap, 0, wcr_enable);
+ 	/*
+@@ -133,7 +137,11 @@ static inline void imx2_wdt_setup(struct watchdog_device *wdog)
+ 	/* Strip the old watchdog Time-Out value */
+ 	val &= ~IMX2_WDT_WCR_WT;
+ 	/* Generate reset if WDOG times out */
+-	val &= ~IMX2_WDT_WCR_WRE;
++	if (!wdev->wdog_b)
++		val &= ~IMX2_WDT_WCR_WRE;
++	/* Or if external-reset assert WDOG_B reset only on time-out */
++	else
++		val |= IMX2_WDT_WCR_WRE;
+ 	/* Keep Watchdog Disabled */
+ 	val &= ~IMX2_WDT_WCR_WDE;
+ 	/* Set the watchdog's Time-Out value */
+-- 
+2.11.0
+
