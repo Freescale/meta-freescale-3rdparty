@@ -22,6 +22,7 @@ SRC_URI = "git://github.com/Freescale/linux-fslc.git;branch=${SRCBRANCH} \
            file://0008-da9063-Add-a-PMIC-qurk-to-support-system-suspend-res.patch \
            file://0009-mfd-da9063-Add-wakeup-source-support.patch \
            file://0010-ARM-dts-imx-Add-Q7-SUS_S3_OUT-control-support-during.patch \
+	   file://0011-dms-ba16-watchdog-enable-external-wdog_b-signal.patch \
            file://defconfig"
 
 COMPATIBLE_MACHINE = "(imx6q-dms-ba16)"
