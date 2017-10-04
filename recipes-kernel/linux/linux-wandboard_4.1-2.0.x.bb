@@ -6,6 +6,6 @@ include linux-wandboard.inc
 DEPENDS += "lzop-native bc-native"
 
 SRCBRANCH = "4.1-2.0.x-imx"
-SRCREV = "18945fa6f63c4c5d2df14998c5e74bf799e6f65e"
+SRCREV = "0d698de42426a92e3ba47071f11960aeb91eb349"
 
 COMPATIBLE_MACHINE = "(wandboard)"
