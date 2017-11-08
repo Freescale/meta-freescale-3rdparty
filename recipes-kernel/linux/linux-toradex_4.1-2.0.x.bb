@@ -1,3 +1,4 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 require recipes-kernel/linux/linux-imx.inc
 
 SUMMARY = "Linux kernel for Toradex Freescale i.MX based modules"
@@ -8,9 +9,11 @@ SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRAN
 # Load USB functions configurable through configfs (CONFIG_USB_CONFIGFS)
 KERNEL_MODULE_AUTOLOAD += "${@bb.utils.contains('COMBINED_FEATURES', 'usbgadget', ' libcomposite', '',d)}"
 
-LOCALVERSION = "-v2.6b2.1"
-SRCBRANCH = "toradex_imx_4.1.15_1.0.0_ga"
-SRCREV = "eb479e52f9c6d32164ae76606fd7ce372f2aa153"
+LOCALVERSION = "-2.7.4"
+PV_append = "+git${SRCPV}"
+
+SRCBRANCH = "toradex_4.1-2.0.x-imx"
+SRCREV = "b1555bfbf38818bc6fed8d921b55b7b207249c53"
 
 DEPENDS += "lzop-native bc-native"
-COMPATIBLE_MACHINE = "(mx7)"
+COMPATIBLE_MACHINE = "(mx6|mx7)"
