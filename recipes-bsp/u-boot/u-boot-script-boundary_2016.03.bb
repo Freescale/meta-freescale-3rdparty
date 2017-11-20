@@ -1,14 +1,6 @@
-LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
+require recipes-bsp/u-boot/u-boot-boundary-common_${PV}.inc
+
 DEPENDS = "u-boot-mkimage-native"
-
-PV = "v2016.03+git${SRCPV}"
-
-SRCREV = "568947b9d1dd4e966008fceb4617392a82dc753c"
-SRCBRANCH = "boundary-v2016.03"
-SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git;branch=${SRCBRANCH}"
-
-S = "${WORKDIR}/git"
 
 inherit deploy
 
@@ -59,5 +51,4 @@ addtask deploy after do_install before do_build
 
 FILES_${PN} += "/"
 
-PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite|nitrogen6sx|nitrogen7)"
