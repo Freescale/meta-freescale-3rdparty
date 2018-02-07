@@ -6,7 +6,7 @@ SRC_URI = " \
 "
 
 S = "${WORKDIR}"
-BRCM_FWDIR = "/lib/firmware/brcm"
+BRCM_FWDIR = "${nonarch_base_libdir}/firmware/brcm"
 CHIP_MODEL ?= "Invalid"
 
 do_install() {
