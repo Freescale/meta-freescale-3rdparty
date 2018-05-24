@@ -1,3 +1,0 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
-
-COMPATIBLE_MACHINE_cfa10036 = "cfa10036"
