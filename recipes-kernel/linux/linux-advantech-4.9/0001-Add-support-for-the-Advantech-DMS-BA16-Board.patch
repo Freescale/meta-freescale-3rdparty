@@ -1,25 +1,22 @@
-From b65cedb176959d126e062e437a58738a2b31f724 Mon Sep 17 00:00:00 2001
-From: Justin Waters <justin.waters@timesys.com>
-Date: Fri, 12 Dec 2014 17:12:24 -0500
-Subject: [PATCH 7/7] ARM: dts: imx: Add support for Advantech DMS-BA16
+From 65b84fc181347ae04b1e38dbaa1672751050a5f5 Mon Sep 17 00:00:00 2001
+From: Ken Lin <yungching0725@gmail.com>
+Date: Thu, 7 Jun 2018 07:20:32 +0800
+Subject: [PATCH] Add support for the Advantech DMS-BA16 Board
 
-Add support for the Advantech DMS-BA16 Board.
-
-Signed-off-by: Justin Waters <justin.waters@timesys.com>
+Signed-off-by: Ken Lin <yungching0725@gmail.com>
 ---
- arch/arm/boot/dts/imx6q-dms-ba16.dts | 795 +++++++++++++++++++++++++++++++++++
- 1 file changed, 795 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6q-dms-ba16.dts
+ arch/arm/boot/dts/imx6q-dms-ba16.dts | 815 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 815 insertions(+)
+ create mode 100755 arch/arm/boot/dts/imx6q-dms-ba16.dts
 
 diff --git a/arch/arm/boot/dts/imx6q-dms-ba16.dts b/arch/arm/boot/dts/imx6q-dms-ba16.dts
-new file mode 100644
-index 0000000..533d536
+new file mode 100755
+index 000000000000..fb5c9ae6579f
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6q-dms-ba16.dts
-@@ -0,0 +1,795 @@
+@@ -0,0 +1,815 @@
 +/*
-+ * Copyright 2016 Timesys Corporation
-+ * Copyright 2016 Advantech Corporation
++ * Copyright 2018 Advantech Corporation
 + *
 + * The code contained herein is licensed under the GNU General Public
 + * License. You may obtain a copy of the GNU General Public License
@@ -279,11 +276,13 @@ index 0000000..533d536
 +	status = "okay";
 +};
 +
++
 +&hdmi_cec {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&pinctrl_hdmi_cec>;
-+	status = "okay";
++	status = "disabled";
 +};
++
 +
 +&hdmi_core {
 +	ipu_id = <1>;
@@ -318,10 +317,12 @@ index 0000000..533d536
 +	pinctrl-0 = <&pinctrl_i2c2>;
 +	status = "okay";
 +
-+	hdmi: edid@50 {
++
++	hdmi_edid: edid@50 {
 +		compatible = "fsl,imx6-hdmi-i2c";
 +		reg = <0x50>;
 +	};
++
 +};
 +
 +&i2c3 {
@@ -334,7 +335,11 @@ index 0000000..533d536
 +		compatible = "dialog,da9063";
 +		reg = <0x58>;
 +		interrupt-parent = <&gpio7>;
-+		interrupts = <13 0x8>; /* active-low GPIO7_13 */
++		interrupts = <13 IRQ_TYPE_LEVEL_LOW>; /* active-low GPIO7_13 */
++
++                onkey {
++                        compatible = "dlg,da9063-onkey";
++                };
 +
 +		regulators {
 +			bcore1 {
@@ -483,13 +488,14 @@ index 0000000..533d536
 +				MX6QDL_PAD_NANDF_D7__GPIO2_IO07 0x80000000	/* GPIO7 */
 +				MX6QDL_PAD_NANDF_CLE__GPIO6_IO07 0x80000000	/* CAM_PWDN */
 +				MX6QDL_PAD_GPIO_2__GPIO1_IO02 0x80000000	/* CAM_RST */
-+				MX6QDL_PAD_GPIO_9__WDOG1_B 0x80000000		/* Watchdog out */
 +				MX6QDL_PAD_GPIO_16__GPIO7_IO11   0x80000000	/* HUB_RESET */
 +				MX6QDL_PAD_GPIO_18__GPIO7_IO13   0x80000000	/* PMIC Interrupt */
 +				MX6QDL_PAD_GPIO_19__GPIO4_IO05   0x80000000	/* AR8033 Interrupt */
 +				MX6QDL_PAD_GPIO_0__GPIO1_IO00  0x80000000	/* BLEN_OUT */
 +				MX6QDL_PAD_EIM_D22__GPIO3_IO22   0x80000000	/* LVDS_PPEN_OUT */
 +				MX6QDL_PAD_KEY_COL2__GPIO4_IO10  0x80000000	/* RTC_INT */
++                        	MX6QDL_PAD_KEY_ROW2__GPIO4_IO11  0x1b0b0 	/*SUS_S3_OUT*/
++
 +			>;
 +		};
 +	};
@@ -681,6 +687,13 @@ index 0000000..533d536
 +			>;
 +		};
 +	};
++	wdog {
++		pinctrl_wdog: wdoggrp {
++			fsl,pins = <
++				MX6QDL_PAD_GPIO_9__WDOG1_B 0x1b0b0		/* Watchdog out */
++			>;
++		};
++	};
 +};
 +
 +&ldb {
@@ -812,6 +825,11 @@ index 0000000..533d536
 +	fsl,receive-dpll-mode = <1>;
 +	status = "okay";
 +};
++&wdog1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdog>;
++	fsl,wdog_b;
++};
 -- 
-2.8.1
+2.11.0
 
