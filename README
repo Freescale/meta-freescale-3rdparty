@@ -7,18 +7,21 @@ use with OpenEmbedded and/or Yocto Freescale's BSP layer.
 This layer depends on:
 
 URI: git://git.openembedded.org/openembedded-core
-branch: master
+branch: sumo
 revision: HEAD
 
 URI: git://git.yoctoproject.org/meta-freescale
-branch: master
+branch: sumo
 revision: HEAD
 
 Contributing
 ------------
 
 To contribute to this layer you should the patches for review to the
-mailing list.
+mailing list (meta-freescale@yoctoproject.org).
+
+Please refer to:
+http://openembedded.org/wiki/Commit_Patch_Message_Guidelines
 
 Mailing list:
 
@@ -30,18 +33,8 @@ Source code:
 
 When creating a patch of the last commit, use
 
-    git format-patch -s --subject-prefix='3rdparty][PATCH' -1
+    git format-patch -s --subject-prefix='3rdparty][PATCH][sumo' -1
 
 To send it to the community, use
 
     git send-email --to meta-freescale@yoctoproject.org <generated patch>
-
-Patches are normally intended for the master branch.
-
-Patches for other branches should be sent separately so they can be tracked
-individually in Patchwork and should have the branch name in brackets.
-
-For example, use this to generate a patch for branch 'morty':
-
-    git format-patch -s \
-	--subject-prefix='3rdparty][morty][PATCH' -1
