@@ -5,12 +5,16 @@ require recipes-kernel/linux/linux-imx.inc
 
 SUMMARY = "Linux kernel for Boundary Devices boards"
 
+FILESEXTRAPATHS_prepend_mx6 := "${THISDIR}/${PN}-${PV}/arm:"
+FILESEXTRAPATHS_prepend_mx7 := "${THISDIR}/${PN}-${PV}/arm:"
+FILESEXTRAPATHS_prepend_mx8 := "${THISDIR}/${PN}-${PV}/arm64:"
+
 SRC_URI = "git://github.com/boundarydevices/linux-imx6.git;branch=${SRCBRANCH} \
            file://defconfig \
 "
 
-LOCALVERSION = "-1.0.0-ga+yocto"
-SRCBRANCH = "boundary-imx_4.9.x_1.0.0_ga"
-SRCREV = "46f9b57bc9312834a51e589cac1a3517cad56a96"
+LOCALVERSION = "-2.0.0-ga+yocto"
+SRCBRANCH = "boundary-imx_4.9.x_2.0.0_ga"
+SRCREV = "b1200e83d3d2f673f2455073db127942c6e1e7d9"
 DEPENDS += "lzop-native bc-native"
-COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite|nitrogen6sx|nitrogen7)"
+COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite|nitrogen6sx|nitrogen7|nitrogen8m)"
