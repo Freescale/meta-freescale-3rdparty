@@ -4,7 +4,6 @@ SUMMARY = "U-Boot bootloader fw_printenv/setenv utilities"
 DEPENDS = "mtd-utils"
 
 SRC_URI += " \
-   file://default-gcc.patch \
    file://fw_env.config \
 "
 
