@@ -9,11 +9,11 @@ SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRAN
 # Load USB functions configurable through configfs (CONFIG_USB_CONFIGFS)
 KERNEL_MODULE_AUTOLOAD += "${@bb.utils.contains('COMBINED_FEATURES', 'usbgadget', ' libcomposite', '',d)}"
 
-LOCALVERSION = "-2.7.4"
+LOCALVERSION = "-2.8.3"
 PV_append = "+git${SRCPV}"
 
-SRCBRANCH = "toradex_4.1-2.0.x-imx"
-SRCREV = "b1555bfbf38818bc6fed8d921b55b7b207249c53"
+SRCREV = "07d40f6ffcbb9b3db3c146f0949725752ed61b63"
+SRCBRANCH = "toradex_4.9-1.0.x-imx"
 
 DEPENDS += "lzop-native bc-native"
 COMPATIBLE_MACHINE = "(mx6|mx7)"
