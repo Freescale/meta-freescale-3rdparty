@@ -10,7 +10,7 @@ SUMMARY = "U-Boot bootloader with support for Toradex Computer on Modules"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
-DEPENDS += "dtc-native"
+DEPENDS_append = " dtc-145-native"
 
 PROVIDES += "u-boot"
 

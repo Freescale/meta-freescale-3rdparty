@@ -1,8 +1,8 @@
 require recipes-bsp/u-boot/u-boot-toradex.inc
 
-LOCALVERSION = "-2.7.4"
+LOCALVERSION = "-2.8.3"
 PV_append = "+git${SRCPV}"
 
-SRCREV = "1b121c6ab548a9af0a27876e9eaa0c654c1dc3e1"
+SRCREV = "aca804c9ddadbf34a8ff82779e5598ec5e319f23"
 SRCBRANCH = "2016.11-toradex"
 COMPATIBLE_MACHINE = "(mx6|mx7|vf|use-mainline-bsp)"
