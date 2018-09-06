@@ -8,7 +8,7 @@ DESTDIR = "/boot"
 S = "${WORKDIR}"
 
 do_compile() {
-    bootscript="${THISDIR}/u-boot-script-gateworks-imx/6x_bootscript-yocto.txt"
+    bootscript="${WORKDIR}/6x_bootscript-yocto.txt"
     echo "bootscript == $bootscript"
 
     uboot-mkimage  -A arm -O linux -T script -C none -a 0 -e 0 \
