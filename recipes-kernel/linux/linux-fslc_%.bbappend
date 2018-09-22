@@ -8,6 +8,6 @@ SRC_URI_append_imx6qdl-variscite-som_use-mainline-bsp = " \
     file://imx6q-var-som-vsc.dts \
 "
 
-do_configure_prepend() {
+do_configure_prepend_imx6qdl-variscite-som() {
     cp ${WORKDIR}/imx6*-var*.dts* ${S}/arch/arm/boot/dts
 }
