@@ -1,7 +1,11 @@
 require u-boot-boundary-common_${PV}.inc
 
 SUMMARY = "U-Boot bootloader fw_printenv/setenv utilities"
-DEPENDS = "mtd-utils"
+DEPENDS += "mtd-utils bison-native"
+
+FILESEXTRAPATHS_prepend_mx6 := "${THISDIR}/${PN}/arm:"
+FILESEXTRAPATHS_prepend_mx7 := "${THISDIR}/${PN}/arm:"
+FILESEXTRAPATHS_prepend_mx8 := "${THISDIR}/${PN}/aarch64:"
 
 SRC_URI += " \
    file://fw_env.config \
@@ -15,7 +19,7 @@ inherit uboot-config
 
 do_compile () {
     oe_runmake ${UBOOT_MACHINE}
-    oe_runmake env
+    oe_runmake envtools
 }
 
 do_install () {
