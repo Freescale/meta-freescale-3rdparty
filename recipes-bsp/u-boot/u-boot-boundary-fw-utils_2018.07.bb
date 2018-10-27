@@ -44,4 +44,3 @@ RPROVIDES_${PN} += "u-boot-fw-utils"
 BBCLASSEXTEND = "cross"
 
 COMPATIBLE_MACHINE = "(imx)"
-COMPATIBLE_MACHINE_class-cross = "(.*)"
