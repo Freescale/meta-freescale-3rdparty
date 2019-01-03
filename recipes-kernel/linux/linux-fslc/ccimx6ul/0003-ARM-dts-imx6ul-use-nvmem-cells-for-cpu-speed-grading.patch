@@ -1,7 +1,6 @@
-From 6e7242f21f0d9461e1ad3b13a4118c44e17cfa38 Mon Sep 17 00:00:00 2001
 From: Anson Huang <Anson.Huang@nxp.com>
 Date: Fri, 14 Sep 2018 10:59:21 +0800
-Subject: [PATCH 3/5] ARM: dts: imx6ul: use nvmem-cells for cpu speed grading
+Subject: [PATCH] ARM: dts: imx6ul: use nvmem-cells for cpu speed grading
 
 On i.MX6UL, accessing OCOTP directly is wrong because the ocotp clock
 needs to be enabled first, so use the nvmem-cells binding instead.
@@ -14,10 +13,10 @@ Signed-off-by: Shawn Guo <shawnguo@kernel.org>
  1 file changed, 6 insertions(+)
 
 diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
-index 47a3453a4211..9670f15bcb31 100644
+index 6dc0b569acdf..c670d8e4e0a9 100644
 --- a/arch/arm/boot/dts/imx6ul.dtsi
 +++ b/arch/arm/boot/dts/imx6ul.dtsi
-@@ -88,6 +88,8 @@
+@@ -89,6 +89,8 @@
  				      "pll1_sys";
  			arm-supply = <&reg_arm>;
  			soc-supply = <&reg_soc>;
@@ -26,7 +25,7 @@ index 47a3453a4211..9670f15bcb31 100644
  		};
  	};
  
-@@ -926,6 +928,10 @@
+@@ -932,6 +934,10 @@
  				tempmon_temp_grade: temp-grade@20 {
  					reg = <0x20 4>;
  				};
