@@ -21,6 +21,14 @@ UBOOT_CONFIG[ccimx6ulstarter] = "ccimx6ulstarter_defconfig"
 MACHINE_EXTRA_RDEPENDS += " \
     mtd-utils-ubifs \
 "
+
+MACHINE_FEATURES += " wifi bluetooth"
+
+MACHINE_EXTRA_RRECOMMENDS += " \
+    ${@bb.utils.contains('MACHINE_FEATURES', 'wifi', 'kernel-module-qca6564 linux-firmware-qca6564-wifi', '', d)} \
+    ${@bb.utils.contains('MACHINE_FEATURES', 'bluetooth', 'linux-firmware-qca6564-bt', '', d)} \
+"
+
 # mkfs.ubifs parameters for boot partition (the one holding kernel and device tree files)
 # Max LEB count (-c 255) calculated for a partition of up to 32 MiB considering 128 KiB erase-block size.
 MKUBIFS_BOOT_ARGS ?= "-m 2048 -e 126976 -c 255"
