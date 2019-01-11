@@ -1,0 +1,77 @@
+From: Alex Gonzalez <alex.gonzalez@digi.com>
+Date: Mon, 10 Sep 2018 13:38:40 +0200
+Subject: [PATCH] net: wireless: Export regulatory_hint_user()
+
+The QCA6564 driver makes use of this kernel API when built with
+the QCA_VENDOR_KERNEL flag.
+
+Signed-off-by: Alex Gonzalez <alex.gonzalez@digi.com>
+---
+ include/net/cfg80211.h | 26 ++++++++++++++++++++++++++
+ net/wireless/reg.c     |  1 +
+ net/wireless/reg.h     |  3 ---
+ 3 files changed, 27 insertions(+), 3 deletions(-)
+
+diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
+index e0c41eb1c860..84d47ac0cea4 100644
+--- a/include/net/cfg80211.h
++++ b/include/net/cfg80211.h
+@@ -5111,6 +5111,32 @@ int regulatory_set_wiphy_regd_sync_rtnl(struct wiphy *wiphy,
+ 					struct ieee80211_regdomain *rd);
+ 
+ /**
++ * regulatory_hint_user - hint to the wireless core a regulatory domain
++ * which the driver has received from an application
++ * @alpha2: the ISO/IEC 3166 alpha2 the driver claims its regulatory domain
++ *	should be in. If @rd is set this should be NULL. Note that if you
++ *	set this to NULL you should still set rd->alpha2 to some accepted
++ *	alpha2.
++ * @user_reg_hint_type: the type of user regulatory hint.
++ *
++ * Wireless drivers can use this function to hint to the wireless core
++ * the current regulatory domain as specified by trusted applications,
++ * it is the driver's responsibilty to estbalish which applications it
++ * trusts.
++ *
++ * The wiphy should be registered to cfg80211 prior to this call.
++ * For cfg80211 drivers this means you must first use wiphy_register(),
++ * for mac80211 drivers you must first use ieee80211_register_hw().
++ *
++ * Drivers should check the return value, its possible you can get
++ * an -ENOMEM or an -EINVAL.
++ *
++ * Return: 0 on success. -ENOMEM, -EINVAL.
++ */
++int regulatory_hint_user(const char *alpha2,
++			 enum nl80211_user_reg_hint_type user_reg_hint_type);
++
++/**
+  * wiphy_apply_custom_regulatory - apply a custom driver regulatory domain
+  * @wiphy: the wireless device we want to process the regulatory domain on
+  * @regd: the custom regulatory domain to use for this wiphy
+diff --git a/net/wireless/reg.c b/net/wireless/reg.c
+index dd58b9909ac9..816a8a25b06f 100644
+--- a/net/wireless/reg.c
++++ b/net/wireless/reg.c
+@@ -2912,6 +2912,7 @@ int regulatory_hint_user(const char *alpha2,
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL(regulatory_hint_user);
+ 
+ int regulatory_hint_indoor(bool is_indoor, u32 portid)
+ {
+diff --git a/net/wireless/reg.h b/net/wireless/reg.h
+index 9ceeb5f3a7cb..92de47dec466 100644
+--- a/net/wireless/reg.h
++++ b/net/wireless/reg.h
+@@ -31,9 +31,6 @@ bool is_world_regdom(const char *alpha2);
+ bool reg_supported_dfs_region(enum nl80211_dfs_regions dfs_region);
+ enum nl80211_dfs_regions reg_get_dfs_region(struct wiphy *wiphy);
+ 
+-int regulatory_hint_user(const char *alpha2,
+-			 enum nl80211_user_reg_hint_type user_reg_hint_type);
+-
+ /**
+  * regulatory_hint_indoor - hint operation in indoor env. or not
+  * @is_indoor: if true indicates that user space thinks that the

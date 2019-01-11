@@ -1,0 +1,62 @@
+From: Alex Gonzalez <alex.gonzalez@digi.com>
+Date: Fri, 7 Sep 2018 13:12:14 +0200
+Subject: [PATCH] net: wireless: Allow for firmware to handle DFS
+
+The QCA6564 driver makes use of this functionality when compiled with
+the QCA_VENDOR_KERNEL flag.
+
+Signed-off-by: Alex Gonzalez <alex.gonzalez@digi.com>
+---
+ include/net/cfg80211.h | 2 ++
+ net/wireless/chan.c    | 3 ++-
+ net/wireless/nl80211.c | 3 +++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
+index 84d47ac0cea4..3082f6bf047d 100644
+--- a/include/net/cfg80211.h
++++ b/include/net/cfg80211.h
+@@ -3740,6 +3740,7 @@ struct cfg80211_ops {
+  *	beaconing mode (AP, IBSS, Mesh, ...).
+  * @WIPHY_FLAG_HAS_STATIC_WEP: The device supports static WEP key installation
+  *	before connection.
++ * @WIPHY_FLAG_DFS_OFFLOAD: The driver handles all the DFS related operations.
+  */
+ enum wiphy_flags {
+ 	/* use hole at 0 */
+@@ -3766,6 +3767,7 @@ enum wiphy_flags {
+ 	WIPHY_FLAG_SUPPORTS_5_10_MHZ		= BIT(22),
+ 	WIPHY_FLAG_HAS_CHANNEL_SWITCH		= BIT(23),
+ 	WIPHY_FLAG_HAS_STATIC_WEP		= BIT(24),
++	WIPHY_FLAG_DFS_OFFLOAD                  = BIT(25),
+ };
+ 
+ /**
+diff --git a/net/wireless/chan.c b/net/wireless/chan.c
+index 7dc1bbd0888f..2ef1f908408f 100644
+--- a/net/wireless/chan.c
++++ b/net/wireless/chan.c
+@@ -321,7 +321,8 @@ static int cfg80211_get_chans_dfs_required(struct wiphy *wiphy,
+ 		if (!c)
+ 			return -EINVAL;
+ 
+-		if (c->flags & IEEE80211_CHAN_RADAR)
++		if ((c->flags & IEEE80211_CHAN_RADAR) &&
++		    !(wiphy->flags & WIPHY_FLAG_DFS_OFFLOAD))
+ 			return 1;
+ 	}
+ 	return 0;
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index d91a408db113..930670ccfa59 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -7956,6 +7956,9 @@ static int nl80211_start_radar_detection(struct sk_buff *skb,
+ 	if (netif_carrier_ok(dev))
+ 		return -EBUSY;
+ 
++	if (rdev->wiphy.flags & WIPHY_FLAG_DFS_OFFLOAD)
++		return -EOPNOTSUPP;
++
+ 	if (wdev->cac_started)
+ 		return -EBUSY;
+ 

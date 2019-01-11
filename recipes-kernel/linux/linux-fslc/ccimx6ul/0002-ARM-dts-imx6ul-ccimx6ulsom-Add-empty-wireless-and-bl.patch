@@ -1,0 +1,32 @@
+From: Alex Gonzalez <alex.gonzalez@digi.com>
+Date: Fri, 14 Sep 2018 12:32:41 +0200
+Subject: [PATCH] ARM: dts: imx6ul: ccimx6ulsom: Add empty wireless and
+ bluetooth placeholders
+
+The vendor provided U-Boot will use these empty nodes to populate the
+MAC addresses used for both the Bluetooth and the Wireless chips.
+
+Upstream-Status: Inappropriate [vendor specific]
+
+Signed-off-by: Alex Gonzalez <alex.gonzalez@digi.com>
+---
+ arch/arm/boot/dts/imx6ul-ccimx6ulsom.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6ul-ccimx6ulsom.dtsi b/arch/arm/boot/dts/imx6ul-ccimx6ulsom.dtsi
+index b5781c3656d1..82fa176bf138 100644
+--- a/arch/arm/boot/dts/imx6ul-ccimx6ulsom.dtsi
++++ b/arch/arm/boot/dts/imx6ul-ccimx6ulsom.dtsi
+@@ -24,6 +24,12 @@
+ 			linux,cma-default;
+ 		};
+ 	};
++
++	bluetooth {
++	};
++
++	wireless {
++	};
+ };
+ 
+ &adc1 {
