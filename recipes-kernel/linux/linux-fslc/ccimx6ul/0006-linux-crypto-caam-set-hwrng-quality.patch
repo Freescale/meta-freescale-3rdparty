@@ -1,0 +1,26 @@
+From: Jose Diaz de Grenu <Jose.DiazdeGrenu@digi.com>
+Date: Wed, 27 Jun 2018 17:39:11 +0200
+Subject: [PATCH] linux: crypto: caam set hwrng quality
+
+According to the i.MX6 Security Reference Manual it is a NIST
+certifiable RNG, so set high quality to let the HWRNG framework
+automatically use it.
+
+Signed-off-by: Jose Diaz de Grenu <Jose.DiazdeGrenu@digi.com>
+Signed-off-by: Alex Gonzalez <alex.gonzalez@digi.com>
+---
+ drivers/crypto/caam/caamrng.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/crypto/caam/caamrng.c b/drivers/crypto/caam/caamrng.c
+index fde07d4ff019..ddca16941640 100644
+--- a/drivers/crypto/caam/caamrng.c
++++ b/drivers/crypto/caam/caamrng.c
+@@ -292,6 +292,7 @@ static struct hwrng caam_rng = {
+ 	.name		= "rng-caam",
+ 	.cleanup	= caam_cleanup,
+ 	.read		= caam_read,
++	.quality	= 1024,
+ };
+ 
+ static void __exit caam_rng_exit(void)
