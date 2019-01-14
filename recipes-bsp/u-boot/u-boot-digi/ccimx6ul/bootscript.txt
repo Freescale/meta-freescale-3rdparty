@@ -2,6 +2,6 @@
 # U-Boot bootscript for NAND images created by Yocto.
 #
 
-setenv fdt_file imx6ul-ccimx6ulsbcexpress.dtb
-setenv zimage zImage-ccimx6ulsbcexpress.bin
+setenv fdt_file imx6ul-${platform}.dtb
+setenv zimage zImage-${platform}.bin
 dboot linux nand ${mtdbootpart}
