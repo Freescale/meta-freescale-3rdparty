@@ -30,6 +30,7 @@ UBOOT_ENV = "boot"
 UBOOT_ENV_SUFFIX = "scr"
 
 do_compile_append () {
+    sed -i -e 's/\${platform}/${MACHINE}/g' ${WORKDIR}/bootscript.txt
     uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
         -n "boot script" -d ${WORKDIR}/bootscript.txt \
         ${WORKDIR}/${UBOOT_ENV_BINARY}
