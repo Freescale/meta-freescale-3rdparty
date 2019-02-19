@@ -7,11 +7,11 @@ use with OpenEmbedded and/or Yocto Freescale's BSP layer.
 This layer depends on:
 
 URI: git://git.openembedded.org/openembedded-core
-branch: sumo
+branch: master
 revision: HEAD
 
 URI: git://git.yoctoproject.org/meta-freescale
-branch: sumo
+branch: master
 revision: HEAD
 
 Contributing
@@ -33,7 +33,7 @@ Source code:
 
 When creating a patch of the last commit, use
 
-    git format-patch -s --subject-prefix='3rdparty][PATCH][sumo' -1
+    git format-patch -s --subject-prefix='3rdparty][PATCH' -1
 
 To send it to the community, use
 
