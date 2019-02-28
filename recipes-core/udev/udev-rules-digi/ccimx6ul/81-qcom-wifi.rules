@@ -1,0 +1,2 @@
+# Load Qualcomm wireless module (sdio)
+SUBSYSTEM=="sdio", ACTION=="add", ENV{MODALIAS}=="sdio:c00v0271d050A", RUN="/etc/udev/scripts/qca6564-init-wifi.sh"

@@ -1,0 +1,2 @@
+# Attach QCA6564 Bluetooth (uart)
+SUBSYSTEM=="tty", KERNEL=="ttymxc0", ACTION=="add", RUN="/etc/udev/scripts/qca6564-attach.sh start"
