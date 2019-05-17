@@ -1,0 +1,144 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Support for Variscite VAR-SOM-MX6 Starter Kit
+ *
+ * Copyright 2018
+ * Author: Andreas Müller <schnitzeltony@gmail.com>
+ */
+
+/dts-v1/;
+
+#include "imx6q.dtsi"
+#include "imx6qdl-var-som.dtsi"
+#include <dt-bindings/input/linux-event-codes.h>
+
+/ {
+	model = "Variscite i.MX6 VAR-SOM-MX6";
+	compatible = "variscite,var-som", "fsl,imx6q";
+
+	gpio-keys { /* OK */
+		compatible = "gpio-keys";
+		autorepeat;
+
+		back {
+			gpios = <&gpio5 20 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_BACK>;
+			label = "Key Back";
+			linux,input-type = <1>;
+			debounce-interval = <100>;
+			wakeup-source;
+		};
+	};
+
+
+	sound {
+		compatible = "simple-audio-card";
+		simple-audio-card,name = "tlv320aic3106-audio";
+		simple-audio-card,format = "i2s";
+		simple-audio-card,bitclock-master = <&sound_codec>;
+		simple-audio-card,frame-master = <&sound_codec>;
+		simple-audio-card,widgets = "Headphone", "Headphone Jack",
+					    "Line", "Line In";
+		simple-audio-card,routing = "Headphone Jack", "HPLOUT",
+					    "Headphone Jack", "HPROUT",
+					    "LINE1L", "Line In",
+					    "LINE1R", "Line In";
+
+		sound_cpu: simple-audio-card,cpu {
+			sound-dai = <&ssi2>;
+		};
+
+		sound_codec: simple-audio-card,codec {
+			sound-dai = <&tlv320aic3106>;
+			clocks = <&clks IMX6QDL_CLK_CKO>;
+		};
+	};
+};
+
+&can1 {
+	status = "okay";
+};
+
+&ecspi1 {
+	cs-gpios = <&gpio4 9 GPIO_ACTIVE_HIGH>,
+		   <&gpio4 10 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+};
+
+&fec { /* OK */
+	status = "okay";
+};
+
+&hdmi {
+	status = "okay";
+};
+
+&i2c3 { /* OK */
+	status = "okay";
+	rtc@0x68 {
+		compatible = "dallas,ds1337";
+		reg = <0x68>;
+	};
+};
+
+/*&ldb {
+	status = "okay";
+
+	lvds-channel@1 {
+		status = "okay";
+
+		port@4 {
+			reg = <4>;
+
+			lvds1_out: endpoint {
+				remote-endpoint = <&panel_in>;
+			};
+		};
+	};
+};*/
+
+&pwm2 {
+	status = "okay";
+};
+
+&uart1 {
+	status = "okay";
+};
+
+&uart3 {
+	status = "okay";
+};
+
+&usbh1 {
+	status = "okay";
+};
+
+&usbotg {
+	status = "okay";
+};
+
+&usdhc2 { /* OK */
+	pinctrl-1 = <&pinctrl_usdhc2cdwp>;
+	cd-gpios = <&gpio4 14 GPIO_ACTIVE_LOW>;
+	wp-gpios = <&gpio4 15 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+};
+
+&iomuxc {
+	pinctrl_gpio_keys: gpio_keysgrp {
+		fsl,pins = <
+			/* user button */
+			MX6QDL_PAD_CSI0_DATA_EN__GPIO5_IO20 0x17059
+		>;
+	};
+
+	pinctrl_usdhc2cdwp: usdhc2cdwpgrp {
+		fsl,pins = <
+      /* SDMMC2 CD/WP */
+      MX6QDL_PAD_KEY_COL4__GPIO4_IO14		0x80000000
+      MX6QDL_PAD_KEY_ROW4__GPIO4_IO15		0x80000000
+		>;
+	};
+};
+
+
