@@ -5,4 +5,4 @@ include broadcom-nvram-config.inc
 
 CHIP_MODEL = "4339"
 
-COMPATIBLE_MACHINE = "(imx7d-pico)"
+COMPATIBLE_MACHINE = "(imx7d-pico|imx6ul-pico)"
