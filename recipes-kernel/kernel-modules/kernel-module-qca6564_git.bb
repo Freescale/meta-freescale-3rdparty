@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/ISC;md5=f3b90e78ea0cffb20bf5cca
 PV = "v4.2.89.63+${SRCPV}"
 
 SRCBRANCH = "qca6564/master"
-SRCREV = "2e780b29209ca6b0f71442be5fd36cf0ddddc661"
+SRCREV = "fef49841fd1b4f3fee3b2193f9927c09d59df7de"
 
 SRC_URI = "\
     git://github.com/digi-embedded/qcacld-2.0.git;protocol=git;branch=${SRCBRANCH} \
