@@ -14,6 +14,7 @@ SRCBRANCH = "imx_v2017.03_4.9.11_1.0.0_ga_var01"
 
 SRC_URI = "\
     git://github.com/varigit/uboot-imx.git;protocol=git;branch=${SRCBRANCH} \
+    file://0001-Fix-build-with-recent-layers.patch \
 "
 
 S = "${WORKDIR}/git"
