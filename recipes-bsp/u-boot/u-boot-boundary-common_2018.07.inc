@@ -9,5 +9,5 @@ SRCBRANCH = "boundary-v2018.07"
 SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git;branch=${SRCBRANCH}"
 
 S = "${WORKDIR}/git"
-
+B = "${WORKDIR}/build"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
