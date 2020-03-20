@@ -24,7 +24,7 @@ do_copy_default_config() {
         if [ -f ${S}/arch/${ARCH}/configs/${KERNEL_DEFCONFIG} ]; then
             cp ${S}/arch/${ARCH}/configs/${KERNEL_DEFCONFIG} ${WORKDIR}/defconfig
         else
-	    bberror "KERNEL_DEFCONFIG does not exist!" Please set a valid KERNEL_DEFCONFIG"
+	    bberror "KERNEL_DEFCONFIG does not exist! Please set a valid KERNEL_DEFCONFIG"
 	fi
     fi
 }
