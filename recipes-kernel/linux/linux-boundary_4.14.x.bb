@@ -6,6 +6,8 @@ require recipes-kernel/linux/linux-imx.inc
 SUMMARY = "Linux kernel for Boundary Devices boards"
 
 SRC_URI = "git://github.com/boundarydevices/linux-imx6.git;branch=${SRCBRANCH} \
+           file://0001-Compiler-Attributes-add-support-for-__copy-gcc-9.patch \
+           file://0002-include-linux-module.h-copy-__init-__exit-attrs-to-i.patch \
 "
 
 LOCALVERSION = "-2.0.0-ga+yocto"
