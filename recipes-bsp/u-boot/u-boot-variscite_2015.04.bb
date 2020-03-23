@@ -14,7 +14,7 @@ SRCBRANCH = "imx_v2015.04_4.1.15_1.1.0_ga_var01"
 
 SRC_URI = "\
     git://github.com/varigit/uboot-imx.git;protocol=git;branch=${SRCBRANCH} \
-    file://Fix-the-compile-issue-under-gcc6.patch \
+    file://kernel-gcc7.patch \
 "
 
 S = "${WORKDIR}/git"
