@@ -14,6 +14,7 @@ SRC_URI = " \
     file://Fix-the-compile-issue-under-gcc6.patch \
     file://0001-mxc_hdmi-mxc_hdmi-allow-EDID-to-select-non-CEA-modes.patch \
     file://imx6qdl-var-som-Enable-wl12xx.patch \
+    file://kernel-gcc7.patch \
     file://defconfig \
 "
 
