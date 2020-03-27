@@ -1,19 +1,21 @@
 # Copyright (C) 2015 Toradex AG
-# Based on u-boot-fslc.inc Copyright (C) 2012-2014 O.S. Systems Software LTDA
+# Based on u-boot-fslc.inc Copyright (C) 2012-2020 O.S. Systems Software LTDA
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 SUMMARY = "U-Boot bootloader with support for Toradex Computer on Modules"
 LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
+LIC_FILES_CHKSUM = "file://Licenses/README;md5=30503fd321432fc713238f582193b78e"
+
+DEPENDS += "flex-native bison-native"
 
 SRC_URI = "git://git.toradex.com/u-boot-toradex.git;branch=${SRCBRANCH}"
 
-SRCREV ?= "aca804c9ddadbf34a8ff82779e5598ec5e319f23"
-SRCBRANCH ?= "2016.11-toradex"
+SRCREV = "694e2136eefc2d110f44b26218c03e44a1e88235"
+SRCBRANCH = "toradex_2019.07"
 
 S = "${WORKDIR}/git"
 
-PV = "2016.11+git${SRCPV}"
+PV = "2019.07+git${SRCPV}"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
