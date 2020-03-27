@@ -1,0 +1,30 @@
+if test ${devtype} = "ubi"
+then
+    echo "This script is not meant to distro boot from raw NAND flash."
+    exit
+fi
+
+if test ${distro_bootpart} != 1
+then
+    echo "Boot partition needs to be the first partition"
+    exit
+fi
+
+if test -n ${setup}
+then
+    run setup
+else
+    env set setupargs 'console=tty1 consoleblank=0'
+fi
+test -n ${m4boot} || env set m4boot ';'
+test -n ${fdtfile} || env set fdtfile $fdt_file
+test -n ${kernel_image} || env set kernel_image ${boot_file}
+
+env set uuid_set 'part uuid ${devtype} ${devnum}:2 uuid'
+env set emmcargs_set 'env set emmcargs root=PARTUUID=${uuid} rw rootfstype=ext4 rootwait'
+env set bootcmd_args 'env set bootargs ${defargs} ${emmcargs} ${setupargs} ${vidargs} ${tdxargs}'
+env set bootcmd_kernel 'load ${devtype} ${devnum}:${distro_bootpart} ${kernel_addr_r} ${kernel_image}'
+env set bootcmd_dtb 'load ${devtype} ${devnum}:${distro_bootpart} ${fdt_addr_r} ${fdtfile}'
+env set bootcmd_run '@@KERNEL_BOOTCMD@@ ${kernel_addr_r} - ${fdt_addr_r}'
+env set bootcmd 'run m4boot; run bootcmd_dtb && run uuid_set && run emmcargs_set && run bootcmd_args && run bootcmd_kernel && run bootcmd_run'
+run bootcmd
