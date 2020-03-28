@@ -23,3 +23,7 @@ do_compile_append_colibri-imx6ull () {
 do_compile_append_colibri-imx7 () {
     nand_padding
 }
+
+do_compile_append_colibri-vf () {
+    nand_padding
+}
