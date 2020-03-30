@@ -11,8 +11,8 @@ KERNEL_MODULE_AUTOLOAD += "${@bb.utils.contains('COMBINED_FEATURES', 'usbgadget'
 LOCALVERSION = "-2.8.3"
 PV_append = "+git${SRCPV}"
 
-SRCBRANCH = "toradex_vf_4.4-next"
-SRCREV = "166cb6f4a4aff202d98914fe0c5530d26ce671a5"
+SRCBRANCH = "toradex_vf_4.4"
+SRCREV = "4a31b8a3519d5dde0eacbb088b0d45c83732535b"
 
 DEPENDS += "lzop-native bc-native"
 COMPATIBLE_MACHINE = "(vf)"
