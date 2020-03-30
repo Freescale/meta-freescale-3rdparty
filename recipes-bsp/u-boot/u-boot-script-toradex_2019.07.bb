@@ -14,11 +14,26 @@ KERNEL_BOOTCMD_aarch64 ?= "booti"
 
 inherit deploy nopackages
 
-do_deploy() {
+do_configure[noexec] = "1"
+do_compile[noexec] = "1"
+
+do_mkimage() {
     sed -e 's/@@KERNEL_BOOTCMD@@/${KERNEL_BOOTCMD}/' \
-        "${WORKDIR}/boot.cmd.in" > boot.cmd
-    mkimage -T script -C none -n "Distro boot script" -d boot.cmd boot.scr
-    install -m 0644 boot.scr ${DEPLOYDIR}
+        "${WORKDIR}/boot.cmd.in" > ${B}/boot.cmd
+    mkimage -T script -C none -n "Distro boot script" -d ${B}/boot.cmd ${B}/boot.scr
+}
+
+addtask mkimage after do_compile before do_install
+
+do_install() {
+    install -Dm 0644 ${B}/boot.scr ${D}/boot.scr
+}
+
+do_deploy() {
+    install -Dm 0644 ${D}/boot.scr ${DEPLOYDIR}/boot.scr-${MACHINE}-${PV}-${PR}
+    cd ${DEPLOYDIR}
+    rm -f boot.scr-${MACHINE}
+    ln -sf boot.scr-${MACHINE}-${PV}-${PR} boot.scr-${MACHINE}
 }
 
 addtask deploy after do_install before do_build
