@@ -38,4 +38,6 @@ do_deploy() {
 
 addtask deploy after do_install before do_build
 
+PROVIDES += "virtual/bootscript"
+
 PACKAGE_ARCH = "${MACHINE_ARCH}"
