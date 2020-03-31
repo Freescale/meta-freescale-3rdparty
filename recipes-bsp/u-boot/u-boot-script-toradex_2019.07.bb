@@ -41,3 +41,5 @@ addtask deploy after do_install before do_build
 PROVIDES += "virtual/bootscript"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+COMPATIBLE_MACHINE = "(apalis-imx6|colibri-imx6|colibri-imx6ull|colibri-imx7-emmc|colibri-imx7-nand|colibri-vf.conf)"
