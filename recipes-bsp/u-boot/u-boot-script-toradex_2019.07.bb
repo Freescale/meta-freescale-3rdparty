@@ -38,7 +38,7 @@ do_deploy() {
 
 addtask deploy after do_install before do_build
 
-PROVIDES += "virtual/bootscript"
+PROVIDES += "u-boot-default-script"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
