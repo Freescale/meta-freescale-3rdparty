@@ -42,4 +42,4 @@ PROVIDES += "u-boot-default-script"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(apalis-imx6|colibri-imx6|colibri-imx6ull|colibri-imx7-emmc|colibri-imx7-nand|colibri-vf.conf)"
+COMPATIBLE_MACHINE = "(apalis-imx6|colibri-imx6|colibri-imx6ull|colibri-imx7-emmc|colibri-imx7-nand|colibri-vf)"
