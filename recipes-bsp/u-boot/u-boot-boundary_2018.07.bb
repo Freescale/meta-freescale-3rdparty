@@ -1,7 +1,13 @@
 require recipes-bsp/u-boot/u-boot.inc
 require recipes-bsp/u-boot/u-boot-boundary-common_${PV}.inc
 
+FILESEXTRAPATHS_prepend_mx6 := "${THISDIR}/${PN}/arm:"
+FILESEXTRAPATHS_prepend_mx7 := "${THISDIR}/${PN}/arm:"
+FILESEXTRAPATHS_prepend_mx8 := "${THISDIR}/${PN}/aarch64:"
+
 DEPENDS += "bison-native"
+
+SRC_URI += "file://fw_env.config"
 
 PROVIDES += "u-boot"
 
