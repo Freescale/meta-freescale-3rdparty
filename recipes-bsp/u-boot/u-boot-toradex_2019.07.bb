@@ -3,10 +3,7 @@ require recipes-bsp/u-boot/u-boot-toradex-common.inc
 
 DEPENDS += "bc-native dtc-native"
 
-SRC_URI += " \
-    file://fw_env.config \
-    file://fw_unlock_mmc.sh \
-"
+SRC_URI += "file://fw_env.config"
 
 PROVIDES += "u-boot"
 
@@ -32,21 +29,3 @@ do_compile_append_colibri-imx7 () {
 do_compile_append_colibri-vf () {
     nand_padding
 }
-
-install_unlock_emmc() {
-    install -Dm 0644 ${WORKDIR}/fw_unlock_mmc.sh ${D}${sysconfdir}/profile.d/fw_unlock_mmc.sh
-}
-
-do_install_append_apalis-imx6() {
-    install_unlock_emmc
-}
-
-do_install_append_colibri-imx6() {
-    install_unlock_emmc
-}
-
-do_install_append_colibri-imx7-emmc() {
-    install_unlock_emmc
-}
-
-FILES_${PN}-env += "${sysconfdir}/profile.d/fw_unlock_mmc.sh"
