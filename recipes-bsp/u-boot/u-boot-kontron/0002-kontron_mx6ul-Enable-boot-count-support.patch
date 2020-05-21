@@ -1,0 +1,29 @@
+From 9433532e5be9ddca76fdf5bdeca3b936ebcd657c Mon Sep 17 00:00:00 2001
+From: Otavio Salvador <otavio@ossystems.com.br>
+Date: Thu, 21 May 2020 14:49:46 -0300
+Subject: [PATCH 2/3] kontron_mx6ul: Enable boot count support
+Organization: O.S. Systems Software LTDA.
+
+Upstream-Status: Pending
+
+Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+---
+ configs/kontron_mx6ul_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/configs/kontron_mx6ul_defconfig b/configs/kontron_mx6ul_defconfig
+index f92b2aa7b52..aabf348c17f 100644
+--- a/configs/kontron_mx6ul_defconfig
++++ b/configs/kontron_mx6ul_defconfig
+@@ -53,6 +53,8 @@ CONFIG_ENV_IS_IN_MMC=y
+ CONFIG_ENV_IS_IN_SPI_FLASH=y
+ CONFIG_USE_ENV_SPI_BUS=y
+ CONFIG_ENV_SPI_BUS=2
++CONFIG_BOOTCOUNT_LIMIT=y
++CONFIG_BOOTCOUNT_ENV=y
+ CONFIG_DM_I2C=y
+ CONFIG_DM_MMC=y
+ CONFIG_FSL_USDHC=y
+-- 
+2.26.2
+

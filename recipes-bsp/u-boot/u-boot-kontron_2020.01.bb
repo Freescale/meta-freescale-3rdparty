@@ -13,6 +13,11 @@ LIC_FILES_CHKSUM = "file://Licenses/README;md5=30503fd321432fc713238f582193b78e"
 
 SRC_URI = "git://git.kontron-electronics.de/linux/u-boot.git;protocol=https;branch=${SRCBRANCH} \
            file://fw_env.config \
+           \
+           file://0001-kontron_mx6ul-Sync-configuration-using-savedefconfig.patch \
+           file://0002-kontron_mx6ul-Enable-boot-count-support.patch \
+           file://0003-kontron_mx6ul-Enable-UUID-command-support.patch \
+           \
            file://Remove-redundant-YYLOC-global-declaration.patch"
 SRCREV = "438e0ad034813d38228ace8f1d311459933d1125"
 SRCBRANCH = "v2020.01-ktn"
