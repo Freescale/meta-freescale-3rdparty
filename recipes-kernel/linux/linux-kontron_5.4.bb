@@ -21,9 +21,9 @@ LOCALVERSION = "-ktn"
 #
 # LINUX_VERSION define should match to the kernel version referenced by SRC_URI and
 # should be updated once patchlevel is merged.
-LINUX_VERSION = "5.4.36"
+LINUX_VERSION = "5.4.41"
 
 SRCBRANCH = "v5.4-ktn"
-SRCREV = "fbb3adb523bebab289c7cb283ff8cbfebe477a23"
+SRCREV = "807a88195d767631837242b89cd8c7734a471f81"
 
 COMPATIBLE_MACHINE = "(imx6ul-kontron)"
