@@ -5,6 +5,8 @@ DESCRIPTION = "Linux kernel for CompuLab cm-fx6 boards."
 
 DEPENDS += "lzop-native bc-native"
 
+LINUX_VERSION = "3.14.28"
+
 SRCBRANCH = "imx_3.14.28_1.0.0_ga"
 SRCREV = "91cf351a2afc17ac4a260e4d2ad1e32d00925a1b"
 LOCALVERSION = "-cm-fx6"
