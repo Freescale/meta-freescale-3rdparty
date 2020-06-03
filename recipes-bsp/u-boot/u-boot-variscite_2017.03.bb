@@ -12,7 +12,7 @@ PROVIDES += "u-boot"
 
 SPL_BINARY = "SPL"
 
-SRCREV = "3b5f889cb501c9fbe44c750c657dcd9ea4875176"
+SRCREV = "a7869c2cde98e5f5b1886d8f54dff321a7aa0597"
 SRCBRANCH = "imx_v2017.03_4.9.11_1.0.0_ga_var01"
 
 SRC_URI = "\
