@@ -4,8 +4,8 @@
 include recipes-kernel/linux/linux-imx.inc
 DEPENDS += "lzop-native bc-native"
 
-SRCBRANCH = "4.9-1.0.x-imx"
-SRCREV = "0e674a64b86e2bb00ab43f56104d3ea85dda0066"
+SRCBRANCH = "imx_5.4.3_2.0.0"
+SRCREV = "6ea635c2f9b08dc75ffef7d6262a2c6df7afa4e1"
 LOCALVERSION = "-${SRCBRANCH}-dms-ba16"
 
 SRC_URI = "git://github.com/Freescale/linux-fslc.git;branch=${SRCBRANCH} \
