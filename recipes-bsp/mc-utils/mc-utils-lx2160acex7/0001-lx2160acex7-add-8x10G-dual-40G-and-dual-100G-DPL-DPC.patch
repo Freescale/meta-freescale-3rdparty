@@ -1,0 +1,1912 @@
+From 1b1279d4ce8eb28a3c4f1e98bcd62f16173d8285 Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Sun, 28 Jul 2019 14:40:28 +0300
+Subject: [PATCH] lx2160acex7: add 8x10G, dual 40G and dual 100G DPL/DPC files
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ config/lx2160a/CEX7/dpc-8_x_usxgmii.dts      | 103 ++++
+ config/lx2160a/CEX7/dpc-dual-100g.dts        |  85 +++
+ config/lx2160a/CEX7/dpc-dual-40g.dts         |  85 +++
+ config/lx2160a/CEX7/dpl-eth.8x10g.19.dts     | 532 ++++++++++++++++++
+ config/lx2160a/CEX7/dpl-eth.dual-100g.19.dts | 511 ++++++++++++++++++
+ config/lx2160a/CEX7/dpl-eth.dual-40g.19.dts  | 534 +++++++++++++++++++
+ 6 files changed, 1850 insertions(+)
+ create mode 100644 config/lx2160a/CEX7/dpc-8_x_usxgmii.dts
+ create mode 100644 config/lx2160a/CEX7/dpc-dual-100g.dts
+ create mode 100644 config/lx2160a/CEX7/dpc-dual-40g.dts
+ create mode 100644 config/lx2160a/CEX7/dpl-eth.8x10g.19.dts
+ create mode 100644 config/lx2160a/CEX7/dpl-eth.dual-100g.19.dts
+ create mode 100644 config/lx2160a/CEX7/dpl-eth.dual-40g.19.dts
+
+diff --git a/config/lx2160a/CEX7/dpc-8_x_usxgmii.dts b/config/lx2160a/CEX7/dpc-8_x_usxgmii.dts
+new file mode 100644
+index 0000000..44e22bb
+--- /dev/null
++++ b/config/lx2160a/CEX7/dpc-8_x_usxgmii.dts
+@@ -0,0 +1,103 @@
++/*
++* Copyright 2018 NXP
++*
++* Redistribution and use in source and binary forms, with or without
++* modification, are permitted provided that the following conditions are met:
++*   * Redistributions of source code must retain the above copyright
++*     notice, this list of conditions and the following disclaimer.
++*   * Redistributions in binary form must reproduce the above copyright
++*     notice, this list of conditions and the following disclaimer in the
++*     documentation and/or other materials provided with the distribution.
++*   * Neither the name of the above-listed copyright holders nor the
++*     names of any contributors may be used to endorse or promote products
++*     derived from this software without specific prior written permission.
++*
++* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
++* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++* POSSIBILITY OF SUCH DAMAGE.
++*/
++
++/*
++* This DPC showcases one Linux configuration for lx2160a boards.
++*/
++
++/dts-v1/;
++
++/ {
++
++	resources {
++
++		icid_pools {
++
++			icid_pool@1 {
++				num = <0x64>;
++				base_icid = <0x0>;
++			};
++		};
++	};
++
++	mc_general {
++
++		log {
++			mode = "LOG_MODE_ON";
++			level = "LOG_LEVEL_WARNING";
++		};
++
++		console {
++			mode = "CONSOLE_MODE_OFF";
++			uart_id = <0x4>;
++			level = "LOG_LEVEL_WARNING";
++		};
++	};
++
++	controllers {
++
++		qbman {
++			/* Transform this number of 8-WQ channels into four times
++			 * as many 2-WQ channels. This allows the creation of a
++			 * larger number of DPCONs.
++			 */
++			wq_ch_conversion = <32>;
++		};
++	};
++
++	board_info {
++		ports {
++			mac@3 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@4 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@5 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@6 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@7 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@8 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@9 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@10 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@17 {
++				link_type = "MAC_LINK_TYPE_PHY";
++			};
++		};
++	};
++};
+diff --git a/config/lx2160a/CEX7/dpc-dual-100g.dts b/config/lx2160a/CEX7/dpc-dual-100g.dts
+new file mode 100644
+index 0000000..0601a07
+--- /dev/null
++++ b/config/lx2160a/CEX7/dpc-dual-100g.dts
+@@ -0,0 +1,85 @@
++/*
++* Copyright 2018 NXP
++*
++* Redistribution and use in source and binary forms, with or without
++* modification, are permitted provided that the following conditions are met:
++*   * Redistributions of source code must retain the above copyright
++*     notice, this list of conditions and the following disclaimer.
++*   * Redistributions in binary form must reproduce the above copyright
++*     notice, this list of conditions and the following disclaimer in the
++*     documentation and/or other materials provided with the distribution.
++*   * Neither the name of the above-listed copyright holders nor the
++*     names of any contributors may be used to endorse or promote products
++*     derived from this software without specific prior written permission.
++*
++* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
++* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++* POSSIBILITY OF SUCH DAMAGE.
++*/
++
++/*
++* This DPC showcases one Linux configuration for lx2160a boards.
++*/
++
++/dts-v1/;
++
++/ {
++
++	resources {
++
++		icid_pools {
++
++			icid_pool@1 {
++				num = <0x64>;
++				base_icid = <0x0>;
++			};
++		};
++	};
++
++	mc_general {
++
++		log {
++			mode = "LOG_MODE_ON";
++			level = "LOG_LEVEL_WARNING";
++		};
++
++		console {
++			mode = "CONSOLE_MODE_OFF";
++			uart_id = <0x4>;
++			level = "LOG_LEVEL_WARNING";
++		};
++	};
++
++	controllers {
++
++		qbman {
++			/* Transform this number of 8-WQ channels into four times
++			 * as many 2-WQ channels. This allows the creation of a
++			 * larger number of DPCONs.
++			 */
++			wq_ch_conversion = <32>;
++		};
++	};
++
++	board_info {
++		ports {
++			mac@1 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@2 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@17 {
++				link_type = "MAC_LINK_TYPE_PHY";
++			};
++		};
++	};
++};
+diff --git a/config/lx2160a/CEX7/dpc-dual-40g.dts b/config/lx2160a/CEX7/dpc-dual-40g.dts
+new file mode 100644
+index 0000000..0601a07
+--- /dev/null
++++ b/config/lx2160a/CEX7/dpc-dual-40g.dts
+@@ -0,0 +1,85 @@
++/*
++* Copyright 2018 NXP
++*
++* Redistribution and use in source and binary forms, with or without
++* modification, are permitted provided that the following conditions are met:
++*   * Redistributions of source code must retain the above copyright
++*     notice, this list of conditions and the following disclaimer.
++*   * Redistributions in binary form must reproduce the above copyright
++*     notice, this list of conditions and the following disclaimer in the
++*     documentation and/or other materials provided with the distribution.
++*   * Neither the name of the above-listed copyright holders nor the
++*     names of any contributors may be used to endorse or promote products
++*     derived from this software without specific prior written permission.
++*
++* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
++* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++* POSSIBILITY OF SUCH DAMAGE.
++*/
++
++/*
++* This DPC showcases one Linux configuration for lx2160a boards.
++*/
++
++/dts-v1/;
++
++/ {
++
++	resources {
++
++		icid_pools {
++
++			icid_pool@1 {
++				num = <0x64>;
++				base_icid = <0x0>;
++			};
++		};
++	};
++
++	mc_general {
++
++		log {
++			mode = "LOG_MODE_ON";
++			level = "LOG_LEVEL_WARNING";
++		};
++
++		console {
++			mode = "CONSOLE_MODE_OFF";
++			uart_id = <0x4>;
++			level = "LOG_LEVEL_WARNING";
++		};
++	};
++
++	controllers {
++
++		qbman {
++			/* Transform this number of 8-WQ channels into four times
++			 * as many 2-WQ channels. This allows the creation of a
++			 * larger number of DPCONs.
++			 */
++			wq_ch_conversion = <32>;
++		};
++	};
++
++	board_info {
++		ports {
++			mac@1 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@2 {
++				link_type = "MAC_LINK_TYPE_FIXED";
++			};
++			mac@17 {
++				link_type = "MAC_LINK_TYPE_PHY";
++			};
++		};
++	};
++};
+diff --git a/config/lx2160a/CEX7/dpl-eth.8x10g.19.dts b/config/lx2160a/CEX7/dpl-eth.8x10g.19.dts
+new file mode 100644
+index 0000000..b72af03
+--- /dev/null
++++ b/config/lx2160a/CEX7/dpl-eth.8x10g.19.dts
+@@ -0,0 +1,532 @@
++/*
++ * Copyright 2018 NXP
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *   * Redistributions of source code must retain the above copyright
++ *     notice, this list of conditions and the following disclaimer.
++ *   * Redistributions in binary form must reproduce the above copyright
++ *     notice, this list of conditions and the following disclaimer in the
++ *     documentation and/or other materials provided with the distribution.
++ *   * Neither the name of the above-listed copyright holders nor the
++ *     names of any contributors may be used to endorse or promote products
++ *     derived from this software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/dts-v1/;
++
++/ {
++	dpl-version = <0xa>;
++	/*****************************************************************
++	 * Containers
++	 *****************************************************************/
++	containers {
++		dprc@1 {
++			parent = "none";
++			options = "DPRC_CFG_OPT_SPAWN_ALLOWED", "DPRC_CFG_OPT_ALLOC_ALLOWED", "DPRC_CFG_OPT_IRQ_CFG_ALLOWED";
++			objects {
++				/* ------------ DPNIs --------------*/
++				obj_set@dpni {
++					type = "dpni";
++					ids = <0x0>;
++				};
++
++
++				/* ------------ DPMACs --------------*/
++				obj_set@dpmac {
++					type = "dpmac";
++					ids = <0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0x11>;
++				};
++
++
++				/* ------------ DPBPs --------------*/
++				obj_set@dpbp {
++					type = "dpbp";
++					ids = <0x0 0x1>;
++				};
++
++				/* ------------ DPIOs --------------*/
++				obj_set@dpio {
++					type = "dpio";
++					ids = <0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf>;
++				};
++
++				/* ------------ DPMCPs --------------*/
++				obj_set@dpmcp {
++					type = "dpmcp";
++					ids = <0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f 0x20 0x21 0x22 0x23>;
++				};
++
++				/* ------------ DPCON --------------*/
++				obj_set@dpcon {
++					type = "dpcon";
++					ids = <0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f>;
++				};
++
++				/* ------------ DPSECI --------------*/
++				obj@700 {
++					obj_name = "dpseci@0";
++				};
++
++				/* ------------ DPRTC --------------*/
++				obj@800 {
++					obj_name="dprtc@0";
++				};
++			};
++		};
++	};
++
++	/*****************************************************************
++	 * Objects
++	 *****************************************************************/
++	objects {
++
++		/* ------------ DPNI --------------*/
++		dpni@0 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@1 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@2 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@3 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@4 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@5 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@6 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@7 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@8 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpmac@2 {
++		};
++
++		dpmac@3 {
++		};
++
++		dpmac@4 {
++		};
++
++		dpmac@5 {
++		};
++
++		dpmac@6 {
++		};
++		dpmac@7 {
++		};
++		dpmac@8 {
++		};
++		dpmac@9 {
++		};
++		dpmac@10 {
++		};
++
++		dpmac@17 {
++		};
++
++		dpmac@18 {
++		};
++
++		/* ------------ DPBP --------------*/
++		dpbp@0 {
++		};
++
++		dpbp@1 {
++		};
++
++
++		/* ------------ DPIO --------------*/
++		dpio@0 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@1 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@2 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@3 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@4 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@5 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@6 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@7 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@8 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@9 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@10 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@11 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@12 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@13 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@14 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@15 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		/* ------------ DPMCP --------------*/
++		dpmcp@1 {
++		};
++
++		dpmcp@2 {
++		};
++
++		dpmcp@3 {
++		};
++
++		dpmcp@4 {
++		};
++
++		dpmcp@5 {
++		};
++
++		dpmcp@6 {
++		};
++
++		dpmcp@7 {
++		};
++
++		dpmcp@8 {
++		};
++
++		dpmcp@9 {
++		};
++
++		dpmcp@10 {
++		};
++
++		dpmcp@11 {
++		};
++
++		dpmcp@12 {
++		};
++
++		dpmcp@13 {
++		};
++
++		dpmcp@14 {
++		};
++
++		dpmcp@15 {
++		};
++
++		dpmcp@16 {
++		};
++
++		dpmcp@17 {
++		};
++
++		dpmcp@18 {
++		};
++
++		dpmcp@19 {
++		};
++
++		dpmcp@20 {
++		};
++
++		dpmcp@21 {
++		};
++
++		dpmcp@22 {
++		};
++
++		dpmcp@23 {
++		};
++
++		dpmcp@24 {
++		};
++
++		dpmcp@25 {
++		};
++
++		dpmcp@26 {
++		};
++
++		dpmcp@27 {
++		};
++
++		dpmcp@28 {
++		};
++
++		dpmcp@29 {
++		};
++
++		dpmcp@30 {
++		};
++
++		dpmcp@31 {
++		};
++
++		dpmcp@32 {
++		};
++
++		dpmcp@33 {
++		};
++
++		dpmcp@34 {
++		};
++
++		dpmcp@35 {
++		};
++
++		/* ------------ DPCON --------------*/
++		dpcon@0 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@1 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@2 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@3 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@4 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@5 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@6 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@7 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@8 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@9 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@10 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@11 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@12 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@13 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@14 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@15 {
++			num_priorities = <0x2>;
++		};
++		dpcon@16 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@17 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@18 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@19 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@20 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@21 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@22 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@23 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@24 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@25 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@26 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@27 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@28 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@29 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@30 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@31 {
++			num_priorities = <0x2>;
++		};
++
++		/* ------------ DPSECI --------------*/
++		dpseci@0 {
++			priorities = <0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01>;
++			options = "DPSECI_OPT_HAS_CG";
++		};
++
++		/* ------------ DPRTC --------------*/
++		dprtc@0 {
++			compatible="fsl,dprtc";
++		};
++	};
++
++	/*****************************************************************
++	 * Connections
++	 *****************************************************************/
++	connections {
++		connection@1 {
++			endpoint1 = "dpni@0";
++			endpoint2 = "dpmac@17";
++		};
++/*		connection@2 {
++			endpoint1 = "dpni@1";
++			endpoint2 = "dpmac@3";
++		};
++		connection@3 {
++			endpoint1 = "dpni@2";
++			endpoint2 = "dpmac@4";
++		};
++		connection@4 {
++			endpoint1 = "dpni@3";
++			endpoint2 = "dpmac@5";
++		};
++		connection@5 {
++			endpoint1 = "dpni@4";
++			endpoint2 = "dpmac@6";
++		};*/
++	};
++};
++
+diff --git a/config/lx2160a/CEX7/dpl-eth.dual-100g.19.dts b/config/lx2160a/CEX7/dpl-eth.dual-100g.19.dts
+new file mode 100644
+index 0000000..bb1b54f
+--- /dev/null
++++ b/config/lx2160a/CEX7/dpl-eth.dual-100g.19.dts
+@@ -0,0 +1,511 @@
++/*
++ * Copyright 2018 NXP
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *   * Redistributions of source code must retain the above copyright
++ *     notice, this list of conditions and the following disclaimer.
++ *   * Redistributions in binary form must reproduce the above copyright
++ *     notice, this list of conditions and the following disclaimer in the
++ *     documentation and/or other materials provided with the distribution.
++ *   * Neither the name of the above-listed copyright holders nor the
++ *     names of any contributors may be used to endorse or promote products
++ *     derived from this software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/dts-v1/;
++
++/ {
++	dpl-version = <0xa>;
++	/*****************************************************************
++	 * Containers
++	 *****************************************************************/
++	containers {
++		dprc@1 {
++			parent = "none";
++			options = "DPRC_CFG_OPT_SPAWN_ALLOWED", "DPRC_CFG_OPT_ALLOC_ALLOWED", "DPRC_CFG_OPT_IRQ_CFG_ALLOWED";
++			objects {
++				/* ------------ DPNIs --------------*/
++				obj_set@dpni {
++					type = "dpni";
++					ids = <0x0>;
++				};
++
++
++				/* ------------ DPMACs --------------*/
++				obj_set@dpmac {
++					type = "dpmac";
++					ids = <0x1 0x2 0x11>;
++				};
++
++
++				/* ------------ DPBPs --------------*/
++				obj_set@dpbp {
++					type = "dpbp";
++					ids = <0x0 0x1>;
++				};
++
++				/* ------------ DPIOs --------------*/
++				obj_set@dpio {
++					type = "dpio";
++					ids = <0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf>;
++				};
++
++				/* ------------ DPMCPs --------------*/
++				obj_set@dpmcp {
++					type = "dpmcp";
++					ids = <0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f 0x20 0x21 0x22 0x23>;
++				};
++
++				/* ------------ DPCON --------------*/
++				obj_set@dpcon {
++					type = "dpcon";
++					ids = <0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f>;
++				};
++
++				/* ------------ DPSECI --------------*/
++				obj@700 {
++					obj_name = "dpseci@0";
++				};
++
++				/* ------------ DPRTC --------------*/
++				obj@800 {
++					obj_name="dprtc@0";
++				};
++			};
++		};
++	};
++
++	/*****************************************************************
++	 * Objects
++	 *****************************************************************/
++	objects {
++
++		/* ------------ DPNI --------------*/
++		dpni@0 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@1 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@2 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@3 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@4 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@5 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@6 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@7 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@8 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpmac@1 {
++		};
++		dpmac@2 {
++		};
++
++		dpmac@17 {
++		};
++
++		/* ------------ DPBP --------------*/
++		dpbp@0 {
++		};
++
++		dpbp@1 {
++		};
++
++
++		/* ------------ DPIO --------------*/
++		dpio@0 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@1 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@2 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@3 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@4 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@5 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@6 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@7 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@8 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@9 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@10 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@11 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@12 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@13 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@14 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@15 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		/* ------------ DPMCP --------------*/
++		dpmcp@1 {
++		};
++
++		dpmcp@2 {
++		};
++
++		dpmcp@3 {
++		};
++
++		dpmcp@4 {
++		};
++
++		dpmcp@5 {
++		};
++
++		dpmcp@6 {
++		};
++
++		dpmcp@7 {
++		};
++
++		dpmcp@8 {
++		};
++
++		dpmcp@9 {
++		};
++
++		dpmcp@10 {
++		};
++
++		dpmcp@11 {
++		};
++
++		dpmcp@12 {
++		};
++
++		dpmcp@13 {
++		};
++
++		dpmcp@14 {
++		};
++
++		dpmcp@15 {
++		};
++
++		dpmcp@16 {
++		};
++
++		dpmcp@17 {
++		};
++
++		dpmcp@18 {
++		};
++
++		dpmcp@19 {
++		};
++
++		dpmcp@20 {
++		};
++
++		dpmcp@21 {
++		};
++
++		dpmcp@22 {
++		};
++
++		dpmcp@23 {
++		};
++
++		dpmcp@24 {
++		};
++
++		dpmcp@25 {
++		};
++
++		dpmcp@26 {
++		};
++
++		dpmcp@27 {
++		};
++
++		dpmcp@28 {
++		};
++
++		dpmcp@29 {
++		};
++
++		dpmcp@30 {
++		};
++
++		dpmcp@31 {
++		};
++
++		dpmcp@32 {
++		};
++
++		dpmcp@33 {
++		};
++
++		dpmcp@34 {
++		};
++
++		dpmcp@35 {
++		};
++
++		/* ------------ DPCON --------------*/
++		dpcon@0 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@1 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@2 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@3 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@4 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@5 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@6 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@7 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@8 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@9 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@10 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@11 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@12 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@13 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@14 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@15 {
++			num_priorities = <0x2>;
++		};
++		dpcon@16 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@17 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@18 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@19 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@20 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@21 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@22 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@23 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@24 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@25 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@26 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@27 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@28 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@29 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@30 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@31 {
++			num_priorities = <0x2>;
++		};
++
++		/* ------------ DPSECI --------------*/
++		dpseci@0 {
++			priorities = <0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01>;
++			options = "DPSECI_OPT_HAS_CG";
++		};
++
++		/* ------------ DPRTC --------------*/
++		dprtc@0 {
++			compatible="fsl,dprtc";
++		};
++	};
++
++	/*****************************************************************
++	 * Connections
++	 *****************************************************************/
++	connections {
++		connection@1 {
++			endpoint1 = "dpni@0";
++			endpoint2 = "dpmac@17";
++		};
++/*		connection@2 {
++			endpoint1 = "dpni@1";
++			endpoint2 = "dpmac@3";
++		};
++		connection@3 {
++			endpoint1 = "dpni@2";
++			endpoint2 = "dpmac@4";
++		};
++		connection@4 {
++			endpoint1 = "dpni@3";
++			endpoint2 = "dpmac@5";
++		};
++		connection@5 {
++			endpoint1 = "dpni@4";
++			endpoint2 = "dpmac@6";
++		};*/
++	};
++};
++
+diff --git a/config/lx2160a/CEX7/dpl-eth.dual-40g.19.dts b/config/lx2160a/CEX7/dpl-eth.dual-40g.19.dts
+new file mode 100644
+index 0000000..5619fd2
+--- /dev/null
++++ b/config/lx2160a/CEX7/dpl-eth.dual-40g.19.dts
+@@ -0,0 +1,534 @@
++/*
++ * Copyright 2018 NXP
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *   * Redistributions of source code must retain the above copyright
++ *     notice, this list of conditions and the following disclaimer.
++ *   * Redistributions in binary form must reproduce the above copyright
++ *     notice, this list of conditions and the following disclaimer in the
++ *     documentation and/or other materials provided with the distribution.
++ *   * Neither the name of the above-listed copyright holders nor the
++ *     names of any contributors may be used to endorse or promote products
++ *     derived from this software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/dts-v1/;
++
++/ {
++	dpl-version = <0xa>;
++	/*****************************************************************
++	 * Containers
++	 *****************************************************************/
++	containers {
++		dprc@1 {
++			parent = "none";
++			options = "DPRC_CFG_OPT_SPAWN_ALLOWED", "DPRC_CFG_OPT_ALLOC_ALLOWED", "DPRC_CFG_OPT_IRQ_CFG_ALLOWED";
++			objects {
++				/* ------------ DPNIs --------------*/
++				obj_set@dpni {
++					type = "dpni";
++					ids = <0x0>;
++				};
++
++
++				/* ------------ DPMACs --------------*/
++				obj_set@dpmac {
++					type = "dpmac";
++					ids = <0x1 0x2 0x11>;
++				};
++
++
++				/* ------------ DPBPs --------------*/
++				obj_set@dpbp {
++					type = "dpbp";
++					ids = <0x0 0x1>;
++				};
++
++				/* ------------ DPIOs --------------*/
++				obj_set@dpio {
++					type = "dpio";
++					ids = <0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf>;
++				};
++
++				/* ------------ DPMCPs --------------*/
++				obj_set@dpmcp {
++					type = "dpmcp";
++					ids = <0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f 0x20 0x21 0x22 0x23>;
++				};
++
++				/* ------------ DPCON --------------*/
++				obj_set@dpcon {
++					type = "dpcon";
++					ids = <0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f>;
++				};
++
++				/* ------------ DPSECI --------------*/
++				obj@700 {
++					obj_name = "dpseci@0";
++				};
++
++				/* ------------ DPRTC --------------*/
++				obj@800 {
++					obj_name="dprtc@0";
++				};
++			};
++		};
++	};
++
++	/*****************************************************************
++	 * Objects
++	 *****************************************************************/
++	objects {
++
++		/* ------------ DPNI --------------*/
++		dpni@0 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@1 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@2 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@3 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@4 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@5 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@6 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@7 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpni@8 {
++			options = "DPNI_OPT_HAS_KEY_MASKING";
++			num_queues = <0x10>;
++			num_tcs = <0x1>;
++		};
++		dpmac@1 {
++		};
++		dpmac@2 {
++		};
++
++		dpmac@3 {
++		};
++
++		dpmac@4 {
++		};
++
++		dpmac@5 {
++		};
++
++		dpmac@6 {
++		};
++		dpmac@7 {
++		};
++		dpmac@8 {
++		};
++		dpmac@9 {
++		};
++		dpmac@10 {
++		};
++
++		dpmac@17 {
++		};
++
++		dpmac@18 {
++		};
++
++		/* ------------ DPBP --------------*/
++		dpbp@0 {
++		};
++
++		dpbp@1 {
++		};
++
++
++		/* ------------ DPIO --------------*/
++		dpio@0 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@1 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@2 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@3 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@4 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@5 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@6 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@7 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@8 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@9 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@10 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@11 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@12 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@13 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@14 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		dpio@15 {
++			channel_mode = "DPIO_LOCAL_CHANNEL";
++			num_priorities = <0x8>;
++		};
++
++		/* ------------ DPMCP --------------*/
++		dpmcp@1 {
++		};
++
++		dpmcp@2 {
++		};
++
++		dpmcp@3 {
++		};
++
++		dpmcp@4 {
++		};
++
++		dpmcp@5 {
++		};
++
++		dpmcp@6 {
++		};
++
++		dpmcp@7 {
++		};
++
++		dpmcp@8 {
++		};
++
++		dpmcp@9 {
++		};
++
++		dpmcp@10 {
++		};
++
++		dpmcp@11 {
++		};
++
++		dpmcp@12 {
++		};
++
++		dpmcp@13 {
++		};
++
++		dpmcp@14 {
++		};
++
++		dpmcp@15 {
++		};
++
++		dpmcp@16 {
++		};
++
++		dpmcp@17 {
++		};
++
++		dpmcp@18 {
++		};
++
++		dpmcp@19 {
++		};
++
++		dpmcp@20 {
++		};
++
++		dpmcp@21 {
++		};
++
++		dpmcp@22 {
++		};
++
++		dpmcp@23 {
++		};
++
++		dpmcp@24 {
++		};
++
++		dpmcp@25 {
++		};
++
++		dpmcp@26 {
++		};
++
++		dpmcp@27 {
++		};
++
++		dpmcp@28 {
++		};
++
++		dpmcp@29 {
++		};
++
++		dpmcp@30 {
++		};
++
++		dpmcp@31 {
++		};
++
++		dpmcp@32 {
++		};
++
++		dpmcp@33 {
++		};
++
++		dpmcp@34 {
++		};
++
++		dpmcp@35 {
++		};
++
++		/* ------------ DPCON --------------*/
++		dpcon@0 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@1 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@2 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@3 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@4 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@5 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@6 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@7 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@8 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@9 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@10 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@11 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@12 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@13 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@14 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@15 {
++			num_priorities = <0x2>;
++		};
++		dpcon@16 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@17 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@18 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@19 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@20 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@21 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@22 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@23 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@24 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@25 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@26 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@27 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@28 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@29 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@30 {
++			num_priorities = <0x2>;
++		};
++
++		dpcon@31 {
++			num_priorities = <0x2>;
++		};
++
++		/* ------------ DPSECI --------------*/
++		dpseci@0 {
++			priorities = <0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01 0x01>;
++			options = "DPSECI_OPT_HAS_CG";
++		};
++
++		/* ------------ DPRTC --------------*/
++		dprtc@0 {
++			compatible="fsl,dprtc";
++		};
++	};
++
++	/*****************************************************************
++	 * Connections
++	 *****************************************************************/
++	connections {
++		connection@1 {
++			endpoint1 = "dpni@0";
++			endpoint2 = "dpmac@17";
++		};
++/*		connection@2 {
++			endpoint1 = "dpni@1";
++			endpoint2 = "dpmac@3";
++		};
++		connection@3 {
++			endpoint1 = "dpni@2";
++			endpoint2 = "dpmac@4";
++		};
++		connection@4 {
++			endpoint1 = "dpni@3";
++			endpoint2 = "dpmac@5";
++		};
++		connection@5 {
++			endpoint1 = "dpni@4";
++			endpoint2 = "dpmac@6";
++		};*/
++	};
++};
++
+-- 
+2.17.1
+
