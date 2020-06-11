@@ -1,0 +1,95 @@
+From 6d634d64528e5ba510c369a2ae19c337ae7d692e Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Mon, 23 Mar 2020 12:36:20 +0200
+Subject: [PATCH 7/8] lx2160acex7 - pcie workarounds and fan full speed
+
+1. Moves calling the workarounds to the _defaults.rcwi
+2. Toggle fan-full-speed GPIO. The fan controller starts throttling when
+a driver exists (i.e. kernel); in order to avoid overheating until then
+enable full speed.
+3. Run a050234.rcw on rev1 - fixes some issues observed when using Mellanox
+ConnectX-5 NICs
+4. Run a009531 and a00885 on rev2.
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ lx2160acex7/configs/lx2160a_defaults.rcwi | 21 +++++++++++++++++----
+ lx2160acex7/configs/lx2160a_sdboot.rcwi   |  6 ------
+ lx2160acex7/configs/lx2160a_xspiboot.rcwi |  6 ------
+ 3 files changed, 17 insertions(+), 16 deletions(-)
+
+diff --git a/lx2160acex7/configs/lx2160a_defaults.rcwi b/lx2160acex7/configs/lx2160a_defaults.rcwi
+index 3ea7683..7af1f5b 100644
+--- a/lx2160acex7/configs/lx2160a_defaults.rcwi
++++ b/lx2160acex7/configs/lx2160a_defaults.rcwi
+@@ -1,10 +1,6 @@
+ #include <../lx2160asi/lx2160a.rcwi>
+ MEM_PLL_CFG=3
+ MEM2_PLL_CFG=3
+-C5_PLL_SEL=0
+-C6_PLL_SEL=0
+-C7_PLL_SEL=0
+-C8_PLL_SEL=0
+ HWA_CGA_M1_CLK_SEL=1
+ HWA_CGB_M1_CLK_SEL=7
+ BOOT_LOC=26
+@@ -22,3 +18,20 @@ IRQ07_04_PMUX=1
+ IRQ11_08_PMUX=1
+ EVT20_PMUX=1
+ EVT43_PMUX=1
++
++/* Drive the fan full speed pin */
++.pbi
++write 0x2320000,0x20000000
++.end
++
++/* Errata for SATA controller */
++#include <../lx2160asi/a010554.rcw>
++
++/* Errata for rev 1 PCIe controller */
++#include <../lx2160asi/a011270.rcw>
++
++/* Errata a050234 - fix elastic buffer threshold in rev 1 */
++#include <../lx2160asi/a050234.rcw>
++
++/* LX2 rev 2 PCIe Errata A-009531 and A-008851*/
++#include <../lx2160asi/a009531_a008851.rcw>
+diff --git a/lx2160acex7/configs/lx2160a_sdboot.rcwi b/lx2160acex7/configs/lx2160a_sdboot.rcwi
+index d537ea5..9086ffc 100644
+--- a/lx2160acex7/configs/lx2160a_sdboot.rcwi
++++ b/lx2160acex7/configs/lx2160a_sdboot.rcwi
+@@ -9,12 +9,6 @@ blockcopy 0x08,0x00100000,0x1800a000,0x00020000
+ /* Boot Location Pointer */
+ #include <../lx2160asi/bootlocptr_sd.rcw>
+ 
+-/* Errata for SATA controller */
+-#include <../lx2160asi/a010554.rcw>
+-
+-/* Errata for PCIe controller */
+-#include <../lx2160asi/a011270.rcw>
+-
+ /* common PBI commands */
+ #include <../lx2160asi/common.rcw>
+ 
+diff --git a/lx2160acex7/configs/lx2160a_xspiboot.rcwi b/lx2160acex7/configs/lx2160a_xspiboot.rcwi
+index 28310c9..fa092c9 100644
+--- a/lx2160acex7/configs/lx2160a_xspiboot.rcwi
++++ b/lx2160acex7/configs/lx2160a_xspiboot.rcwi
+@@ -4,12 +4,6 @@
+ /* Boot Location Pointer */
+ #include <../lx2160asi/bootlocptr_nor.rcw>
+ 
+-/* Errata for SATA controller */
+-#include <../lx2160asi/a010554.rcw>
+-
+-/* Errata for PCIe controller */
+-#include <../lx2160asi/a011270.rcw>
+-
+ /* common PBI commands */
+ #include <../lx2160asi/common.rcw>
+ 
+-- 
+2.17.1
+

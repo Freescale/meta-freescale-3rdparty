@@ -1,0 +1,181 @@
+From c7c3ed47f1de7c20de348a6ca5fe0d5a18912f4b Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Mon, 23 Mar 2020 12:16:13 +0200
+Subject: [PATCH 4/4] refactor a009531, a008851 and a011270
+
+1. Add 'load conditional', 'jump condidional' and 'jump' to PBI
+instructions.
+2. Use SVR register to execute the PCIe workarounds on the relevant rev
+of the device.
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ lx2160asi/a009531_a008851.rcw | 96 +++++++++++++++++++++++++++++++++++
+ lx2160asi/a011270.rcw         |  6 +++
+ rcw.py                        | 28 ++++++++++
+ 3 files changed, 130 insertions(+)
+ create mode 100644 lx2160asi/a009531_a008851.rcw
+
+diff --git a/lx2160asi/a009531_a008851.rcw b/lx2160asi/a009531_a008851.rcw
+new file mode 100644
+index 0000000..0eb7051
+--- /dev/null
++++ b/lx2160asi/a009531_a008851.rcw
+@@ -0,0 +1,96 @@
++/*
++ * Work-around for erratum A-009531
++ *
++ * Description:
++ * As defined in section 2.2.6.4, Relaxed Ordering and ID-Based Ordering (IDO)
++ * Attributes of the PCI Express Base Specification Rev 3.1, “A Completer
++ * is permitted to set IDO only if the IDO Completion Enable bit in the Device
++ * Control 2 Register is set. It is not required to copy the value of IDO from
++ * the Request into the Completion(s) for that Request".
++ *
++ * However, the PCI Express controller as the completer sets the IDO bit in the
++ * completion packet header, in response to non-posted requests (memory read) with
++ * IDO bit set in the packet header, even if the IDO Completion Enable bit in the
++ * Device Control 2 Register is not set.
++ *
++ * Impact:
++ * The PCI Express controller as the completer sends completion packets with IDO
++ * bit set in packet header even when the IDO Completion Enable bit is cleared in
++ * the controller’s Device Control 2 Register.
++ * Applicable for SNP PCIe controller
++ */
++
++/*
++ * Work-around for erratum A-008851
++ *
++ * Invalid transmitter/receiver preset values are used in Gen3 equalization
++ * phases during link training for RC mode
++ * This errata is valid only for PCI gen3.
++ * Workaround:
++ *  write 0x00000001 to MISC_CONTROL_1_OFF
++ *  write 0x4747 to Lane Equalization Control register for each lane
++ * Applicable for SNP PCIe controller
++ */
++
++.pbi
++/* Load condition SVR register mask major ID */
++loadc 0x01e000a4,0x000000f0
++
++/* If it is rev 2, skip the following jump command */
++jumpc 0x00000014,0x00000020
++
++/* Jump all the below instructions */
++jump 0x190 /* All instruction below including the jump are 0x190 bytes */
++
++loadc 0x01ea1080,0x70000000
++jumpc 0x00000034,0x00000000 
++write 0x03400098,0x00000000
++write 0x034008bc,0x00000001
++write 0x03400154,0x47474747
++write 0x03400158,0x47474747
++write 0x034008bc,0x00000000
++
++loadc 0x01ea1080,0x00700000
++jumpc 0x00000034,0x00000000 
++write 0x03500098,0x00000000
++write 0x035008bc,0x00000001
++write 0x03500154,0x47474747
++write 0x03500158,0x47474747
++write 0x035008bc,0x00000000
++
++loadc 0x01eb1080,0x70000000
++jumpc 0x00000044,0x00000000 
++write 0x03600098,0x00000000
++write 0x036008bc,0x00000001
++write 0x03600164,0x47474747
++write 0x03600168,0x47474747
++write 0x0360016c,0x47474747
++write 0x03600170,0x47474747
++write 0x036008bc,0x00000000
++
++loadc 0x01eb1080,0x00700000
++jumpc 0x00000034,0x00000000 
++write 0x03700098,0x00000000
++write 0x037008bc,0x00000001
++write 0x03700154,0x47474747
++write 0x03700158,0x47474747
++write 0x037008bc,0x00000000
++
++loadc 0x01ec1080,0x70000000
++jumpc 0x00000044,0x00000000 
++write 0x03800098,0x00000000
++write 0x038008bc,0x00000001
++write 0x03800164,0x47474747
++write 0x03800168,0x47474747
++write 0x0380016c,0x47474747
++write 0x03800170,0x47474747
++write 0x038008bc,0x00000000
++
++loadc 0x01ec1080,0x00700000
++jumpc 0x00000034,0x00000000 
++write 0x03900098,0x00000000
++write 0x039008bc,0x00000001
++write 0x03900154,0x47474747
++write 0x03900158,0x47474747
++write 0x039008bc,0x00000000
++.end
+diff --git a/lx2160asi/a011270.rcw b/lx2160asi/a011270.rcw
+index 0dc774d..5bd5558 100644
+--- a/lx2160asi/a011270.rcw
++++ b/lx2160asi/a011270.rcw
+@@ -4,6 +4,12 @@
+  */
+ 
+ .pbi
++/* Load condition SVR register mask major ID */
++loadc 0x01e000a4,0x000000f0
++/* If it is rev 1, skip the following jump command */
++jumpc 0x00000014,0x00000010
++/* Skip the following instructions by jumping to the end */
++jump  0x38
+ write 0x03400688,0x00000001
+ write 0x03500688,0x00000001
+ write 0x03600688,0x00000001
+diff --git a/rcw.py b/rcw.py
+index 863f755..c2d06f6 100755
+--- a/rcw.py
++++ b/rcw.py
+@@ -328,6 +328,34 @@ def build_pbi(lines):
+             v2 = struct.pack(endianess + 'L', p2)
+             subsection += v1
+             subsection += v2
++        elif op == 'loadc':
++            if p1 == None or p2 == None:
++                print('Error: "loadc" instruction requires two parameters')
++                return ''
++            v1 = struct.pack(endianess + 'L', 0x80140000)
++            v2 = struct.pack(endianess + 'L', p1)
++            v3 = struct.pack(endianess + 'L', p2)
++            subsection += v1
++            subsection += v2
++            subsection += v3
++        elif op == 'jumpc':
++            if p1 == None or p2 == None:
++                print('Error: "jumpc" instruction requires two parameters')
++                return ''
++            v1 = struct.pack(endianess + 'L', 0x80850000)
++            v2 = struct.pack(endianess + 'L', p1)
++            v3 = struct.pack(endianess + 'L', p2)
++            subsection += v1
++            subsection += v2
++            subsection += v3
++        elif op == 'jump':
++            if p1 == None:
++                print('Error: "jump" instruction requires a parameter')
++                return ''
++            v1 = struct.pack(endianess + 'L', 0x80840000)
++            v2 = struct.pack(endianess + 'L', p1)
++            subsection += v1
++            subsection += v2
+         elif op == 'awrite':
+             if p1 == None or p2 == None:
+                 print('Error: "awrite" instruction requires two parameters')
+-- 
+2.17.1
+
