@@ -1,0 +1,194 @@
+From b5401a18ad8ade8f12a12171169f99214c7126e3 Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Tue, 24 Mar 2020 02:48:34 +0200
+Subject: [PATCH 2/2] plat/nxp: lx2160a auto boot
+
+This patch adds support to patch RCW that already has SD/eMMC/SPI boot
+support embedded with conditional load and jump.
+The idea is to look for SD/eMMC/SPI boot, and modify src/dst/size
+address with the correct values; rather than adding blockread at the end
+of RCW code.
+
+With this patch images are unified and can be used to boot from SD /
+eMMC and SPI.
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ plat/nxp/common/common.mk   |  5 +++
+ plat/nxp/tools/create_pbl.c | 79 ++++++++++++++++++++++++++++---------
+ 2 files changed, 66 insertions(+), 18 deletions(-)
+
+diff --git a/plat/nxp/common/common.mk b/plat/nxp/common/common.mk
+index a80990740..e7e5f3879 100644
+--- a/plat/nxp/common/common.mk
++++ b/plat/nxp/common/common.mk
+@@ -148,6 +148,11 @@ BOOT_DEV_SOURCES		=	${PLAT_DRIVERS_PATH}/sd/sd_mmc.c	\
+ else ifeq (${BOOT_MODE}, flexspi_nor)
+ $(eval $(call add_define,FLEXSPI_NOR_BOOT))
+ BOOT_DEV_SOURCES		= ${PLAT_DRIVERS_PATH}/flexspi/nor/flexspi_nor.c
++else ifeq (${BOOT_MODE}, auto)
++$(eval $(call add_define,FLEXSPI_NOR_BOOT))
++BOOT_DEV_SOURCES		= ${PLAT_DRIVERS_PATH}/flexspi/nor/flexspi_nor.c \
++				  ${PLAT_DRIVERS_PATH}/sd/sd_mmc.c	\
++				  drivers/io/io_block.c
+ endif
+ 
+ # DDR driver needs to be enabled by default
+diff --git a/plat/nxp/tools/create_pbl.c b/plat/nxp/tools/create_pbl.c
+index 5a08472be..7ee085757 100644
+--- a/plat/nxp/tools/create_pbl.c
++++ b/plat/nxp/tools/create_pbl.c
+@@ -67,6 +67,7 @@ typedef enum {
+ 	FLXSPI_NOR_BOOT,
+ 	FLXSPI_NAND_BOOT,
+ 	FLXSPI_NAND4K_BOOT,
++	AUTO_BOOT,
+ 	MAX_BOOT    /* must be last item in list */
+ } boot_src_t;
+ 
+@@ -194,7 +195,7 @@ struct pbl_image {
+ #define SOC_LS2088 2088
+ #define SOC_LX2160 2160
+ 
+-static uint32_t pbl_size;
++static uint32_t pbl_size = 0;
+ bool sb_flag = false;
+ 
+ /***************************************************************************
+@@ -503,7 +504,6 @@ int add_boot_ptr_cmd(FILE *fp_rcw_pbi_op)
+ 			goto bootptr_err;
+ 		}
+ 	}
+-
+ 	printf("\nBoot Location Pointer= %x\n", BYTE_SWAP_32(pblimg.ep));
+ 	ret = SUCCESS;
+ 
+@@ -697,6 +697,8 @@ int main(int argc, char **argv)
+ 	int ret = FAILURE;
+ 	bool bootptr_flag = false;
+ 	enum stop_command flag_stop_cmd = CRC_STOP_COMMAND;;
++	int skip = 0;
++	uint32_t saved_src;
+ 
+ 	/* Initializing the global structure to zero. */
+ 	memset(&pblimg, 0x0, sizeof(struct pbl_image));
+@@ -797,6 +799,8 @@ int main(int argc, char **argv)
+ 				pblimg.boot_src = FLXSPI_NAND_BOOT;
+ 			else if (!strcmp(optarg, "flexspi_nand2k"))
+ 				pblimg.boot_src = FLXSPI_NAND4K_BOOT;
++			else if (!strcmp(optarg, "auto"))
++				pblimg.boot_src = AUTO_BOOT;
+ 			else {
+ 				printf("CMD Error: Invalid boot source.\n");
+                 		goto exit_main;
+@@ -902,13 +906,14 @@ int main(int argc, char **argv)
+     			printf("%s: Error reading PBI Cmd.\n", __func__);
+     			goto exit_main;
+     		}
+-    		while (word != 0x808f0000 && word != 0x80ff0000) {
++		saved_src = pblimg.src_addr;
++		while (word != 0x808f0000 && word != 0x80ff0000) {
+     			pbl_size++;
+ 			/* 11th words in RCW has PBL length. Update it
+ 			 * with new length. 2 comamnds get added 
+ 			 * Block copy + CCSR Write/CSF header write 
+ 			 */	
+-    			if (pbl_size == 11) {
++			if ((pbl_size == 11) && (pblimg.boot_src != AUTO_BOOT)) {
+     				word_1 = (word & PBI_LEN_MASK)
+     					+ (PBI_LEN_ADD << 20);
+     				word = word & ~PBI_LEN_MASK;
+@@ -923,8 +928,44 @@ int main(int argc, char **argv)
+     					goto exit_main;
+     				}
+     			}
+-    			if (fwrite(&word, sizeof(word),	NUM_MEM_BLOCK,
+-    				fp_rcw_pbi_op) != NUM_MEM_BLOCK) {
++			if (pblimg.boot_src == AUTO_BOOT) {
++				if (word == 0x80000008) {
++					printf ("Found SD boot at %d\n",pbl_size);
++					pblimg.boot_src = SD_BOOT;
++					add_blk_cpy_cmd(fp_rcw_pbi_op, args);
++					pblimg.boot_src = AUTO_BOOT;
++					pblimg.src_addr = saved_src;
++					if (bootptr_flag == true) {
++						add_boot_ptr_cmd(fp_rcw_pbi_op);
++						skip = 6;
++					} else skip=4;
++				}
++				if (word == 0x80000009) {
++					printf ("Found eMMC boot at %d\n",pbl_size);
++					pblimg.boot_src = EMMC_BOOT;
++					add_blk_cpy_cmd(fp_rcw_pbi_op, args);
++					pblimg.boot_src = AUTO_BOOT;
++					pblimg.src_addr = saved_src;
++					if (bootptr_flag == true) {
++						add_boot_ptr_cmd(fp_rcw_pbi_op);
++						skip = 6;
++					} else skip=4;
++				}
++				if (word == 0x8000000f) {
++					printf ("Found SPI boot at %d\n",pbl_size);
++					pblimg.boot_src = FLXSPI_NOR_BOOT;
++					add_blk_cpy_cmd(fp_rcw_pbi_op, args);
++					pblimg.boot_src = AUTO_BOOT;
++					pblimg.src_addr = saved_src;
++					if (bootptr_flag == true) {
++						add_boot_ptr_cmd(fp_rcw_pbi_op);
++						skip = 6;
++					} else skip=4;
++				}
++			}
++			if (!skip &&
++				(fwrite(&word, sizeof(word),	NUM_MEM_BLOCK,
++					fp_rcw_pbi_op) != NUM_MEM_BLOCK)) {
+     				printf("%s: [CH3] Error in Writing PBI Words\n",
+     					__func__);
+     				goto exit_main;
+@@ -941,8 +982,9 @@ int main(int argc, char **argv)
+ 			} else if (word == STOP_CMD_ARM_CH3){
+ 				flag_stop_cmd = STOP_COMMAND;
+ 			}
++			if (skip) skip--;
+     		}
+-		if (bootptr_flag == true) {
++		if ((pblimg.boot_src != AUTO_BOOT) && (bootptr_flag == true)) {
+     			/* Add command to set boot_loc ptr */
+     			ret = add_boot_ptr_cmd(fp_rcw_pbi_op);
+     			if (ret != SUCCESS) {
+@@ -953,18 +995,19 @@ int main(int argc, char **argv)
+ 		}
+ 
+     		/* Write acs write commands to output file */
+-    		ret = add_blk_cpy_cmd(fp_rcw_pbi_op, args);
+-    		if (ret != SUCCESS) {
+-    			printf("%s: Function add_blk_cpy_cmd return failure.\n",
+-    				 __func__);
+-    			goto exit_main;
+-    		}
+-
++		if (pblimg.boot_src != AUTO_BOOT) {
++			ret = add_blk_cpy_cmd(fp_rcw_pbi_op, args);
++			if (ret != SUCCESS) {
++				printf("%s: Function add_blk_cpy_cmd return failure.\n",
++					 __func__);
++				goto exit_main;
++			}
++		}
+ 		/* Add stop command after adding pbi commands */
+-	        ret = add_pbi_stop_cmd(fp_rcw_pbi_op, flag_stop_cmd);
+-    		if (ret != SUCCESS) {
+-    			goto exit_main;
+-    		}
++		ret = add_pbi_stop_cmd(fp_rcw_pbi_op, flag_stop_cmd);
++		if (ret != SUCCESS) {
++			goto exit_main;
++		}
+ 
+             break;
+ 
+-- 
+2.17.1
+
