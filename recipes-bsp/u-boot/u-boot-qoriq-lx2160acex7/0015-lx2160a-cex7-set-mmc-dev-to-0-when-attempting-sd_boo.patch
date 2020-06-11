@@ -1,0 +1,32 @@
+From 47923a2f4cf159963d20acd1744619b44c9d5b02 Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Mon, 23 Mar 2020 15:13:11 +0200
+Subject: [PATCH 15/17] lx2160a-cex7: set mmc dev to 0 when attempting
+ sd_bootcmd
+
+When attempting sd_bootcmd which is the fallback of failed distroboot
+then set mmc dev to 0; since distroboot already set that variable to 1.
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ include/configs/lx2160acex7.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/lx2160acex7.h b/include/configs/lx2160acex7.h
+index 478cd8242f..7116e038a1 100644
+--- a/include/configs/lx2160acex7.h
++++ b/include/configs/lx2160acex7.h
+@@ -73,7 +73,7 @@
+ 		"$kernelheader_size && esbc_validate ${kernelheader_addr_r}; "\
+ 		" bootm $load_addr#$BOARD\0"			\
+ 	"sd_bootcmd=echo Trying load from sd card..;"		\
+-		"mmcinfo; mmc read $load_addr "			\
++		"mmc dev 0; mmcinfo; mmc read $load_addr "			\
+ 		"$kernel_addr_sd $kernel_size_sd ;"		\
+ 		"env exists secureboot && mmc read $kernelheader_addr_r "\
+ 		"$kernelhdr_addr_sd $kernelhdr_size_sd "	\
+-- 
+2.17.1
+

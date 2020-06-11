@@ -1,0 +1,44 @@
+From a8a182b435e96a22b01d722a8df3061c1a1b7da6 Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Sun, 28 Jul 2019 13:27:46 +0300
+Subject: [PATCH 02/17] armv8: lx2160acex: misc hacks to get the sources built
+
+those hacks will be sorted out nicer in the future and this patch will
+not be needed anymore
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ arch/arm/cpu/armv8/fsl-layerscape/Kconfig | 1 -
+ drivers/mmc/fsl_esdhc.c                   | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/arch/arm/cpu/armv8/fsl-layerscape/Kconfig b/arch/arm/cpu/armv8/fsl-layerscape/Kconfig
+index 42ca990994..efdc31da5d 100644
+--- a/arch/arm/cpu/armv8/fsl-layerscape/Kconfig
++++ b/arch/arm/cpu/armv8/fsl-layerscape/Kconfig
+@@ -218,7 +218,6 @@ config ARCH_LX2160A
+ 	select SYS_FSL_DDR_LE
+ 	select SYS_FSL_DDR_VER_50
+ 	select SYS_FSL_EC1
+-	select SYS_FSL_EC2
+ 	select SYS_FSL_ERRATUM_A050106
+ 	select SYS_FSL_HAS_RGMII
+ 	select SYS_FSL_HAS_SEC
+diff --git a/drivers/mmc/fsl_esdhc.c b/drivers/mmc/fsl_esdhc.c
+index f8e6ceba06..f4a7698cfd 100644
+--- a/drivers/mmc/fsl_esdhc.c
++++ b/drivers/mmc/fsl_esdhc.c
+@@ -1020,7 +1020,7 @@ static int fsl_esdhc_probe(struct udevice *dev)
+ 		priv->non_removable = 0;
+ 	}
+ 
+-	priv->wp_enable = 1;
++	priv->wp_enable = 0;
+ 
+ 	if (IS_ENABLED(CONFIG_CLK)) {
+ 		/* Assigned clock already set clock */
+-- 
+2.17.1
+

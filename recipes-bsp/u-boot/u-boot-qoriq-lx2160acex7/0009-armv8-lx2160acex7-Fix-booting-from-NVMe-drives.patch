@@ -1,0 +1,33 @@
+From aeefed55fa39f4fc5acb2bd22fdde4dc97924d22 Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Mon, 23 Mar 2020 13:32:09 +0200
+Subject: [PATCH 09/17] armv8: lx2160acex7: Fix booting from NVMe drives
+
+Currently NVMe is not initialized so u-boot fails to read kernel from
+NVMe drive. This patch modifies default environment so it initializes
+NVMe as part of default startup script...
+
+Credit to Damjan Marion <dmarion@me.com> on fixing that on LSDK-19.09.
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ include/configs/lx2160a_common.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/configs/lx2160a_common.h b/include/configs/lx2160a_common.h
+index e31738d3a3..91e9a2470f 100644
+--- a/include/configs/lx2160a_common.h
++++ b/include/configs/lx2160a_common.h
+@@ -261,6 +261,7 @@ int select_i2c_ch_pca9547_sec(unsigned char ch);
+ 	BOOTENV					\
+ 	"mcmemsize=0x70000000\0"		\
+ 	XSPI_MC_INIT_CMD				\
++	"nvme_need_init=true\0" \
+ 	"scan_dev_for_boot_part="		\
+ 		"part list ${devtype} ${devnum} devplist; "	\
+ 		"env exists devplist || setenv devplist 1; "	\
+-- 
+2.17.1
+

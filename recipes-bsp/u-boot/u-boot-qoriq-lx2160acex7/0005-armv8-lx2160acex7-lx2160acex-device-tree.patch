@@ -1,0 +1,91 @@
+From bd96fd21fafd7560dba1d5a6f893e4a7d0b7ee74 Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Sun, 28 Jul 2019 13:37:22 +0300
+Subject: [PATCH 05/17] armv8: lx2160acex7: lx2160acex device tree
+
+Based on NXP's LX2160ARDB device tree; it defines -
+1. MX35X based SPI flash
+2. SDHC0 (SD card) and SDHC1 (eMMC)
+3. 4 SATA ports that depending on SERDES configuration they can get
+connected to external SATA drives
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ arch/arm/dts/fsl-lx2160a-cex7.dts | 63 +++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 arch/arm/dts/fsl-lx2160a-cex7.dts
+
+diff --git a/arch/arm/dts/fsl-lx2160a-cex7.dts b/arch/arm/dts/fsl-lx2160a-cex7.dts
+new file mode 100644
+index 0000000000..4fbcaafb0e
+--- /dev/null
++++ b/arch/arm/dts/fsl-lx2160a-cex7.dts
+@@ -0,0 +1,63 @@
++// SPDX-License-Identifier: GPL-2.0+ OR X11
++/*
++ * SolidRun LX2160ACEX7 device tree source
++ *
++ * Author:	Rabeeh Khoury <rabeeh@solid-run.com>
++ *
++ * Copyright 2019 SolidRun ltd.
++ *
++ */
++
++/dts-v1/;
++
++#include "fsl-lx2160a.dtsi"
++
++/ {
++	model = "SolidRun LX2160ACEX7 COM express type 7 based board";
++	compatible = "fsl,lx2160acex7", "fsl,lx2160a";
++
++	aliases {
++		spi0 = &fspi;
++	};
++};
++
++&fspi {
++	bus-num = <0>;
++	status = "okay";
++
++	qflash0: MT35XU512ABA1G12@0 {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		compatible = "spi-flash";
++		spi-max-frequency = <50000000>;
++		reg = <0>;
++		/* The following setting enables 1-1-8 (CMD-ADDR-DATA) mode */
++		fspi-rx-bus-width = <8>; /* 8 FSPI Rx lines */
++		fspi-tx-bus-width = <1>; /* 1 FSPI Tx line */
++	};
++
++};
++
++&esdhc0 {
++	status = "okay";
++};
++
++&esdhc1 {
++	status = "okay";
++};
++
++&sata0 {
++	status = "okay";
++};
++
++&sata1 {
++	status = "okay";
++};
++
++&sata2 {
++	status = "okay";
++};
++
++&sata3 {
++	status = "okay";
++};
+-- 
+2.17.1
+
