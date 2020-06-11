@@ -1,0 +1,38 @@
+From b184697cff85d8f98e765014309b97444ff1c5b7 Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Wed, 30 Oct 2019 11:43:37 +0200
+Subject: [PATCH 2/2] Set io pads as GPIO
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ lx2160acex7/configs/lx2160a_defaults.rcwi | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/lx2160acex7/configs/lx2160a_defaults.rcwi b/lx2160acex7/configs/lx2160a_defaults.rcwi
+index 6fd65ec..dbc843f 100644
+--- a/lx2160acex7/configs/lx2160a_defaults.rcwi
++++ b/lx2160acex7/configs/lx2160a_defaults.rcwi
+@@ -9,11 +9,16 @@ HWA_CGA_M1_CLK_SEL=1
+ HWA_CGB_M1_CLK_SEL=7
+ BOOT_LOC=26
+ SYSCLK_FREQ=600
+-IIC2_PMUX=6
++IIC2_PMUX=1
+ IIC3_PMUX=0
+ IIC4_PMUX=2
+ USB3_CLK_FSEL=39
+ SRDS_DIV_PEX_S1=1
+ SRDS_DIV_PEX_S2=3
+ SRDS_DIV_PEX_S3=1
+-
++SDHC1_DIR_PMUX=1
++IRQ03_00_PMUX=1
++IRQ07_04_PMUX=1
++IRQ11_08_PMUX=1
++EVT20_PMUX=1
++EVT43_PMUX=1
+-- 
+2.17.1
+

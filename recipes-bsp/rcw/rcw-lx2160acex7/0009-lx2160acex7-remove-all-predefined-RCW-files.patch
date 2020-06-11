@@ -1,0 +1,301 @@
+From 151f650f383fc5ddd9c405cf96bc189c2eaf13bd Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Tue, 24 Mar 2020 03:51:28 +0200
+Subject: [PATCH 9/9] lx2160acex7: remove all predefined RCW files
+
+Remove all predefined RCW files and use on-the-fly created RCW from
+external script.
+For instance when using lx2160a_build repo; the runme.sh file creates
+lx2160acex7/RCW/template.rcw file the gets compiled.
+The creation is done using a simple bash script -
+
+cd $ROOTDIR/build/rcw/lx2160acex7
+mkdir -p RCW
+echo "#include <configs/lx2160a_defaults.rcwi>" > RCW/template.rcw
+echo "#include <configs/lx2160a_${SPEED}.rcwi>" >> RCW/template.rcw
+echo "#include <configs/lx2160a_${SERDES}.rcwi>" >> RCW/template.rcw
+make clean
+make -j${PARALLEL}
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw.orig  | 61 -------------------
+ .../rcw_1900_600_2600_17_4_2.rcw              |  4 --
+ .../rcw_1900_600_2600_17_4_2_sd.rcw           |  4 --
+ .../rcw_2000_700_2400_13_5_2_sd.rcw           |  4 --
+ .../rcw_2000_700_2400_20_5_2_sd.rcw           |  4 --
+ .../rcw_2000_700_2400_8_5_2_sd.rcw            |  4 --
+ .../rcw_2000_700_2600_8_5_2_sd.rcw            |  4 --
+ .../rcw_2000_700_2900_17_4_2_sd.rcw           |  4 --
+ .../rcw_2000_700_2900_8_5_2_sd.rcw            |  4 --
+ .../rcw_2000_700_3200_17_4_2_sd.rcw           |  4 --
+ .../rcw_2000_700_3200_20_5_2_sd.rcw           |  4 --
+ .../rcw_2000_700_3200_8_5_0_sd.rcw            |  4 --
+ .../rcw_2000_700_3200_8_5_2_sd.rcw            |  4 --
+ .../rcw_2000_700_3200_8_5_2_xspi.rcw          |  4 --
+ .../rcw_2400_700_3200_8_5_2_sd.rcw            |  4 --
+ .../rcw_2500_700_3200_8_5_2_sd.rcw            |  4 --
+ .../rcw_2600_700_3200_8_5_2_sd.rcw            |  4 --
+ .../XGGFF_PP_HHHH_RR_19_5_2/rcw_test_sd.rcw   |  4 --
+ 18 files changed, 129 deletions(-)
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw.orig
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_1900_600_2600_17_4_2.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_1900_600_2600_17_4_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_13_5_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_20_5_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_8_5_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2600_8_5_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_17_4_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_8_5_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_17_4_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_20_5_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_0_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_2_xspi.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2400_700_3200_8_5_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2500_700_3200_8_5_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2600_700_3200_8_5_2_sd.rcw
+ delete mode 100644 lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_test_sd.rcw
+
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw.orig b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw.orig
+deleted file mode 100644
+index cdb6446..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw.orig
++++ /dev/null
+@@ -1,61 +0,0 @@
+-/*
+- * SerDes Protocol 1 -  19
+- * SerDes Protocol 2 -  5
+- * SerDes Protocol 3 -  2
+- *
+- * Frequencies:
+- * Core     -- 1900 MHz
+- * Platform -- 600  MHz
+- * DDR      -- 2600 MT/s
+- */
+-
+-#include <../lx2160asi/lx2160a.rcwi>
+-
+-SYS_PLL_RAT=12
+-MEM_PLL_CFG=3
+-MEM_PLL_RAT=26
+-MEM2_PLL_CFG=3
+-MEM2_PLL_RAT=26
+-CGA_PLL1_RAT=19
+-CGA_PLL2_RAT=19
+-CGB_PLL1_RAT=19
+-CGB_PLL2_RAT=9
+-C5_PLL_SEL=0
+-C6_PLL_SEL=0
+-C7_PLL_SEL=0
+-C8_PLL_SEL=0
+-HWA_CGA_M1_CLK_SEL=1
+-HWA_CGB_M1_CLK_SEL=7
+-BOOT_LOC=26
+-SYSCLK_FREQ=600
+-IIC2_PMUX=6
+-IIC3_PMUX=2
+-IIC4_PMUX=2
+-USB3_CLK_FSEL=39
+-SRDS_PRTCL_S1=19
+-SRDS_PRTCL_S2=5
+-SRDS_PRTCL_S3=2
+-SRDS_PLL_REF_CLK_SEL_S1=2
+-SRDS_DIV_PEX_S1=1
+-SRDS_DIV_PEX_S2=3
+-SRDS_DIV_PEX_S3=1
+-
+-/* Errata to write on scratch reg for validation */
+-#include <../lx2160asi/scratchrw1.rcw>
+-
+-/* Copy SPL Uboot to Ocram */
+-.pbi
+-blockcopy 0x08,0x00100000,0x1800a000,0x00020000
+-.end
+-
+-/* Boot Location Pointer */
+-#include <../lx2160asi/bootlocptr_sd.rcw>
+-
+-/* Errata for SATA controller */
+-#include <../lx2160asi/a010554.rcw>
+-
+-/* Modify FlexSPI Clock Divisor value */
+-#include <../lx2160asi/flexspi_divisor_24.rcw>
+-
+-/* common PBI commands */
+-#include <../lx2160asi/common.rcw>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_1900_600_2600_17_4_2.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_1900_600_2600_17_4_2.rcw
+deleted file mode 100644
+index 13ab0b9..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_1900_600_2600_17_4_2.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_1900_600_2600.rcwi>
+-#include <configs/lx2160a_17_4_2.rcwi>
+-#include <configs/lx2160a_xspiboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_1900_600_2600_17_4_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_1900_600_2600_17_4_2_sd.rcw
+deleted file mode 100644
+index 14fae8c..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_1900_600_2600_17_4_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_1900_600_2600.rcwi>
+-#include <configs/lx2160a_17_4_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_13_5_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_13_5_2_sd.rcw
+deleted file mode 100644
+index 2dae5a2..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_13_5_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_2400.rcwi>
+-#include <configs/lx2160a_13_5_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_20_5_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_20_5_2_sd.rcw
+deleted file mode 100644
+index 5335072..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_20_5_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_2400.rcwi>
+-#include <configs/lx2160a_20_5_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_8_5_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_8_5_2_sd.rcw
+deleted file mode 100644
+index e2a5bd3..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2400_8_5_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_2400.rcwi>
+-#include <configs/lx2160a_8_5_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2600_8_5_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2600_8_5_2_sd.rcw
+deleted file mode 100644
+index a330bfe..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2600_8_5_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_2600.rcwi>
+-#include <configs/lx2160a_8_5_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_17_4_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_17_4_2_sd.rcw
+deleted file mode 100644
+index 8535dbd..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_17_4_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_2900.rcwi>
+-#include <configs/lx2160a_17_4_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_8_5_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_8_5_2_sd.rcw
+deleted file mode 100644
+index 698be01..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_8_5_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_2900.rcwi>
+-#include <configs/lx2160a_8_5_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_17_4_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_17_4_2_sd.rcw
+deleted file mode 100644
+index 780d8c3..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_17_4_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_3200.rcwi>
+-#include <configs/lx2160a_17_4_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_20_5_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_20_5_2_sd.rcw
+deleted file mode 100644
+index eb9d240..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_20_5_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_3200.rcwi>
+-#include <configs/lx2160a_20_5_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_0_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_0_sd.rcw
+deleted file mode 100644
+index ceb53a3..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_0_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_3200.rcwi>
+-#include <configs/lx2160a_8_5_0.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_2_sd.rcw
+deleted file mode 100644
+index a220e98..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_3200.rcwi>
+-#include <configs/lx2160a_8_5_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_2_xspi.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_2_xspi.rcw
+deleted file mode 100644
+index 1eabd7d..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_3200_8_5_2_xspi.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2000_700_3200.rcwi>
+-#include <configs/lx2160a_8_5_2.rcwi>
+-#include <configs/lx2160a_xspiboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2400_700_3200_8_5_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2400_700_3200_8_5_2_sd.rcw
+deleted file mode 100644
+index 2ac59b1..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2400_700_3200_8_5_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2400_700_3200.rcwi>
+-#include <configs/lx2160a_8_5_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2500_700_3200_8_5_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2500_700_3200_8_5_2_sd.rcw
+deleted file mode 100644
+index e7c08df..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2500_700_3200_8_5_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2500_700_3200.rcwi>
+-#include <configs/lx2160a_8_5_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2600_700_3200_8_5_2_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2600_700_3200_8_5_2_sd.rcw
+deleted file mode 100644
+index 1e7a8f7..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_2600_700_3200_8_5_2_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_2600_700_3200.rcwi>
+-#include <configs/lx2160a_8_5_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+diff --git a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_test_sd.rcw b/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_test_sd.rcw
+deleted file mode 100644
+index 86f12f8..0000000
+--- a/lx2160acex7/XGGFF_PP_HHHH_RR_19_5_2/rcw_test_sd.rcw
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#include <configs/lx2160a_defaults.rcwi>
+-#include <configs/lx2160a_test.rcwi>
+-#include <configs/lx2160a_17_4_2.rcwi>
+-#include <configs/lx2160a_sdboot.rcwi>
+-- 
+2.17.1
+

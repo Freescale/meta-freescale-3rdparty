@@ -1,0 +1,113 @@
+From f7f0ad5e568862f7dc70fbd0f790845ee576734d Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Tue, 24 Mar 2020 03:42:14 +0200
+Subject: [PATCH 8/8] lx2160a: add generic bootloc section
+
+The generic bootloc section does conditional blockcopy from SD/eMMC and
+SPI with some predefined addresses.
+Later on if ATF is used; those addresses are modified with ATF's
+create_pbl.c
+
+With this method a single boot image is unified for all the 3 different
+boot methods.
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ lx2160acex7/configs/lx2160a_defaults.rcwi | 12 +++++
+ lx2160asi/bootlocptr.rcw                  | 62 +++++++++++++++++++++++
+ 2 files changed, 74 insertions(+)
+ create mode 100644 lx2160asi/bootlocptr.rcw
+
+diff --git a/lx2160acex7/configs/lx2160a_defaults.rcwi b/lx2160acex7/configs/lx2160a_defaults.rcwi
+index 7af1f5b..7997d49 100644
+--- a/lx2160acex7/configs/lx2160a_defaults.rcwi
++++ b/lx2160acex7/configs/lx2160a_defaults.rcwi
+@@ -35,3 +35,15 @@ write 0x2320000,0x20000000
+ 
+ /* LX2 rev 2 PCIe Errata A-009531 and A-008851*/
+ #include <../lx2160asi/a009531_a008851.rcw>
++
++/* Unified boot location copy */
++#include <../lx2160asi/bootlocptr.rcw>
++
++/* Errata to write on scratch reg for validation */
++#include <../lx2160asi/scratchrw1.rcw>
++
++/* common PBI commands */
++#include <../lx2160asi/common.rcw>
++
++/* Modify FlexSPI Clock Divisor value - for now keep it fixed value but using loadc/jumpc/jump it can be calculated on the fly */
++#include <../lx2160asi/flexspi_divisor_28.rcw>
+diff --git a/lx2160asi/bootlocptr.rcw b/lx2160asi/bootlocptr.rcw
+new file mode 100644
+index 0000000..645182f
+--- /dev/null
++++ b/lx2160asi/bootlocptr.rcw
+@@ -0,0 +1,62 @@
++/*
++ * Generic code for auto booting.
++ * For each section blockcopy followed by write to bootlocl then bootloch must
++ * be followed in each section since when using ATF with create_pbl script in
++ * auto mode; it counts on the sequence of to be in that order.
++ */
++
++/* Boot from SD - copy SPL Uboot to Ocram */
++.pbi
++/* Load condition PORSR1 and mask RCW_SRC */
++loadc 0x01e00000,0x07800000
++
++/* If it is 0x8 << 23 then skip the following jump command */
++jumpc 0x00000014,0x04000000
++
++/* Jump all the below instructions */
++jump 0x28 /* All instruction below including the jump are 40 bytes */
++
++/* blockcopy must be followed by two writes to bootlocl and bootloch */
++blockcopy 0x08,0x00100000,0x1800a000,0x00020000
++write 0x01e00400,0x1800a000
++write 0x01e00404,0x00000000
++.end
++
++/* Boot from eMMC - copy SPL Uboot to Ocram */
++.pbi
++/* Load condition PORSR1 and mask RCW_SRC */
++loadc 0x01e00000,0x07800000
++
++/* If it is 0x9 << 23 then skip the following jump command */
++jumpc 0x00000014,0x04800000
++
++/* Jump all the below instructions */
++jump 0x28 /* All instruction below including the jump are 40 bytes */
++
++/* blockcopy must be followed by two writes to bootlocl and bootloch */
++blockcopy 0x09,0x00100000,0x1800a000,0x00020000
++write 0x01e00400,0x1800a000
++write 0x01e00404,0x00000000
++.end
++
++/* XSPI boot Location Pointer */
++/*
++ * Set the boot location pointer to the NOR flash boot area.
++ */
++
++.pbi
++/* Load condition PORSR1 and mask RCW_SRC */
++loadc 0x01e00000,0x07800000
++
++/* If it is 0xf << 23 then skip the following jump command */
++jumpc 0x00000014,0x07800000
++
++/* Jump all the below instructions */
++jump 0x28 /* All instruction below including the jump are 0x190 bytes */
++
++/* blockcopy must be followed by two writes to bootlocl and bootloch */
++blockcopy 0x0f,0x00100000,0x1800a000,0x00020000
++write 0x01e00400,0x20100000
++write 0x01e00404,0x00000000
++.end
++
+-- 
+2.17.1
+

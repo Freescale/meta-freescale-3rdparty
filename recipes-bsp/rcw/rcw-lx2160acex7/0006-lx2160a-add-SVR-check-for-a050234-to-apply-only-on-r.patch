@@ -1,0 +1,32 @@
+From 2ebdb6a46e6db66cc0b09c51260a90ea8abc4713 Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Mon, 23 Mar 2020 12:35:04 +0200
+Subject: [PATCH 6/8] lx2160a: add SVR check for a050234 to apply only on rev1
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ lx2160asi/a050234.rcw | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/lx2160asi/a050234.rcw b/lx2160asi/a050234.rcw
+index 72a40e4..2130709 100644
+--- a/lx2160asi/a050234.rcw
++++ b/lx2160asi/a050234.rcw
+@@ -4,6 +4,12 @@
+  */
+ 
+ .pbi
++/* Load condition SVR register mask major ID */
++loadc 0x01e000a4,0x000000f0
++/* If it is rev 1, skip the following jump command */
++jumpc 0x00000014,0x00000010
++/* Skip the following instructions by jumping to the end */
++jump  0xc8
+ write 0x1ea1200,0x20081004
+ write 0x1ea1240,0x20081004
+ write 0x1ea1280,0x20081004
+-- 
+2.17.1
+
