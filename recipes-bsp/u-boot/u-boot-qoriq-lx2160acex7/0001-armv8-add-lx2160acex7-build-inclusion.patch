@@ -1,0 +1,75 @@
+From c24c3ec7d9591cf359ac12f656bd59a5440532f4 Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Sun, 28 Jul 2019 13:26:45 +0300
+Subject: [PATCH 01/17] armv8: add lx2160acex7 build inclusion
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ arch/arm/Kconfig           | 13 +++++++++++++
+ arch/arm/cpu/armv8/Kconfig |  2 +-
+ arch/arm/dts/Makefile      |  3 ++-
+ 3 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 5d33526ae9..8615e1673f 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -1189,6 +1189,18 @@ config TARGET_LX2160ARDB
+ 	  is a high-performance development platform that supports the
+ 	  QorIQ LX2160A/LX2120A/LX2080A Layerscape Architecture processor.
+ 
++config TARGET_LX2160ACEX7
++	bool "Support lx2160acex7"
++	select ARCH_LX2160A
++	select ARCH_MISC_INIT
++	select ARM64
++	select ARMV8_MULTIENTRY
++	select BOARD_LATE_INIT
++	help
++	  Support for SolidRun LX2160A based com express type 7 module and
++	  platform. The lx2160acex7 high-performance platform that supports the
++	  QorIQ LX2160A/LX2120A/LX2080A Layerscape Architecture processor.
++
+ config TARGET_LX2160AQDS
+ 	bool "Support lx2160aqds"
+ 	select ARCH_LX2160A
+@@ -1796,6 +1808,7 @@ source "board/freescale/ls1012aqds/Kconfig"
+ source "board/freescale/ls1012ardb/Kconfig"
+ source "board/freescale/ls1012afrdm/Kconfig"
+ source "board/freescale/lx2160a/Kconfig"
++source "board/solidrun/lx2160a/Kconfig"
+ source "board/freescale/mx35pdk/Kconfig"
+ source "board/freescale/s32v234evb/Kconfig"
+ source "board/grinn/chiliboard/Kconfig"
+diff --git a/arch/arm/cpu/armv8/Kconfig b/arch/arm/cpu/armv8/Kconfig
+index 92a2b58ed4..9df6ebdc1b 100644
+--- a/arch/arm/cpu/armv8/Kconfig
++++ b/arch/arm/cpu/armv8/Kconfig
+@@ -109,7 +109,7 @@ config PSCI_RESET
+ 		   !TARGET_LS1046ARDB && !TARGET_LS1046AQDS && \
+ 		   !TARGET_LS1046AFRWY && \
+ 		   !TARGET_LS2081ARDB && !TARGET_LX2160ARDB && \
+-		   !TARGET_LX2160AQDS && \
++		   !TARGET_LX2160AQDS && !TARGET_LX2160ACEX7 && \
+ 		   !ARCH_UNIPHIER && !TARGET_S32V234EVB
+ 	help
+ 	  Most armv8 systems have PSCI support enabled in EL3, either through
+diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
+index 8d7d5bee45..6d8d7fa09e 100644
+--- a/arch/arm/dts/Makefile
++++ b/arch/arm/dts/Makefile
+@@ -348,7 +348,8 @@ dtb-$(CONFIG_FSL_LSCH3) += fsl-ls2080a-qds.dtb \
+ 	fsl-ls1028a-qds-duart.dtb \
+ 	fsl-ls1028a-qds-lpuart.dtb \
+ 	fsl-lx2160a-rdb.dtb \
+-	fsl-lx2160a-qds.dtb
++	fsl-lx2160a-qds.dtb \
++	fsl-lx2160a-cex7.dtb
+ dtb-$(CONFIG_FSL_LSCH2) += fsl-ls1043a-qds-duart.dtb \
+ 	fsl-ls1043a-qds-lpuart.dtb \
+ 	fsl-ls1043a-rdb.dtb \
+-- 
+2.17.1
+

@@ -1,0 +1,51 @@
+From bdc721890d0a68d297959052394da75112080bfe Mon Sep 17 00:00:00 2001
+From: Patrick Wildt <patrick@blueri.se>
+Date: Wed, 16 Oct 2019 23:22:50 +0200
+Subject: [PATCH 11/17] nvme: flush dcache on both r/w, and the prp list
+
+It's possible that the data cache for the buffer still holds data
+to be flushed to memory, since the buffer was probably used as stack
+before.  Thus we need to make sure to flush it also on reads, since
+it's possible that the cache is automatically flused to memory after
+the NVMe DMA transfer happened, thus overwriting the NVMe transfer's
+data.  Also add a missing dcache flush for the prp list.
+
+Upstream-Status: Backport [Solid-Run BSP]
+
+Signed-off-by: Patrick Wildt <patrick@blueri.se>
+Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+(cherry picked from commit 8c403402ca691c967516481b6bc2c879d683a73d)
+Signed-off-by: Olof Johansson <olof@lixom.net>
+---
+ drivers/nvme/nvme.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/nvme/nvme.c b/drivers/nvme/nvme.c
+index ee6b581d9e..53ff6e89aa 100644
+--- a/drivers/nvme/nvme.c
++++ b/drivers/nvme/nvme.c
+@@ -123,6 +123,9 @@ static int nvme_setup_prps(struct nvme_dev *dev, u64 *prp2,
+ 	}
+ 	*prp2 = (ulong)dev->prp_pool;
+ 
++	flush_dcache_range((ulong)dev->prp_pool, (ulong)dev->prp_pool +
++			   dev->prp_entry_num * sizeof(u64));
++
+ 	return 0;
+ }
+ 
+@@ -705,9 +708,8 @@ static ulong nvme_blk_rw(struct udevice *udev, lbaint_t blknr,
+ 	u16 lbas = 1 << (dev->max_transfer_shift - ns->lba_shift);
+ 	u64 total_lbas = blkcnt;
+ 
+-	if (!read)
+-		flush_dcache_range((unsigned long)buffer,
+-				   (unsigned long)buffer + total_len);
++	flush_dcache_range((unsigned long)buffer,
++			   (unsigned long)buffer + total_len);
+ 
+ 	c.rw.opcode = read ? nvme_cmd_read : nvme_cmd_write;
+ 	c.rw.flags = 0;
+-- 
+2.17.1
+

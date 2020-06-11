@@ -1,0 +1,127 @@
+From eacde91ef9d8b05ad4df8b6755dd3726e40fb75c Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Mon, 4 May 2020 22:52:02 +0300
+Subject: [PATCH 16/17] lx2160acex7: Misc fixes to support LSDK-20.04
+
+Upstream-Status: Inappropriate [Solid-Run BSP]
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ arch/arm/Kconfig                  |  1 +
+ board/solidrun/lx2160a/lx2160a.c  |  4 +++-
+ configs/lx2160acex7_tfa_defconfig | 24 ++++++++++++------------
+ 3 files changed, 16 insertions(+), 13 deletions(-)
+
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 8615e1673f..c78e17a0ed 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -1195,6 +1195,7 @@ config TARGET_LX2160ACEX7
+ 	select ARCH_MISC_INIT
+ 	select ARM64
+ 	select ARMV8_MULTIENTRY
++	select ARCH_SUPPORT_TFABOOT
+ 	select BOARD_LATE_INIT
+ 	help
+ 	  Support for SolidRun LX2160A based com express type 7 module and
+diff --git a/board/solidrun/lx2160a/lx2160a.c b/board/solidrun/lx2160a/lx2160a.c
+index b7211a2d5c..975431fd53 100644
+--- a/board/solidrun/lx2160a/lx2160a.c
++++ b/board/solidrun/lx2160a/lx2160a.c
+@@ -16,7 +16,7 @@
+ #include <fdt_support.h>
+ #include <linux/libfdt.h>
+ #include <fsl-mc/fsl_mc.h>
+-#include <environment.h>
++#include <env_internal.h>
+ #include <efi_loader.h>
+ #include <asm/arch/mmu.h>
+ #include <hwconfig.h>
+@@ -26,6 +26,8 @@
+ #include <asm/arch/soc.h>
+ #include "../../freescale/common/vid.h"
+ #include <fsl_immap.h>
++#include <asm/arch-fsl-layerscape/fsl_icid.h>
++#include <asm/gic-v3.h>
+ 
+ #ifdef CONFIG_EMC2301
+ #include "../common/emc2301.h"
+diff --git a/configs/lx2160acex7_tfa_defconfig b/configs/lx2160acex7_tfa_defconfig
+index 2a3441d263..d2e62a6e91 100644
+--- a/configs/lx2160acex7_tfa_defconfig
++++ b/configs/lx2160acex7_tfa_defconfig
+@@ -1,16 +1,15 @@
+ CONFIG_ARM=y
+ CONFIG_TARGET_LX2160ACEX7=y
++CONFIG_TFABOOT=y
+ CONFIG_SYS_TEXT_BASE=0x82000000
+ CONFIG_SYS_MALLOC_F_LEN=0x6000
+ CONFIG_FSPI_AHB_EN_4BYTE=y
+-CONFIG_TFABOOT=y
++CONFIG_NR_DRAM_BANKS=3
+ CONFIG_ARMV8_SEC_FIRMWARE_SUPPORT=y
+ CONFIG_SEC_FIRMWARE_ARMV8_PSCI=y
+ CONFIG_AHCI=y
+-CONFIG_NR_DRAM_BANKS=3
+ CONFIG_FIT_VERBOSE=y
+ CONFIG_OF_BOARD_SETUP=y
+-CONFIG_OF_BOARD_FIXUP=y
+ CONFIG_OF_STDOUT_VIA_ALIAS=y
+ CONFIG_BOOTDELAY=10
+ CONFIG_USE_BOOTARGS=y
+@@ -29,6 +28,7 @@ CONFIG_CMD_NVME=y
+ CONFIG_NVME=y
+ CONFIG_MP=y
+ CONFIG_OF_CONTROL=y
++CONFIG_OF_BOARD_FIXUP=y
+ CONFIG_DEFAULT_DEVICE_TREE="fsl-lx2160a-cex7"
+ CONFIG_ENV_IS_IN_MMC=y
+ CONFIG_ENV_IS_IN_SPI_FLASH=y
+@@ -36,6 +36,10 @@ CONFIG_NET_RANDOM_ETHADDR=y
+ CONFIG_DM=y
+ CONFIG_SATA_CEVA=y
+ CONFIG_FSL_CAAM=y
++CONFIG_DM_GPIO=y
++CONFIG_DM_I2C=y
++CONFIG_I2C_SET_DEFAULT_BUS_NUM=y
++CONFIG_I2C_DEFAULT_BUS_NUMBER=0
+ CONFIG_DM_MMC=y
+ CONFIG_FSL_ESDHC=y
+ CONFIG_DM_SPI_FLASH=y
+@@ -55,28 +59,24 @@ CONFIG_CMD_MII=y
+ CONFIG_CMD_DHCP=y
+ CONFIG_CMD_FAT=y
+ CONFIG_CMD_EXT2=y
++CONFIG_E1000=y
+ CONFIG_PCI=y
+ CONFIG_DM_PCI=y
+ CONFIG_DM_PCI_COMPAT=y
+ CONFIG_PCIE_LAYERSCAPE_GEN4=y
+ CONFIG_PCIE_LAYERSCAPE=y
+-CONFIG_E1000=y
++CONFIG_DM_RTC=y
++CONFIG_RTC_PCF2127=y
++
+ CONFIG_DM_SCSI=y
+ CONFIG_DM_SERIAL=y
+-CONFIG_SERIAL_PROBE_ALL=y
+ CONFIG_SPI=y
+ CONFIG_DM_SPI=y
+ CONFIG_NXP_FSPI=y
+-# CONFIG_SYS_NXP_FSPI_AHB=y
+ CONFIG_USB=y
+ CONFIG_DM_USB=y
+ CONFIG_USB_XHCI_HCD=y
+ CONFIG_USB_XHCI_DWC3=y
+ CONFIG_EFI_LOADER_BOUNCE_BUFFER=y
+-CONFIG_DM_I2C=y
+-CONFIG_I2C_SET_DEFAULT_BUS_NUM=y
+-CONFIG_I2C_DEFAULT_BUS_NUMBER=0
+-CONFIG_DM_RTC=y
+-CONFIG_DM_GPIO=y
+ CONFIG_CMD_DATE=y
+-CONFIG_RTC_PCF2127=y
++CONFIG_GIC_V3_ITS=y
+-- 
+2.17.1
+
