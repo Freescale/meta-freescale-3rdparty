@@ -8,6 +8,8 @@ DEPENDS += "lzop-native bc-native"
 
 SRCBRANCH = "cgt_imx_4.9.11_1.0.0"
 
+LINUX_VERSION = "4.9.11"
+
 SRC_URI = "git://git.congatec.com/arm/imx6_kernel_4.9.git;protocol=http;branch=${SRCBRANCH} \
            file://defconfig \
 	   "
