@@ -1,0 +1,30 @@
+From c938afb1e80621898813e1e79a7f90cedf7c1af9 Mon Sep 17 00:00:00 2001
+From: Leon Anavi <leon.anavi@konsulko.com>
+Date: Mon, 21 Sep 2020 19:13:21 +0000
+Subject: [PATCH] mx6cuboxi.h: Fix finduuid
+
+avoid kernel panic and issues with the rootfs for cubox-i:
+
+VFS: Unable to mount root fs on unknown-block
+
+Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+---
+ include/configs/mx6cuboxi.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/mx6cuboxi.h b/include/configs/mx6cuboxi.h
+index a6690367f8..86b1624e0b 100644
+--- a/include/configs/mx6cuboxi.h
++++ b/include/configs/mx6cuboxi.h
+@@ -70,7 +70,7 @@
+ 	"console=" CONSOLE_DEV ",115200\0" \
+ 	"bootm_size=0x10000000\0" \
+ 	"mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV) "\0" \
+-	"finduuid=part uuid mmc 0:1 uuid\0" \
++	"finduuid=part uuid mmc 1:1 uuid\0" \
+ 	"update_sd_firmware=" \
+ 		"if test ${ip_dyn} = yes; then " \
+ 			"setenv get_cmd dhcp; " \
+-- 
+2.17.1
+
