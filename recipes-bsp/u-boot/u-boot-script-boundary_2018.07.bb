@@ -2,6 +2,8 @@ require recipes-bsp/u-boot/u-boot-boundary-common_${PV}.inc
 
 DEPENDS = "u-boot-mkimage-native"
 
+SRC_URI += "file://boundary-bootscripts-Fix-if-statement-that-set-fdt_f.patch"
+
 inherit deploy
 
 BOOTSCRIPT ??= "${S}/board/boundary/bootscripts/bootscript-yocto.txt"
