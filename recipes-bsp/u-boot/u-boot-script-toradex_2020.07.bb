@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 INHIBIT_DEFAULT_DEPS = "1"
 DEPENDS = "u-boot-mkimage-native"
 
-SRC_URI = "\
+SRC_URI = " \
     file://boot.cmd.in \
 "
 
@@ -19,6 +19,7 @@ do_compile[noexec] = "1"
 
 do_mkimage() {
     sed -e 's/@@KERNEL_BOOTCMD@@/${KERNEL_BOOTCMD}/' \
+        -e 's/@@KERNEL_IMAGETYPE@@/${KERNEL_IMAGETYPE}/' \
         "${WORKDIR}/boot.cmd.in" > ${B}/boot.cmd
     mkimage -T script -C none -n "Distro boot script" -d ${B}/boot.cmd ${B}/boot.scr
 }
