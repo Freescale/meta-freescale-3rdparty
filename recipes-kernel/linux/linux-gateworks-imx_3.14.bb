@@ -10,4 +10,6 @@ LOCALVERSION = "-1.0.x-ga+yocto"
 SRC_URI = "git://github.com/Gateworks/linux-imx6.git;protocol=git;branch=gateworks_fslc_3.14_1.0.x_ga \
            file://defconfig"
 
+LINUX_VERSION = "3.14"
+
 COMPATIBLE_MACHINE = "(ventana)"
