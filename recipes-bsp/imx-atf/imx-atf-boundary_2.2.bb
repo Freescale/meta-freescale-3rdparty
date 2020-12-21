@@ -9,10 +9,10 @@ PROVIDES = "imx-atf"
 
 PV .= "+git${SRCPV}"
 
-SRCBRANCH = "boundary-imx_4.14.98_2.3.0"
+SRCBRANCH = "boundary-imx_5.4.47_2.2.0"
 SRC_URI = "git://github.com/boundarydevices/imx-atf.git;branch=${SRCBRANCH} \
 "
-SRCREV = "99e07a29006b35e5b76e3a2555c54575f3b63d0c"
+SRCREV = "515fb041a3876b698b9f8e72bdfeb135d8a98623"
 
 S = "${WORKDIR}/git"
 
