@@ -20,14 +20,14 @@ inherit deploy
 
 BOOT_TOOLS = "imx-boot-tools"
 
-PLATFORM        ?= "INVALID"
-PLATFORM_mx8mq   = "imx8mq"
-PLATFORM_mx8mm   = "imx8mm"
-PLATFORM_mx8mn   = "imx8mn"
+ATF_PLATFORM        ?= "INVALID"
+ATF_PLATFORM_mx8mq   = "imx8mq"
+ATF_PLATFORM_mx8mm   = "imx8mm"
+ATF_PLATFORM_mx8mn   = "imx8mn"
 
 EXTRA_OEMAKE += " \
     CROSS_COMPILE="${TARGET_PREFIX}" \
-    PLAT=${PLATFORM} \
+    PLAT=${ATF_PLATFORM} \
 "
 
 BUILD_OPTEE = "${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'true', 'false', d)}"
@@ -45,9 +45,9 @@ do_compile() {
 do_install[noexec] = "1"
 
 do_deploy() {
-    install -Dm 0644 ${S}/build/${PLATFORM}/release/bl31.bin ${DEPLOYDIR}/${BOOT_TOOLS}/bl31-${PLATFORM}.bin
+    install -Dm 0644 ${S}/build/${ATF_PLATFORM}/release/bl31.bin ${DEPLOYDIR}/${BOOT_TOOLS}/bl31-${ATF_PLATFORM}.bin
     if ${BUILD_OPTEE}; then
-       install -m 0644 ${S}/build-optee/${PLATFORM}/release/bl31.bin ${DEPLOYDIR}/${BOOT_TOOLS}/bl31-${PLATFORM}.bin-optee
+       install -m 0644 ${S}/build-optee/${ATF_PLATFORM}/release/bl31.bin ${DEPLOYDIR}/${BOOT_TOOLS}/bl31-${ATF_PLATFORM}.bin-optee
     fi
 }
 addtask deploy after do_compile
