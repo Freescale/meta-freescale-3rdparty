@@ -1,0 +1,66 @@
+From b2467adeb7d3a1d4395ba49e5e9f7a6bbf918042 Mon Sep 17 00:00:00 2001
+From: Alistair Francis <alistair@alistair23.me>
+Date: Sat, 16 Jan 2021 21:21:01 -0800
+Subject: [PATCH] zero-sugar: Print output on UART6
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+---
+ arch/arm/boot/dts/zero-sugar.dts | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/zero-sugar.dts b/arch/arm/boot/dts/zero-sugar.dts
+index 8aa62bc2c468..aa7327d47e18 100644
+--- a/arch/arm/boot/dts/zero-sugar.dts
++++ b/arch/arm/boot/dts/zero-sugar.dts
+@@ -50,7 +50,7 @@
+ 	compatible = "fsl,imx7d-sdb", "fsl,imx7d";
+ 
+ 	chosen {
+-		stdout-path = &uart1;
++		stdout-path = &uart6;
+ 	};
+ 
+ 	memory {
+@@ -617,7 +617,8 @@
+ };
+ 
+ &uart6 {
+-	/* Pinctrl is defined under 'otgcontrol' driver, which will switch the pinmuxing as required */
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart6>;
+ 	assigned-clocks = <&clks IMX7D_UART6_ROOT_SRC>;
+ 	assigned-clock-parents = <&clks IMX7D_OSC_24M_CLK>;
+ 	status = "okay";
+@@ -791,6 +792,13 @@
+ 		>;
+ 	};
+ 
++	pinctrl_uart6: uart6grp {
++		fsl,pins = <
++			MX7D_PAD_EPDC_DATA09__UART6_DCE_TX		0x79
++			MX7D_PAD_EPDC_DATA08__UART6_DCE_RX		0x79
++		>;
++	};
++
+ 	pinctrl_usdhc2: usdhc2grp {
+ 		fsl,pins = <
+ 			MX7D_PAD_SD2_CMD__SD2_CMD		0x59
+@@ -912,13 +920,13 @@
+ 	pinctrl_one_wire_uart6_tx: one_wire_uart6_tx_grp {
+ 		fsl,pins = <
+ 			MX7D_PAD_EPDC_DATA08__GPIO2_IO8		0x00000004
+-			MX7D_PAD_EPDC_DATA09__UART6_DCE_TX	0x00000004
++			MX7D_PAD_EPDC_DATA09__UART6_DCE_TX	0x00000079
+ 		>;
+ 	};
+ 
+ 	pinctrl_one_wire_uart6_rx: one_wire_uart6_rx_grp {
+ 		fsl,pins = <
+-			MX7D_PAD_EPDC_DATA08__UART6_DCE_RX	0x00000004
++			MX7D_PAD_EPDC_DATA08__UART6_DCE_RX	0x00000079
+ 			MX7D_PAD_EPDC_DATA09__GPIO2_IO9		0x00000004
+ 		>;
+ 	};
+-- 
+2.29.2
+
