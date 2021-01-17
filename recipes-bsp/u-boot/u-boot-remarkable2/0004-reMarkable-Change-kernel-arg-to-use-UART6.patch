@@ -1,0 +1,29 @@
+From 17b4309091e5000934fa865e2e2712d4b4375157 Mon Sep 17 00:00:00 2001
+From: Alistair Francis <alistair@alistair23.me>
+Date: Sat, 16 Jan 2021 21:20:13 -0800
+Subject: [PATCH 4/9] reMarkable: Change kernel arg to use UART6
+
+Tell the kernel to print the UART output to UART6 which is
+accessible via the pogo pins.
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+---
+ include/configs/zero-sugar.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/zero-sugar.h b/include/configs/zero-sugar.h
+index b517a0ca34..6b21980288 100644
+--- a/include/configs/zero-sugar.h
++++ b/include/configs/zero-sugar.h
+@@ -115,7 +115,7 @@
+ 
+ #define CONFIG_EXTRA_ENV_SETTINGS \
+ 	"image=/boot/zImage\0" \
+-	"console=ttymxc0\0" \
++	"console=ttymxc5\0" \
+ 	"fdt_file=/boot/zero-sugar.dtb\0" \
+ 	"fdt_addr=0x83000000\0" \
+ 	"ip_dyn=yes\0" \
+-- 
+2.29.2
+

@@ -1,0 +1,28 @@
+From 5884360d6c8dd2c6294ec20b50e442127be56224 Mon Sep 17 00:00:00 2001
+From: Alistair Francis <alistair@alistair23.me>
+Date: Sat, 16 Jan 2021 21:19:48 -0800
+Subject: [PATCH 5/9] reMarkable: Hard code boot addresses
+
+The original addresses didn't work correctly, let's just hard code some.
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+---
+ include/configs/zero-sugar.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/zero-sugar.h b/include/configs/zero-sugar.h
+index 6b21980288..3384e0b09d 100644
+--- a/include/configs/zero-sugar.h
++++ b/include/configs/zero-sugar.h
+@@ -146,7 +146,7 @@
+ 		"g_mass_storage.stall=0 g_mass_storage.removable=1 " \
+ 		"g_mass_storage.idVendor=0x066F g_mass_storage.idProduct=0x37FF "\
+ 		"g_mass_storage.iSerialNumber=\"\" rdinit=/linuxrc; "\
+-		"bootz ${loadaddr} ${initrd} ${fdt_addr};\0" \
++		"bootz 0x80800000 0x83800000 0x83000000\0" \
+ 	"altbootcmd=echo Running from fallback root...; " \
+ 		"run memboot; " \
+ 		"if test ${bootcount} -gt 10; then " \
+-- 
+2.29.2
+

@@ -1,0 +1,81 @@
+From 2398a414cda1ca4f8519412926641d3b0fdfa5b0 Mon Sep 17 00:00:00 2001
+From: Alistair Francis <alistair@alistair23.me>
+Date: Sat, 16 Jan 2021 21:17:31 -0800
+Subject: [PATCH 3/9] reMarkable: Print output to pogo pins
+
+Print the UART output to UART6 which is accessible via the pogo pins.
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+---
+ arch/arm/dts/zero-sugar.dts             | 15 +++++++++++++++
+ board/reMarkable/zero-sugar/uart_init.c |  6 ++++++
+ include/configs/zero-sugar.h            |  2 +-
+ 3 files changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/dts/zero-sugar.dts b/arch/arm/dts/zero-sugar.dts
+index facc174dcc..2e7af505b9 100644
+--- a/arch/arm/dts/zero-sugar.dts
++++ b/arch/arm/dts/zero-sugar.dts
+@@ -180,6 +180,14 @@
+ 	status = "okay";
+ };
+ 
++&uart6 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart6>;
++	assigned-clocks = <&clks IMX7D_UART6_ROOT_SRC>;
++	assigned-clock-parents = <&clks IMX7D_OSC_24M_CLK>;
++	status = "okay";
++};
++
+ &usbotg1 {
+ 	vbus-supply = <&reg_usb_otg1_vbus>;
+ 	srp-disable;
+@@ -311,6 +319,13 @@
+ 			>;
+ 		};
+ 
++		pinctrl_uart6: uart6grp {
++			fsl,pins = <
++				MX7D_PAD_EPDC_DATA09__UART6_DCE_TX		0x79
++				MX7D_PAD_EPDC_DATA08__UART6_DCE_RX		0x79
++			>;
++		};
++
+ 		pinctrl_usbotg2_pwr_1: usbotg2-1 {
+ 			fsl,pins = <
+ 				MX7D_PAD_UART3_CTS_B__GPIO4_IO7	0x14
+diff --git a/board/reMarkable/zero-sugar/uart_init.c b/board/reMarkable/zero-sugar/uart_init.c
+index 8bb5969f25..377a867729 100644
+--- a/board/reMarkable/zero-sugar/uart_init.c
++++ b/board/reMarkable/zero-sugar/uart_init.c
+@@ -18,7 +18,13 @@ static iomux_v3_cfg_t const uart1_pads[] = {
+ 	MX7D_PAD_UART1_RX_DATA__UART1_DCE_RX | MUX_PAD_CTRL(UART_PAD_CTRL),
+ };
+ 
++static iomux_v3_cfg_t const uart6_pads[] = {
++	MX7D_PAD_EPDC_DATA09__UART6_DCE_TX | MUX_PAD_CTRL(UART_PAD_CTRL),
++	MX7D_PAD_EPDC_DATA08__UART6_DCE_RX | MUX_PAD_CTRL(UART_PAD_CTRL),
++};
++
+ void setup_iomux_uart(void)
+ {
+ 	imx_iomux_v3_setup_multiple_pads(uart1_pads, ARRAY_SIZE(uart1_pads));
++	imx_iomux_v3_setup_multiple_pads(uart6_pads, ARRAY_SIZE(uart6_pads));
+ }
+diff --git a/include/configs/zero-sugar.h b/include/configs/zero-sugar.h
+index 6b5450a40d..b517a0ca34 100644
+--- a/include/configs/zero-sugar.h
++++ b/include/configs/zero-sugar.h
+@@ -17,7 +17,7 @@
+ #define CONFIG_DBG_MONITOR
+ #define PHYS_SDRAM_SIZE			SZ_1G
+ 
+-#define CONFIG_MXC_UART_BASE            UART1_IPS_BASE_ADDR
++#define CONFIG_MXC_UART_BASE            UART6_IPS_BASE_ADDR
+ 
+ /* Size of malloc() pool */
+ #define CONFIG_SYS_MALLOC_LEN		(32 * SZ_1M)
+-- 
+2.29.2
+

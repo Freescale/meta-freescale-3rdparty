@@ -1,0 +1,26 @@
+From 59a1c50896a079de7bebeadff57d2b39f429510c Mon Sep 17 00:00:00 2001
+From: Alistair Francis <alistair@alistair23.me>
+Date: Mon, 18 Jan 2021 16:19:13 -0800
+Subject: [PATCH 7/9] HACK: Always autoboot
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+---
+ common/autoboot.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/common/autoboot.c b/common/autoboot.c
+index d057013cc1..f80ea15ab9 100644
+--- a/common/autoboot.c
++++ b/common/autoboot.c
+@@ -271,7 +271,7 @@ static int abortboot(int bootdelay)
+ 		gd->flags &= ~GD_FLG_SILENT;
+ #endif
+ 
+-	return abort;
++	return 0;
+ }
+ 
+ static void process_fdt_options(const void *blob)
+-- 
+2.29.2
+
