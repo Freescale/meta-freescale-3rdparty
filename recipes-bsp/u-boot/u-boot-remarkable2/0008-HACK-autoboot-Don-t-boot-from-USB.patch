@@ -1,0 +1,44 @@
+From fa6cd5c728e9b955acbf2f041c8da393180c4e61 Mon Sep 17 00:00:00 2001
+From: Alistair Francis <alistair@alistair23.me>
+Date: Mon, 18 Jan 2021 16:20:04 -0800
+Subject: [PATCH 8/9] HACK: autoboot: Don't boot from USB
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+---
+ common/autoboot.c            | 3 ---
+ include/configs/zero-sugar.h | 5 +----
+ 2 files changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/common/autoboot.c b/common/autoboot.c
+index f80ea15ab9..3ae8ee6b3e 100644
+--- a/common/autoboot.c
++++ b/common/autoboot.c
+@@ -318,9 +318,6 @@ const char *bootdelay_process(void)
+ 		bootdelay = 1;
+ 		set_default_env("Use default environment for \
+ 				 mfgtools\n");
+-	} else if (is_boot_from_usb()) {
+-		printf("Boot from USB for uuu\n");
+-		env_set("bootcmd", "fastboot 0");
+ 	} else {
+ 		printf("Normal Boot\n");
+ 	}
+diff --git a/include/configs/zero-sugar.h b/include/configs/zero-sugar.h
+index ee179e9d2e..ccf245c122 100644
+--- a/include/configs/zero-sugar.h
++++ b/include/configs/zero-sugar.h
+@@ -142,10 +142,7 @@
+ 			"fi; " \
+ 		"fi;\0" \
+ 	"memboot=echo Booting from memory...; " \
+-		"setenv bootargs console=${console},${baudrate} " \
+-		"g_mass_storage.stall=0 g_mass_storage.removable=1 " \
+-		"g_mass_storage.idVendor=0x066F g_mass_storage.idProduct=0x37FF "\
+-		"g_mass_storage.iSerialNumber=\"\" rdinit=/linuxrc; "\
++		"setenv bootargs console=${console},${baudrate}; " \
+ 		"bootz 0x80800000 0x83800000 0x83000000\0" \
+ 	"altbootcmd=echo Running from fallback root...; " \
+ 		"run memboot; " \
+-- 
+2.29.2
+

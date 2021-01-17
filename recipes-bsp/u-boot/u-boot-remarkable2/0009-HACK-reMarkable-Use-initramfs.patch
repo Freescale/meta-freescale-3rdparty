@@ -1,0 +1,26 @@
+From d56c978912f192068f4cc3dede73d647745ef63d Mon Sep 17 00:00:00 2001
+From: Alistair Francis <alistair@alistair23.me>
+Date: Mon, 18 Jan 2021 16:29:59 -0800
+Subject: [PATCH 9/9] HACK: reMarkable: Use initramfs
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+---
+ include/configs/zero-sugar.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/zero-sugar.h b/include/configs/zero-sugar.h
+index ccf245c122..d6badbb15d 100644
+--- a/include/configs/zero-sugar.h
++++ b/include/configs/zero-sugar.h
+@@ -142,7 +142,7 @@
+ 			"fi; " \
+ 		"fi;\0" \
+ 	"memboot=echo Booting from memory...; " \
+-		"setenv bootargs console=${console},${baudrate}; " \
++		"setenv bootargs console=${console},${baudrate} root=/dev/ram0; " \
+ 		"bootz 0x80800000 0x83800000 0x83000000\0" \
+ 	"altbootcmd=echo Running from fallback root...; " \
+ 		"run memboot; " \
+-- 
+2.29.2
+
