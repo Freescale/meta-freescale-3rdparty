@@ -1,0 +1,46 @@
+From b640a74851bf1fdc3abe49860e9efc498e4483a8 Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Tue, 8 Dec 2020 13:21:03 +0200
+Subject: [PATCH] arm64: dts: lx2160a-cex7: add power button support
+
+COM express PWRBTN# signal is connected as a GPIO to the LX2 SoC.
+Translate that power button click as KEY_POWER event.
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dts | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dts b/arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dts
+index 2b8f1118b..e2dfe4f67 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dts
+@@ -7,6 +7,7 @@
+ /dts-v1/;
+ 
+ #include "fsl-lx2160a.dtsi"
++#include <dt-bindings/input/linux-event-codes.h>
+ 
+ / {
+ 	model = "SolidRun LX2160A COM express type 7 module";
+@@ -30,6 +31,17 @@
+ 		regulator-boot-on;
+ 		regulator-always-on;
+ 	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		key {
++			label = "power";
++			linux,can-disable;
++			linux,code = <KEY_POWER>;
++			gpios = <&gpio2 6 GPIO_ACTIVE_LOW>;
++		};
++	};
+ };
+ 
+ &crypto {
+-- 
+2.25.1
+
