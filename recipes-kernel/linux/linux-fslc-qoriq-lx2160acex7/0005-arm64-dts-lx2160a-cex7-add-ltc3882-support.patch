@@ -7,8 +7,6 @@ ltc3882 is lx2 cortex-a72 core voltage.
 this patch adds it to the device tree support; the driver is in
 drivers/hwmon/pmbus/ltc2978.c
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
-
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---
  arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dts | 9 +++++++++
