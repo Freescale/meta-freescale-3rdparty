@@ -1,0 +1,33 @@
+From 704c3a0a194839782f5faad9a0b9151503b602fd Mon Sep 17 00:00:00 2001
+From: Rabeeh Khoury <rabeeh@solid-run.com>
+Date: Mon, 18 Jan 2021 09:32:57 +0200
+Subject: [PATCH] lx2160a: dwc3: dts: disable usb3 parkmode
+
+Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
+---
+ arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
+index 2fe86aca3..709a1a95a 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
+@@ -994,6 +994,7 @@
+ 			snps,dis_rxdet_inp3_quirk;
+ 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
+ 			snps,host-vbus-glitches;
++			snps,parkmode-disable-ss-quirk;
+ 			dma-coherent;
+ 			status = "disabled";
+ 		};
+@@ -1009,6 +1010,7 @@
+ 			snps,dis_rxdet_inp3_quirk;
+ 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
+ 			snps,host-vbus-glitches;
++			snps,parkmode-disable-ss-quirk;
+ 			dma-coherent;
+ 			status = "disabled";
+ 		};
+-- 
+2.25.1
+
