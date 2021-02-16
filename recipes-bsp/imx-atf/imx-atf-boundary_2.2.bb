@@ -53,4 +53,4 @@ do_deploy() {
 addtask deploy after do_compile
 
 PACKAGE_ARCH = "${MACHINE_SOCARCH}"
-COMPATIBLE_MACHINE = "(nitrogen8m|nitrogen8mm|nitrogen8mn)"
+COMPATIBLE_MACHINE = "(nitrogen8m|nitrogen8mm|nitrogen8mn|nitrogen8mp)"
