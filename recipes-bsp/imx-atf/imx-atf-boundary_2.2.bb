@@ -24,6 +24,7 @@ ATF_PLATFORM        ?= "INVALID"
 ATF_PLATFORM_mx8mq   = "imx8mq"
 ATF_PLATFORM_mx8mm   = "imx8mm"
 ATF_PLATFORM_mx8mn   = "imx8mn"
+ATF_PLATFORM_mx8mp   = "imx8mp"
 
 EXTRA_OEMAKE += " \
     CROSS_COMPILE="${TARGET_PREFIX}" \
