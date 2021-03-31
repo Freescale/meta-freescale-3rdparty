@@ -6,6 +6,13 @@ MACHINEOVERRIDES =. "mxs:mx23:imx233-olinuxino:"
 include conf/machine/include/imx-base.inc
 include conf/machine/include/tune-arm926ejs.inc
 
+# This machine is not supported by u-boot-imx as it is not tested by NXP on this
+# board. So we force it to use u-boot-fslc which is based on mainline here.
+IMX_DEFAULT_BOOTLOADER = "u-boot-fslc"
+
+UBOOT_MAKE_TARGET = "u-boot.sb"
+UBOOT_SUFFIX = "sb"
+
 IMXBOOTLETS_MACHINE = "stmp378x_dev"
 UBOOT_MACHINE = "mx23_olinuxino_config"
 
