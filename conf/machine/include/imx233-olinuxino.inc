@@ -7,8 +7,8 @@ include conf/machine/include/imx-base.inc
 include conf/machine/include/tune-arm926ejs.inc
 
 # This machine is not supported by u-boot-imx as it is not tested by NXP on this
-# board. So we force it to use u-boot-fslc which is based on mainline here.
-IMX_DEFAULT_BOOTLOADER = "u-boot-fslc"
+# board. Use mainline instead.
+IMX_DEFAULT_BOOTLOADER = "u-boot"
 
 UBOOT_MAKE_TARGET = "u-boot.sb"
 UBOOT_SUFFIX = "sb"
