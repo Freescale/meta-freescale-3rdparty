@@ -10,7 +10,7 @@ DEPENDS += "flex-native bison-native"
 
 SRC_URI = "git://git.toradex.com/u-boot-toradex.git;branch=${SRCBRANCH}"
 
-SRCREV = "51b7d2f591d32916a3addab0193d07bbacb34aad"
+SRCREV = "7c9c42e93b9fda8c0bc27d5b8c81c4c289921c4b"
 SRCBRANCH = "toradex_2020.07"
 
 S = "${WORKDIR}/git"
