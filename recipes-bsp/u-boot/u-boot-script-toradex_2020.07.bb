@@ -10,7 +10,7 @@ SRC_URI = "\
 "
 
 KERNEL_BOOTCMD ??= "bootz"
-KERNEL_BOOTCMD_aarch64 ?= "booti"
+KERNEL_BOOTCMD:aarch64 ?= "booti"
 
 inherit deploy nopackages
 

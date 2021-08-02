@@ -51,4 +51,4 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 COMPATIBLE_MACHINE = "(qoriq)"
 
-FILES_${PN} = "/boot"
+FILES:${PN} = "/boot"

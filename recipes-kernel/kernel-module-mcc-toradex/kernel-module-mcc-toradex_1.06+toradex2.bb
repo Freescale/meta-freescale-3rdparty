@@ -5,8 +5,8 @@ LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c8959abcbbe4d6676c58eab9354019e6"
 
 PROVIDES = "virtual/kernel-module-mcc"
-RPROVIDES_${PN} = "virtual/kernel-module-mcc"
-RPROVIDES_${PN}-dev = "virtual/kernel-module-mcc-dev"
+RPROVIDES:${PN} = "virtual/kernel-module-mcc"
+RPROVIDES:${PN}-dev = "virtual/kernel-module-mcc-dev"
 
 inherit module
 

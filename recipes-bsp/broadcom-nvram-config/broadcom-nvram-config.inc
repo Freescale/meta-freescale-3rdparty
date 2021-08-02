@@ -20,11 +20,11 @@ SRC_URI += " \
    file://brcmfmac${CHIP_MODEL}-sdio.txt \
 "
 
-FILES_${PN} = " \
+FILES:${PN} = " \
   ${BRCM_FWDIR}/brcmfmac${CHIP_MODEL}-sdio.txt \
 "
 
-RDEPENDS_${PN} = " \ 
+RDEPENDS:${PN} = " \ 
   linux-firmware-bcm${CHIP_MODEL} \
 "
 

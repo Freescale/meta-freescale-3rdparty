@@ -18,14 +18,14 @@ nand_padding () {
     dd bs=1024 count=1 if=/dev/zero | cat - u-boot.imx > u-boot-nand.imx
 }
 
-do_compile_append_colibri-imx6ull () {
+do_compile:append:colibri-imx6ull () {
     nand_padding
 }
 
-do_compile_append_colibri-imx7 () {
+do_compile:append:colibri-imx7 () {
     nand_padding
 }
 
-do_compile_append_colibri-vf () {
+do_compile:append:colibri-vf () {
     nand_padding
 }

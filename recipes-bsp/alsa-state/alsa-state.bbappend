@@ -1,1 +1,1 @@
-FILESEXTRAPATHS_prepend_cubox-i := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend:cubox-i := "${THISDIR}/files:"

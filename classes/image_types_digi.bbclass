@@ -6,7 +6,7 @@ do_image_boot_ubifs[depends] += " \
     virtual/kernel:do_deploy \
 "
 
-IMAGE_CMD_boot.ubifs() {
+IMAGE_CMD:boot.ubifs() {
 	BOOTIMG_FILES_SYMLINK="${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${MACHINE}.bin"
 	if [ -n "${KERNEL_DEVICETREE}" ]; then
 		for DTB in ${KERNEL_DEVICETREE}; do

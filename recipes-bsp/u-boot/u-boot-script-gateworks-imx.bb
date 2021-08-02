@@ -24,7 +24,7 @@ do_install() {
     ln -sf 6x_bootscript-${MACHINE}-${PV}-${PR} 6x_bootscript-${MACHINE}
 }
 
-FILES_${PN} = "${DESTDIR}/*"
+FILES:${PN} = "${DESTDIR}/*"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "(ventana)"
