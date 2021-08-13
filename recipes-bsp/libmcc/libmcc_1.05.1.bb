@@ -17,7 +17,7 @@ S = "${WORKDIR}/libmcc-${PV}"
 
 CFLAGS += "-I${STAGING_KERNEL_DIR}/include"
 
-RDEPENDS_${PN} = "virtual/kernel-module-mcc"
+RDEPENDS:${PN} = "virtual/kernel-module-mcc"
 
 COMPATIBLE_MACHINE = "(vf60)"
 
@@ -25,5 +25,5 @@ do_install() {
     oe_runmake 'DESTDIR=${D}' install
 }
 
-RDEPENDS_${PN}-dev += "virtual/kernel-module-mcc-dev"
+RDEPENDS:${PN}-dev += "virtual/kernel-module-mcc-dev"
 PACKAGE_ARCH = "${MACHINE_ARCH}"

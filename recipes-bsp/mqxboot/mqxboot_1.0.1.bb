@@ -15,7 +15,7 @@ S = "${WORKDIR}/mqxboot-${PV}"
 
 CFLAGS += "-I${STAGING_KERNEL_DIR}/include"
 
-RDEPENDS_${PN} = "virtual/kernel-module-mcc"
+RDEPENDS:${PN} = "virtual/kernel-module-mcc"
 
 COMPATIBLE_MACHINE = "(vf60)"
 

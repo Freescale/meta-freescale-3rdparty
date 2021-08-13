@@ -30,11 +30,11 @@ do_install() {
 			${D}${sbindir}/wlconf/official_inis/
 }
 
-FILES_${PN} += " \
+FILES:${PN} += " \
 	${sbindir}/wlconf \
 	${sbindir}/wlconf/official_inis \
 	/lib/firmware/ti-connectivity/wl18xx-conf.bin \
 "
 
-FILES_${PN}-dbg += "${sbindir}/wlconf/.debug"
+FILES:${PN}-dbg += "${sbindir}/wlconf/.debug"
 

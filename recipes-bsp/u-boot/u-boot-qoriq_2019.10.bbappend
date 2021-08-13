@@ -1,6 +1,6 @@
-FILESEXTRAPATHS_append_lx2160acex7 := "${THISDIR}/${PN}-lx2160acex7:"
+FILESEXTRAPATHS:append:lx2160acex7 := "${THISDIR}/${PN}-lx2160acex7:"
 
-SRC_URI_append_lx2160acex7 = "\
+SRC_URI:append:lx2160acex7 = "\
     file://0001-armv8-add-lx2160acex7-build-inclusion.patch \
     file://0002-armv8-lx2160acex-misc-hacks-to-get-the-sources-built.patch \
     file://0003-armv8-lx2160acex7-defconfig-and-main-platform-includ.patch \

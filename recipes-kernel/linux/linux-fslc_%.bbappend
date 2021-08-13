@@ -1,13 +1,13 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-COMPATIBLE_MACHINE_imx6sl-warp = "(.)"
-COMPATIBLE_MACHINE_imx6dl-riotboard = "(.)"
+COMPATIBLE_MACHINE:imx6sl-warp = "(.)"
+COMPATIBLE_MACHINE:imx6dl-riotboard = "(.)"
 
-SRC_URI_append_imx6qdl-variscite-som_use-mainline-bsp = " \
+SRC_URI:append:imx6qdl-variscite-som:use-mainline-bsp = " \
     file://imx6qdl-var-som.dtsi \
     file://imx6q-var-som-vsc.dts \
 "
 
-do_configure_prepend_imx6qdl-variscite-som() {
+do_configure:prepend:imx6qdl-variscite-som() {
     cp ${WORKDIR}/imx6*-var*.dts* ${S}/arch/arm/boot/dts
 }
