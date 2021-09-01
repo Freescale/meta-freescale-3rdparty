@@ -15,7 +15,7 @@ SRC_URI = "git://github.com/boundarydevices/linux-imx6.git;branch=${SRCBRANCH} \
 
 LOCALVERSION = "-2.3.0+yocto"
 SRCBRANCH = "boundary-imx_5.4.x_2.3.0"
-SRCREV = "e5cde7b05e548bebb7cc21113505538b98c0984e"
+SRCREV = "c2a2aa5348060286bb25fa47fac259e5568d7da1"
 DEPENDS += "lzop-native bc-native"
 COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite|nitrogen6sx|nitrogen7|nitrogen8m|nitrogen8mm|nitrogen8mn|nitrogen8mp)"
 
