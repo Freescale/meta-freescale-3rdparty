@@ -10,7 +10,7 @@ RPROVIDES_${PN}-dev = "virtual/kernel-module-mcc-dev"
 
 inherit module
 
-SRC_URI = "git://github.com/toradex/mcc-kmod.git;protocol=git;branch=${SRCBRANCH}"
+SRC_URI = "git://github.com/toradex/mcc-kmod.git;protocol=https;branch=${SRCBRANCH}"
 
 SRCBRANCH = "master"
 SRCREV = "083388fa5cce79c239988d61543322d91996aa8d"
