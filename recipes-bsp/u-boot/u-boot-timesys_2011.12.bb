@@ -10,7 +10,7 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
 
 SRCBRANCH = "2011.12-pcl052"
-SRC_URI = "git://github.com/Timesys/u-boot-timesys.git;protocol=git;branch=${SRCBRANCH}"
+SRC_URI = "git://github.com/Timesys/u-boot-timesys.git;protocol=https;branch=${SRCBRANCH}"
 SRCREV = "dca5026484c69628be9b9618e5795c635cefe110"
 
 SRCBRANCH_quartz = "2011.12-quartz"
