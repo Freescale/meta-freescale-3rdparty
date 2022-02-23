@@ -54,4 +54,4 @@ do_compile:append:colibri-vf () {
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(mx6|mx7|vf|use-mainline-bsp)"
+COMPATIBLE_MACHINE = "(mx6-nxp-bsp|mx7-nxp-bsp|vf-generic-bsp|use-mainline-bsp)"

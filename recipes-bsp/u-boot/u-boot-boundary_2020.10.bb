@@ -1,9 +1,9 @@
 require recipes-bsp/u-boot/u-boot.inc
 require recipes-bsp/u-boot/u-boot-boundary-common_${PV}.inc
 
-FILESEXTRAPATHS:prepend:mx6 := "${THISDIR}/${PN}/arm:"
-FILESEXTRAPATHS:prepend:mx7 := "${THISDIR}/${PN}/arm:"
-FILESEXTRAPATHS:prepend:mx8 := "${THISDIR}/${PN}/aarch64:"
+FILESEXTRAPATHS:prepend:mx6-nxp-bsp := "${THISDIR}/${PN}/arm:"
+FILESEXTRAPATHS:prepend:mx7-nxp-bsp := "${THISDIR}/${PN}/arm:"
+FILESEXTRAPATHS:prepend:mx8-nxp-bsp := "${THISDIR}/${PN}/aarch64:"
 
 DEPENDS += "bison-native"
 
@@ -13,7 +13,7 @@ PROVIDES += "u-boot"
 
 BOOT_TOOLS = "imx-boot-tools"
 
-do_deploy:append:mx8 () {
+do_deploy:append:mx8-nxp-bsp () {
 	install -d ${DEPLOYDIR}/${BOOT_TOOLS}
 	install -m 0777 ${B}/${config}/arch/arm/dts/${UBOOT_DTB_NAME}  ${DEPLOYDIR}/${BOOT_TOOLS}
 	install -m 0777 ${B}/${config}/u-boot-nodtb.bin  ${DEPLOYDIR}/${BOOT_TOOLS}/u-boot-nodtb.bin-${MACHINE}-${UBOOT_CONFIG}

@@ -21,4 +21,4 @@ SRCBRANCH = "toradex_5.4-2.3.x-imx"
 # Deploy symbols to allow for device tree overlays
 EXTRA_OEMAKE += "DTC_FLAGS=-@ "
 
-COMPATIBLE_MACHINE = "(mx6|mx7|mx8)"
+COMPATIBLE_MACHINE = "(mx6-nxp-bsp|mx7-nxp-bsp|mx8-nxp-bsp)"

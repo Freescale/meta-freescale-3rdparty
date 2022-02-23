@@ -21,10 +21,10 @@ inherit deploy
 BOOT_TOOLS = "imx-boot-tools"
 
 ATF_PLATFORM        ?= "INVALID"
-ATF_PLATFORM:mx8mq   = "imx8mq"
-ATF_PLATFORM:mx8mm   = "imx8mm"
-ATF_PLATFORM:mx8mn   = "imx8mn"
-ATF_PLATFORM:mx8mp   = "imx8mp"
+ATF_PLATFORM:mx8mq-nxp-bsp   = "imx8mq"
+ATF_PLATFORM:mx8mm-nxp-bsp   = "imx8mm"
+ATF_PLATFORM:mx8mn-nxp-bsp   = "imx8mn"
+ATF_PLATFORM:mx8mp-nxp-bsp   = "imx8mp"
 
 EXTRA_OEMAKE += " \
     CROSS_COMPILE="${TARGET_PREFIX}" \
