@@ -7,7 +7,7 @@
 require recipes-kernel/linux/linux-imx.inc
 
 SUMMARY = "Kontron Linux mainline based kernel with backported features and fixes"
-LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
+LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
 DEPENDS += "lzop-native bc-native"
 
@@ -21,9 +21,9 @@ LOCALVERSION = "-ktn"
 #
 # LINUX_VERSION define should match to the kernel version referenced by SRC_URI and
 # should be updated once patchlevel is merged.
-LINUX_VERSION = "5.4.41"
+LINUX_VERSION = "5.10.95"
 
-SRCBRANCH = "v5.4-ktn"
-SRCREV = "807a88195d767631837242b89cd8c7734a471f81"
+SRCBRANCH = "v5.10-ktn"
+SRCREV = "546dec2e2d46f9050f6b5484d909e9d7a1f14747"
 
 COMPATIBLE_MACHINE = "(imx6ul-kontron)"
