@@ -1,5 +1,5 @@
 SUMMARY = "Configuration utility for TI wireless drivers"
-LICENSE = "GPLv2"
+LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://README;beginline=1;endline=21;md5=adc05a1903d3f107f85c90328e3a9438"
 
 # Tag: R8.7_SP3 (8.7.3)

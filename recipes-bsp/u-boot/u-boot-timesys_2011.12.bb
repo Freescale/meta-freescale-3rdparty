@@ -6,7 +6,7 @@ require recipes-bsp/u-boot/u-boot.inc
 
 PROVIDES += "u-boot"
 
-LICENSE = "GPLv2+"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
 
 SRCBRANCH = "2011.12-pcl052"

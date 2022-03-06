@@ -1,6 +1,6 @@
 # Copyright (C) 2013 Timesys Corporation
 SUMMARY = "Multicore communication Library"
-LICENSE = "GPL-2.0 | BSD"
+LICENSE = "GPL-2.0-only | BSD"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c49712341497d0b5f2e40c30dff2af9d \
                     file://BSD_LICENSE;md5=10695b8f86532e5e44640acf4d92a2ef"
 
