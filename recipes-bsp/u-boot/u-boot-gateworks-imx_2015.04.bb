@@ -1,7 +1,7 @@
 require recipes-bsp/u-boot/u-boot.inc
 
 DESCRIPTION = "U-Boot for Gateworks Ventana Family SBC's"
-LICENSE = "GPLv2+"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=c7383a594871c03da76b3707929d2919"
 DEPENDS = "u-boot-mkimage-native"
 
