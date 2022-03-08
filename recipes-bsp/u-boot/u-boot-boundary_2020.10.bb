@@ -1,9 +1,9 @@
 require recipes-bsp/u-boot/u-boot.inc
 require recipes-bsp/u-boot/u-boot-boundary-common_${PV}.inc
 
-FILESEXTRAPATHS:prepend:mx6-nxp-bsp := "${THISDIR}/${PN}/arm:"
-FILESEXTRAPATHS:prepend:mx7-nxp-bsp := "${THISDIR}/${PN}/arm:"
-FILESEXTRAPATHS:prepend:mx8-nxp-bsp := "${THISDIR}/${PN}/aarch64:"
+FILESEXTRAPATHS:prepend:mx6-generic-bsp := "${THISDIR}/${PN}/arm:"
+FILESEXTRAPATHS:prepend:mx7-generic-bsp := "${THISDIR}/${PN}/arm:"
+FILESEXTRAPATHS:prepend:mx8-generic-bsp := "${THISDIR}/${PN}/aarch64:"
 
 DEPENDS += "bison-native"
 
