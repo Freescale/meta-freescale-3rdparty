@@ -14,14 +14,14 @@ do_install() {
 	install -d ${D}${sbindir}
 	install -d ${D}${sbindir}/wlconf/
 	install -d ${D}${sbindir}/wlconf/official_inis
-	install -d ${D}/lib/firmware/ti-connectivity
+	install -d ${D}${nonarch_base_libdir}/firmware/ti-connectivity
 
 	install -m 0755 wlconf ${D}${sbindir}/wlconf/
 	install -m 0755 dictionary.txt ${D}${sbindir}/wlconf/
 	install -m 0755 struct.bin ${D}${sbindir}/wlconf/
 	install -m 0755 default.conf ${D}${sbindir}/wlconf/
 	install -m 0755 wl18xx-conf-default.bin ${D}${sbindir}/wlconf/
-	install -m 0755 wl18xx-conf-default.bin ${D}/lib/firmware/ti-connectivity/wl18xx-conf.bin
+	install -m 0755 wl18xx-conf-default.bin ${D}${nonarch_base_libdir}/firmware/ti-connectivity/wl18xx-conf.bin
 	install -m 0755 README ${D}${sbindir}/wlconf/
 	install -m 0755 example.conf ${D}${sbindir}/wlconf/
 	install -m 0755 example.ini ${D}${sbindir}/wlconf/
@@ -33,7 +33,7 @@ do_install() {
 FILES:${PN} += " \
 	${sbindir}/wlconf \
 	${sbindir}/wlconf/official_inis \
-	/lib/firmware/ti-connectivity/wl18xx-conf.bin \
+	${nonarch_base_libdir}/firmware/ti-connectivity/wl18xx-conf.bin \
 "
 
 FILES:${PN}-dbg += "${sbindir}/wlconf/.debug"
