@@ -17,4 +17,4 @@ SRCBRANCH = "toradex_vf_4.4"
 SRCREV = "4a0abd7dd466276ee3fdf79b54f05f845f7d8844"
 
 DEPENDS += "lzop-native bc-native"
-COMPATIBLE_MACHINE = "(vf)"
+COMPATIBLE_MACHINE = "(vf-generic-bsp)"
