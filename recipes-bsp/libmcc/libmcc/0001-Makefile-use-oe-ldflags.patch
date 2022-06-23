@@ -1,0 +1,29 @@
+From ba86203da14d21c9c48dcf02595d71901875a263 Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Thu, 23 Jun 2022 08:31:46 +0000
+Subject: [PATCH] Makefile: use oe ldflags
+
+Prevents QA error about missing GNU_HASH in the binary.
+
+Upstream-Status: Pending
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 4482baf..34afbd4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -8,7 +8,7 @@ build/libmcc.a: build/libmcc.o
+ 	$(AR) rcs $@ $<
+ 
+ build/libmcc.so.1.0: build/libmcc.o
+-	$(CC) -shared -Wl,-soname,libmcc.so.1 -o $@ $< -lc
++	$(CC) $(LDFLAGS) -shared -Wl,-soname,libmcc.so.1 -o $@ $< -lc
+ 
+ install:
+ 	mkdir -p $(DESTDIR)/usr/include $(DESTDIR)/usr/lib
+-- 
+2.20.1
+
