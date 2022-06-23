@@ -10,6 +10,8 @@ RPROVIDES:${PN}-dev = "virtual/kernel-module-mcc-dev"
 
 inherit module
 
+export DESTDIR = "${D}"
+
 SRC_URI = "git://github.com/toradex/mcc-kmod.git;protocol=https;branch=${SRCBRANCH}"
 
 SRCBRANCH = "master"
@@ -17,4 +19,4 @@ SRCREV = "083388fa5cce79c239988d61543322d91996aa8d"
 
 S = "${WORKDIR}/git"
 
-COMPATIBLE_MACHINE = "(vf60)"
+COMPATIBLE_MACHINE = "(vf-generic-bsp)"
