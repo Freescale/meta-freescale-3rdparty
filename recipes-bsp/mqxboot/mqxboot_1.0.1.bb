@@ -17,7 +17,7 @@ CFLAGS += "-I${STAGING_KERNEL_DIR}/include"
 
 RDEPENDS:${PN} = "virtual/kernel-module-mcc"
 
-COMPATIBLE_MACHINE = "(vf60)"
+COMPATIBLE_MACHINE = "(vf-generic-bsp)"
 
 do_install() {
     oe_runmake 'DESTDIR=${D}' install
