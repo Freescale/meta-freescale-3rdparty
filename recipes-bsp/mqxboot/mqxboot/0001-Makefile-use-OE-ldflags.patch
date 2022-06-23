@@ -1,0 +1,29 @@
+From 368ee177806f15194acf352c83f64ba697a613ac Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Thu, 23 Jun 2022 08:46:14 +0000
+Subject: [PATCH] Makefile: use OE ldflags
+
+Prevents QA error about missing GNU_HASH in the binary.
+
+Upstream-Status: Pending
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 37da46f..74cf280 100644
+--- a/Makefile
++++ b/Makefile
+@@ -4,7 +4,7 @@ all: build/mqxboot
+ 
+ build/mqxboot: src/mqxboot.c
+ 	mkdir -p build/
+-	$(CC) $< -o $@ $(CFLAGS)
++	$(CC) $< -o $@ $(CFLAGS) $(LDFLAGS)
+ 
+ install:
+ 	mkdir -p $(INSTALL_PATH)
+-- 
+2.20.1
+
