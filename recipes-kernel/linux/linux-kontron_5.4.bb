@@ -15,15 +15,14 @@ SRC_URI = "git://git.kontron-electronics.de/linux/linux.git;protocol=https;branc
            file://defconfig"
 LOCALVERSION = "-ktn"
 
-
 # PV is defined in the base in linux-imx.inc file and uses the LINUX_VERSION definition
 # required by kernel-yocto.bbclass.
 #
 # LINUX_VERSION define should match to the kernel version referenced by SRC_URI and
 # should be updated once patchlevel is merged.
-LINUX_VERSION = "5.4.41"
+LINUX_VERSION = "5.4.105"
 
 SRCBRANCH = "v5.4-ktn"
-SRCREV = "807a88195d767631837242b89cd8c7734a471f81"
+SRCREV = "e2057e52d166f672e054d99a06766aea50046926"
 
 COMPATIBLE_MACHINE = "(imx6ul-kontron)"
