@@ -4,9 +4,9 @@ LIC_FILES_CHKSUM = "file://Licenses/README;md5=5a7450c57ffe5ae63fd732446b988025"
 
 PV = "v2020.10+git${SRCPV}"
 
-SRCREV = "475d7e6b91375fe207ca37927b6e096aa1a4a360"
+SRCREV = "181aa1693e1bd68c6bc62a3971c81ba6b03da4ad"
 SRCBRANCH = "boundary-v2020.10"
-SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git;branch=${SRCBRANCH};protocol=https"
+SRC_URI = "git://github.com/boundarydevices/u-boot.git;branch=${SRCBRANCH};protocol=https"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
