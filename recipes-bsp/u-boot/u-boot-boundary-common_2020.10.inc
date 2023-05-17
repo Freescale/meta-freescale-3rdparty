@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://Licenses/README;md5=5a7450c57ffe5ae63fd732446b988025"
 
 PV = "v2020.10+git${SRCPV}"
 
-SRCREV = "2c93f67fab79683ed65b43547e4c51f2d4adc235"
+SRCREV = "1c8b2e90563af574d5f7d187c317f900e9fe616e"
 SRCBRANCH = "boundary-v2020.10"
 SRC_URI = "git://github.com/boundarydevices/u-boot-imx6.git;branch=${SRCBRANCH}"
 
