@@ -3,6 +3,7 @@ From: Chunrong Guo <chunrong.guo@nxp.com>
 Date: Tue, 12 Mar 2019 03:52:03 +0100
 Subject: [PATCH] Makfefile: linux-5.4 add warning cflags on LSDK-20.04
 
+Upstream-Status: Inappropriate [OE-specific]
 Signed-off-by: C.r. Guo <nxa13725@lsv07004.swis.us-cdc01.nxp.com>
 ---
  Makefile | 2 +-

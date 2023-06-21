@@ -3,6 +3,7 @@ From: Rabeeh Khoury <rabeeh@solid-run.com>
 Date: Thu, 7 Jan 2021 17:03:59 +0200
 Subject: [PATCH] arm64: dts: lx2160a: add lx2160acex7 device tree build
 
+Upstream-Status: Pending
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---
  arch/arm64/boot/dts/freescale/Makefile | 1 +

@@ -3,6 +3,8 @@ From: yazan shhady <yazan.shhady@solid-run.com>
 Date: Sun, 22 Nov 2020 14:44:32 +0200
 Subject: [PATCH] aarm64: dts: lx2160a-cex7: add secondary spi flash support
 
+Upstream-Status: Pending
+Signed-off-by: yazan shhady <yazan.shhady@solid-run.com>
 ---
  arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dts | 10 ++++++++++
  1 file changed, 10 insertions(+)

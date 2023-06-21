@@ -6,6 +6,7 @@ Subject: [PATCH] arm64: dts: lx2160a-cex7: add power button support
 COM express PWRBTN# signal is connected as a GPIO to the LX2 SoC.
 Translate that power button click as KEY_POWER event.
 
+Upstream-Status: Pending
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---
  arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dts | 12 ++++++++++++
