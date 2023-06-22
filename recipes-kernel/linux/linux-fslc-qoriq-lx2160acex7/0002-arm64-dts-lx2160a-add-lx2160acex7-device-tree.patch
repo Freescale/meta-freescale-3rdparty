@@ -16,6 +16,7 @@ The module supports AMC6821 and EMC2301 PWM controllers where either can
 be assembled, but not both together since the PWM and TACH signals are
 shared between them.
 
+Upstream-Status: Pending
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---
  .../boot/dts/freescale/fsl-lx2160a-cex7.dts   | 190 ++++++++++++++++++

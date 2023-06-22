@@ -4,6 +4,7 @@ This adds a versioned soname to the shared library during linking.
 Otherwise an application linked with '-lmcc' needs libmcc.so for execution,
 having libmcc.so.1 would not be enough.
 
+Upstream-Status: Pending
 Signed-off-by: Max Krummenacher <max.oss.09@gmail.com>
 --- a/Makefile	2015-01-07 17:09:13.657675270 +0100
 +++ b/Makefile	2015-01-07 17:21:19.457545709 +0100
