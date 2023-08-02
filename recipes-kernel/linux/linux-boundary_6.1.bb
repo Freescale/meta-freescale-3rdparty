@@ -13,7 +13,7 @@ LINUX_VERSION = "6.1.22"
 SRC_URI = "git://github.com/boundarydevices/linux.git;branch=${SRCBRANCH};protocol=https \
 "
 
-LOCALVERSION = "-1.22+yocto"
+LOCALVERSION = "+yocto"
 SRCBRANCH = "boundary-imx_6.1.y"
 SRCREV = "46a61156410f484008086b36c03ab8490a38731a"
 DEPENDS += "lzop-native bc-native"
