@@ -8,14 +8,14 @@ SUMMARY = "Linux kernel for Boundary Devices boards"
 LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
-LINUX_VERSION = "5.15.71"
+LINUX_VERSION = "6.1.22"
 
 SRC_URI = "git://github.com/boundarydevices/linux.git;branch=${SRCBRANCH};protocol=https \
 "
 
-LOCALVERSION = "-2.2.0+yocto"
-SRCBRANCH = "boundary-imx_5.15.y"
-SRCREV = "d4a57b30c1d1f018acd340cff4aecba3d64a950e"
+LOCALVERSION = "-1.22+yocto"
+SRCBRANCH = "boundary-imx_6.1.y"
+SRCREV = "46a61156410f484008086b36c03ab8490a38731a"
 DEPENDS += "lzop-native bc-native"
 COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite|nitrogen6sx|nitrogen7|nitrogen8m|nitrogen8mm|nitrogen8mn|nitrogen8mp)"
 
