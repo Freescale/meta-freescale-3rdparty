@@ -17,6 +17,6 @@ IMXBOOTLETS_MACHINE = "stmp378x_dev"
 UBOOT_MACHINE = "mx23_olinuxino_config"
 
 KERNEL_IMAGETYPE = "uImage"
-KERNEL_DEVICETREE = "imx23-olinuxino.dtb"
+KERNEL_DEVICETREE = "nxp/mxs/imx23-olinuxino.dtb"
 
 MACHINE_FEATURES = "usbgadget usbhost vfat"
