@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2019 NXP
+# Copyright (C) 2017-2023 NXP
 
 DESCRIPTION = "i.MX ARM Trusted Firmware"
 SECTION = "BSP"
@@ -9,10 +9,10 @@ PROVIDES = "imx-atf"
 
 PV .= "+git${SRCPV}"
 
-SRCBRANCH = "boundary-lf-6.1.1-1.0.0"
+SRCBRANCH = "boundary-lf-6.1.22-2.0.0"
 SRC_URI = "git://github.com/boundarydevices/imx-atf.git;branch=${SRCBRANCH};protocol=https \
 "
-SRCREV = "b47c5d5f7e87c2b388c10cc5306a651613bccf93"
+SRCREV = "7e3484cc10bfc9a53c1e64867b3fb99761f7c375"
 
 S = "${WORKDIR}/git"
 
@@ -30,6 +30,12 @@ EXTRA_OEMAKE += " \
     CROSS_COMPILE="${TARGET_PREFIX}" \
     PLAT=${ATF_PLATFORM} \
 "
+
+# Let the Makefile handle setting up the CFLAGS and LDFLAGS as it is a standalone application
+CFLAGS[unexport] = "1"
+LDFLAGS[unexport] = "1"
+AS[unexport] = "1"
+LD[unexport] = "1"
 
 BUILD_OPTEE = "${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'true', 'false', d)}"
 
