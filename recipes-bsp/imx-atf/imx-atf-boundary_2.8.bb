@@ -31,6 +31,12 @@ EXTRA_OEMAKE += " \
     PLAT=${ATF_PLATFORM} \
 "
 
+# Let the Makefile handle setting up the CFLAGS and LDFLAGS as it is a standalone application
+CFLAGS[unexport] = "1"
+LDFLAGS[unexport] = "1"
+AS[unexport] = "1"
+LD[unexport] = "1"
+
 BUILD_OPTEE = "${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'true', 'false', d)}"
 
 do_compile() {
