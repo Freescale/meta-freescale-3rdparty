@@ -9,5 +9,5 @@ SRC_URI:append:imx6qdl-variscite-som:use-mainline-bsp = " \
 "
 
 do_configure:prepend:imx6qdl-variscite-som() {
-    cp ${WORKDIR}/imx6*-var*.dts* ${S}/arch/arm/boot/dts
+    cp ${UNPACKDIR}/imx6*-var*.dts* ${S}/arch/arm/boot/dts
 }
