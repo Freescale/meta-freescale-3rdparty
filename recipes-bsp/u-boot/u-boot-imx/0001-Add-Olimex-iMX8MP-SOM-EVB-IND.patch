@@ -1,6 +1,6 @@
-From f3f832527e0c52c9b46c19aae8efc48a48d90e9f Mon Sep 17 00:00:00 2001
+From b10dcd225d3f7d00f256c9624233cc075a38a804 Mon Sep 17 00:00:00 2001
 From: Leon Anavi <leon.anavi@konsulko.com>
-Date: Wed, 10 Jul 2024 07:24:57 +0000
+Date: Wed, 6 Nov 2024 13:07:34 +0000
 Subject: [PATCH] imx: add Olimex iMX8MP-SOM-4GB-IND
 
 Add basic Olimex iMX8MP-SOM-4GB-IND and iMX8MP-SOM-EVB-IND board
@@ -20,10 +20,10 @@ Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
  board/freescale/imx8mp_olimex/imx8mp_olimex.c |  512 +++++
  board/freescale/imx8mp_olimex/lpddr4_timing.c | 2048 +++++++++++++++++
  .../imx8mp_olimex/lpddr4_timing_ndm.c         | 1853 +++++++++++++++
- board/freescale/imx8mp_olimex/spl.c           |  179 ++
- configs/imx8mp_olimex_defconfig               |  211 ++
+ board/freescale/imx8mp_olimex/spl.c           |  183 ++
+ configs/imx8mp_olimex_defconfig               |  213 ++
  include/configs/imx8mp_olimex.h               |  184 ++
- 13 files changed, 7289 insertions(+)
+ 13 files changed, 7295 insertions(+)
  create mode 100644 arch/arm/dts/imx8mp-olimex.dts
  create mode 100644 board/freescale/imx8mp_olimex/Kconfig
  create mode 100644 board/freescale/imx8mp_olimex/MAINTAINERS
@@ -37,11 +37,11 @@ Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
  create mode 100644 include/configs/imx8mp_olimex.h
 
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
-index ceec5c074a4..720537d4f9a 100644
+index e494d16ffce..69dd59f1714 100644
 --- a/arch/arm/dts/Makefile
 +++ b/arch/arm/dts/Makefile
-@@ -1074,6 +1074,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
- 	imx8mp-dhcom-pdk2.dtb \
+@@ -1168,6 +1168,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
+ 	imx8mp-dhcom-pdk3-overlay-rev100.dtbo \
  	imx8mp-ddr4-evk.dtb \
  	imx8mp-evk.dtb \
 +	imx8mp-olimex.dtb \
@@ -996,10 +996,10 @@ index 00000000000..d9990e36d19
 +	};
 +};
 diff --git a/arch/arm/mach-imx/imx8m/Kconfig b/arch/arm/mach-imx/imx8m/Kconfig
-index b124027910d..bf9746155c6 100644
+index 473cfa8e5e3..5afd90bac71 100644
 --- a/arch/arm/mach-imx/imx8m/Kconfig
 +++ b/arch/arm/mach-imx/imx8m/Kconfig
-@@ -448,6 +448,16 @@ config TARGET_LIBREM5
+@@ -446,6 +446,16 @@ config TARGET_LIBREM5
  	select SUPPORT_SPL
  	select IMX8M_LPDDR4
  
@@ -1016,10 +1016,10 @@ index b124027910d..bf9746155c6 100644
  endchoice
  
  source "board/advantech/imx8mp_rsb3720a1/Kconfig"
-@@ -481,5 +491,6 @@ source "board/technexion/pico-imx8mq/Kconfig"
- source "board/variscite/imx8mn_var_som/Kconfig"
+@@ -482,5 +492,6 @@ source "board/variscite/imx8mn_var_som/Kconfig"
  source "board/toradex/verdin-imx8mm/Kconfig"
  source "board/toradex/verdin-imx8mp/Kconfig"
+ source "board/voxelbotics/navqp/Kconfig"
 +source "board/freescale/imx8mp_olimex/Kconfig"
  
  endif
@@ -6829,10 +6829,10 @@ index 00000000000..4765618afde
 +};
 diff --git a/board/freescale/imx8mp_olimex/spl.c b/board/freescale/imx8mp_olimex/spl.c
 new file mode 100644
-index 00000000000..362751e23a3
+index 00000000000..b7b21f0b490
 --- /dev/null
 +++ b/board/freescale/imx8mp_olimex/spl.c
-@@ -0,0 +1,179 @@
+@@ -0,0 +1,183 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
 + * Copyright 2018-2019, 2021 NXP
@@ -6862,6 +6862,7 @@ index 00000000000..362751e23a3
 +#include <fsl_esdhc_imx.h>
 +#include <mmc.h>
 +#include <asm/arch/ddr.h>
++#include <asm/sections.h>
 +
 +DECLARE_GLOBAL_DATA_PTR;
 +
@@ -6923,10 +6924,10 @@ index 00000000000..362751e23a3
 +
 +	ret = pmic_get("pmic@25", &dev);
 +	if (ret == -ENODEV) {
-+		puts("No pca9450@25\n");
++		puts("No pmic@25\n");
 +		return 0;
 +	}
-+	if (ret != 0)
++	if (ret < 0)
 +		return ret;
 +
 +	/* BUCKxOUT_DVS0/1 control BUCK123 output */
@@ -6934,22 +6935,25 @@ index 00000000000..362751e23a3
 +
 +#ifdef CONFIG_IMX8M_LPDDR4
 +	/*
-+	 * increase VDD_SOC to typical value 0.95V before first
-+	 * DRAM access, set DVS1 to 0.85v for suspend.
++	 * Increase VDD_SOC to typical value 0.95V before first
++	 * DRAM access, set DVS1 to 0.85V for suspend.
 +	 * Enable DVS control through PMIC_STBY_REQ and
 +	 * set B1_ENMODE=1 (ON by PMIC_ON_REQ=H)
 +	 */
-+#ifdef CONFIG_IMX8M_VDD_SOC_850MV
-+	/* set DVS0 to 0.85v for special case*/
-+	pmic_reg_write(dev, PCA9450_BUCK1OUT_DVS0, 0x14);
-+#else
-+	pmic_reg_write(dev, PCA9450_BUCK1OUT_DVS0, 0x1C);
-+#endif
++	if (CONFIG_IS_ENABLED(IMX8M_VDD_SOC_850MV))
++		pmic_reg_write(dev, PCA9450_BUCK1OUT_DVS0, 0x14);
++	else
++		pmic_reg_write(dev, PCA9450_BUCK1OUT_DVS0, 0x1C);
++
 +	pmic_reg_write(dev, PCA9450_BUCK1OUT_DVS1, 0x14);
 +	pmic_reg_write(dev, PCA9450_BUCK1CTRL, 0x59);
 +
-+	/* Kernel uses OD/OD freq for SOC */
-+	/* To avoid timing risk from SOC to ARM,increase VDD_ARM to OD voltage 0.95v */
++	/*
++	 * Kernel uses OD/OD freq for SOC.
++	 * To avoid timing risk from SOC to ARM,increase VDD_ARM to OD
++	 * voltage 0.95V.
++	 */
++
 +	pmic_reg_write(dev, PCA9450_BUCK2OUT_DVS0, 0x1C);
 +#elif defined(CONFIG_IMX8M_DDR4)
 +	/* DDR4 runs at 3200MTS, uses default ND 0.85v for VDD_SOC and VDD_ARM */
@@ -7014,10 +7018,10 @@ index 00000000000..362751e23a3
 +}
 diff --git a/configs/imx8mp_olimex_defconfig b/configs/imx8mp_olimex_defconfig
 new file mode 100644
-index 00000000000..8f763537537
+index 00000000000..a01891a6fd8
 --- /dev/null
 +++ b/configs/imx8mp_olimex_defconfig
-@@ -0,0 +1,211 @@
+@@ -0,0 +1,213 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_IMX8M=y
 +CONFIG_TEXT_BASE=0x40200000
@@ -7188,6 +7192,7 @@ index 00000000000..8f763537537
 +CONFIG_IMX_TMU=y
 +CONFIG_USB=y
 +CONFIG_DM_USB=y
++CONFIG_DM_USB_GADGET=y
 +CONFIG_USB_XHCI_HCD=y
 +CONFIG_USB_XHCI_DWC3=y
 +CONFIG_USB_DWC3=y
@@ -7222,6 +7227,7 @@ index 00000000000..8f763537537
 +CONFIG_EFI_VAR_BUF_SIZE=139264
 +CONFIG_EFI_IGNORE_OSINDICATIONS=y
 +CONFIG_EFI_CAPSULE_AUTHENTICATE=y
++CONFIG_EFI_CAPSULE_ESL_FILE="CRT.esl"
 +CONFIG_OPTEE=y
 +CONFIG_CMD_OPTEE_RPMB=y
 +CONFIG_EFI_MM_COMM_TEE=y
@@ -7420,5 +7426,5 @@ index 00000000000..6941d3ede4c
 +
 +#endif
 -- 
-2.45.2
+2.44.1
 
