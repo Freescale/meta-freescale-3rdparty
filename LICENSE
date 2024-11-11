@@ -1,0 +1,57 @@
+# License Information for meta-freescale-3rdparty Layer
+
+This file lists all the licenses used by the recipes in this layer.
+
+## recipes-bsp/atf/qoriq-atf_1.5.bb
+- LICENSE: BSD
+- LIC_FILES_CHKSUM: file://license.rst;md5=e927e02bca647e14efd87e9e914b2443
+
+## recipes-bsp/broadcom-nvram-config/broadcom-nvram-config.inc
+- LICENSE: Proprietary
+- LIC_FILES_CHKSUM: file://LICENCE.broadcom_bcm43xx;md5=3160c14df7228891b868060e1951dfbc
+
+## recipes-bsp/imx-atf/imx-atf-boundary_2.8.bb
+- LICENSE: BSD-3-Clause
+- LIC_FILES_CHKSUM: file://${COREBASE}/meta/files/common-licenses/BSD-3-Clause;md5=550794465ba0ec5312d6919e203a55f9
+
+## recipes-bsp/libmcc/libmcc_1.05.1.bb
+- LICENSE: GPL-2.0-only | BSD
+- LIC_FILES_CHKSUM: file://LICENSE;md5=c49712341497d0b5f2e40c30dff2af9d
+- LIC_FILES_CHKSUM: file://BSD_LICENSE;md5=10695b8f86532e5e44640acf4d92a2ef
+
+## recipes-bsp/mqxboot/mqxboot_1.0.1.bb
+- LICENSE: GPL-2.0-only | BSD
+- LIC_FILES_CHKSUM: file://LICENSE;md5=c49712341497d0b5f2e40c30dff2af9d
+- LIC_FILES_CHKSUM: file://BSD_LICENSE;md5=10695b8f86532e5e44640acf4d92a2ef
+
+## recipes-bsp/u-boot/u-boot-boundary_2022.04.bb
+- LICENSE: GPL-2.0-or-later
+- LIC_FILES_CHKSUM: file://Licenses/README;md5=5a7450c57ffe5ae63fd732446b988025
+
+## recipes-bsp/u-boot/u-boot-kontron_2020.01.bb
+- LICENSE: GPL-2.0-or-later
+- LIC_FILES_CHKSUM: file://Licenses/README;md5=30503fd321432fc713238f582193b78e
+
+## recipes-bsp/u-boot/u-boot-qoriq_2019.10.bb
+- LICENSE: GPL-2.0-only & BSD-3-Clause & BSD-2-Clause & LGPL-2.0-only & LGPL-2.1-only
+- LIC_FILES_CHKSUM: file://Licenses/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4263
+- LIC_FILES_CHKSUM: file://Licenses/bsd-2-clause.txt;md5=6a31f076f5773aabd8ff86191ad6fdd5
+- LIC_FILES_CHKSUM: file://Licenses/bsd-3-clause.txt;md5=4a1190eac56a9db675d58ebe86eaf50c
+- LIC_FILES_CHKSUM: file://Licenses/lgpl-2.0.txt;md5=5f30f0716dfdd0d91eb439ebec522ec2
+- LIC_FILES_CHKSUM: file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c
+
+## recipes-bsp/u-boot/u-boot-toradex_2020.07.bb
+- LICENSE: GPL-2.0-or-later
+- LIC_FILES_CHKSUM: file://Licenses/README;md5=30503fd321432fc713238f582193b78e
+
+## recipes-connectivity/ti-18xx-wlconf/ti-18xx-wlconf_8.7.3.bb
+- LICENSE: GPL-2.0-only
+- LIC_FILES_CHKSUM: file://README;beginline=1;endline=21;md5=adc05a1903d3f107f85c90328e3a9438
+
+## recipes-core/net-persistent-mac/net-persistent-mac.bb
+- LICENSE: MIT
+- LIC_FILES_CHKSUM: file://${COREBASE}/meta/files/common-licenses/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302
+
+## recipes-kernel/linux/linux-boundary_6.1.bb
+- LICENSE: GPL-2.0-only
+- LIC_FILES_CHKSUM: file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46
