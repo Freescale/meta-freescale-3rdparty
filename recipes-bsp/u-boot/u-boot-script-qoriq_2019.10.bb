@@ -26,7 +26,7 @@ do_compile() {
     kernel_devicetree="${kernel_devicetree_tmp}"
     sed -e 's/@KERNEL_BOOTCMD[@]/${KERNEL_BOOTCMD}/' -e "s,@KERNEL_IMAGETYPE[@],${KERNEL_IMAGETYPE},g" \
 	-e "s,@KERNEL_DEVICETREE[@],${kernel_devicetree},g" \
-        "${WORKDIR}/boot.cmd.in" > ${B}/boot.cmd
+        "${UNPACKDIR}/boot.cmd.in" > ${B}/boot.cmd
     target_arch="${TARGET_ARCH}"
     test "${TARGET_ARCH}" = "aarch64" && target_arch="arm64"
     mkimage -A ${target_arch} -T script -C none -n "Distro boot script" -d ${B}/boot.cmd ${B}/boot.scr

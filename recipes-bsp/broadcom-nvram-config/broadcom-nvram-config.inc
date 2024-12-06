@@ -5,14 +5,14 @@ SRC_URI = " \
    file://LICENCE.broadcom_bcm43xx \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 BRCM_FWDIR = "${nonarch_base_libdir}/firmware/brcm"
 CHIP_MODEL ?= "Invalid"
 
 do_install() {
     install -d  ${D}${BRCM_FWDIR}
 
-    cp -r ${WORKDIR}/brcmfmac${CHIP_MODEL}-sdio.txt \
+    cp -r ${UNPACKDIR}/brcmfmac${CHIP_MODEL}-sdio.txt \
         ${D}${BRCM_FWDIR}
 }
 

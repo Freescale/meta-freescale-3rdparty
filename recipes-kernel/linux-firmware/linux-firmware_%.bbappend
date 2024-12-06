@@ -8,7 +8,7 @@ SRC_URI:append:imx6qdl-variscite-som = "\
 SRC_URI[TIInit_11.8.32.sha256sum] = "26ab0608e39fab95a6a55070c2f8364c92aad34442e8349abda71cee4da3277a"
 
 do_install:append:imx6qdl-variscite-som() {
-    cp ${WORKDIR}/TIInit_11.8.32.bts ${D}${nonarch_base_libdir}/firmware/ti-connectivity/
+    cp ${UNPACKDIR}/TIInit_11.8.32.bts ${D}${nonarch_base_libdir}/firmware/ti-connectivity/
 }
 
 PACKAGE_ARCH:imx6qdl-variscite-som = "${MACHINE_ARCH}"
