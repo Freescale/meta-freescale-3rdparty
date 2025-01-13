@@ -11,7 +11,6 @@ SRC_URI = " \
     file://0001-Makefile-use-OE-ldflags.patch \
 "
 
-SRC_URI[md5sum] = "f74755548041d50ca178448ee3e478d4"
 SRC_URI[sha256sum] = "32444409de5e809b9347e275a3bf78623a89e9ecce3188ebac79318b2b7c39b3"
 
 S = "${WORKDIR}/mqxboot-${PV}"
