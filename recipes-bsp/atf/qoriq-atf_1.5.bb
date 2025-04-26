@@ -31,8 +31,8 @@ RCW_FOLDER ?= "${MACHINE}"
 RCW_FOLDER:ls1088ardb-pb = "ls1088ardb"
 
 # requires CROSS_COMPILE set by hand as there is no configure script
-export CROSS_COMPILE="${TARGET_PREFIX}"
-export ARCH="arm64"
+export CROSS_COMPILE = "${TARGET_PREFIX}"
+export ARCH = "arm64"
 
 # Let the Makefile handle setting up the CFLAGS and LDFLAGS as it is
 # a standalone application
