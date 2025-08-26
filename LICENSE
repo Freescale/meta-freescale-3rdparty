@@ -6,6 +6,7 @@ This file lists all licenses used by recipes in the meta-freescale-3rdparty laye
 ./recipes-kernel/linux/linux-boundary_6.1.bb: LICENSE = "GPL-2.0-only"
 ./recipes-bsp/u-boot/u-boot-qoriq_2019.10.bb: LICENSE = "GPL-2.0-only & BSD-3-Clause & BSD-2-Clause & LGPL-2.0-only & LGPL-2.1-only"
 ./recipes-bsp/u-boot/u-boot-toradex_2020.07.bb: LICENSE = "GPL-2.0-or-later"
+./recipes-bsp/u-boot/u-boot-olimex-common_2024.04.inc: LICENSE = "GPL-2.0-or-later"
 ./recipes-bsp/u-boot/u-boot-script-toradex_2020.07.bb: LICENSE = "MIT"
 ./recipes-bsp/u-boot/u-boot-script-qoriq_2019.10.bb: LICENSE = "MIT"
 ./recipes-bsp/u-boot/u-boot-kontron_2020.01.bb: LICENSE = "GPL-2.0-or-later"
