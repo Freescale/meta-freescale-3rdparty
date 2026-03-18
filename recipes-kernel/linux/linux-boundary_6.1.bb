@@ -20,5 +20,3 @@ DEPENDS += "lzop-native bc-native"
 COMPATIBLE_MACHINE = "(nitrogen6x|nitrogen6x-lite|nitrogen6sx|nitrogen7|nitrogen8m|nitrogen8mm|nitrogen8mn|nitrogen8mp)"
 
 KBUILD_DEFCONFIG ?= "boundary_defconfig"
-
-S = "${WORKDIR}/git"
