@@ -20,8 +20,7 @@ UBOOT_INITIAL_ENV = "u-boot-initial-env"
 
 PROVIDES += "u-boot"
 
-B = "${WORKDIR}/build"
-S = "${WORKDIR}/git"
+B = "${UNPACKDIR}/build"
 do_configure[cleandirs] = "${B}"
 
 inherit fsl-u-boot-localversion
