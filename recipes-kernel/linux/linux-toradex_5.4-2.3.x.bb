@@ -9,7 +9,7 @@ SUMMARY = "Linux kernel for Toradex Freescale i.MX based modules"
 # The recipe by default uses KBUILD_DEFCONFIG from the machine
 # configuration. Set KBUILD_DEFCONFIG = "" and add a file 'defconfig' to
 # SRC_URI to inject your defconfig in a bbappend.
-SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH}"
+SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=https;branch=${SRCBRANCH}"
 
 PV:append = "+git${SRCPV}"
 
