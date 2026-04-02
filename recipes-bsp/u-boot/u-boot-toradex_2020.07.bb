@@ -10,7 +10,7 @@ DEPENDS += "bc-native dtc-native bison-native"
 
 PV = "2020.07+git${SRCPV}"
 SRC_URI = " \
-    git://git.toradex.com/u-boot-toradex.git;branch=${SRCBRANCH} \
+    git://git.toradex.com/u-boot-toradex.git;protocol=https;branch=${SRCBRANCH} \
     file://fw_env.config \
 "
 SRCBRANCH = "toradex_2020.07"
