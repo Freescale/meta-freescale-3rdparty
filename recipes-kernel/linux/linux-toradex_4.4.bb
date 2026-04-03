@@ -2,7 +2,7 @@ require recipes-kernel/linux/linux-imx.inc
 
 SUMMARY = "Linux kernel for Toradex Colibri VFxx Computer on Modules"
 
-SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH}"
+SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=https;branch=${SRCBRANCH}"
 
 KBUILD_DEFCONFIG ?= "colibri_vf_defconfig"
 
