@@ -17,8 +17,6 @@ DEPENDS += "u-boot-mkimage-native u-boot openssl openssl-native mbedtls rcw cst-
 DEPENDS:append:lx2160a = " ddr-phy"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
-S = "${WORKDIR}/git"
-
 SRC_URI = "\
     git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1 \
     file://0001-Clean-usage-of-void-pointers-to-access-symbols.patch \
