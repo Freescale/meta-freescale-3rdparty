@@ -1,0 +1,10 @@
+{
+    "comment": "Layer-specific oelint-adv constant DB. oelint-adv auto-loads 'oelint.constants.json' from the layer root (the directory holding conf/layer.conf) whenever a file from this layer is linted, so no --constantmods is needed. List here the real variables/overrides oelint cannot know about when run standalone (outside a full bitbake build): custom global variables the layer defines, and distro/machine override tokens the recipes use. Start empty and add entries only when the baseline survey shows false 'unknown variable/override' findings.",
+    "variables": {
+        "known": []
+    },
+    "replacements": {
+        "distros": [],
+        "machines": []
+    }
+}
