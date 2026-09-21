@@ -3,7 +3,7 @@ From: Rabeeh Khoury <rabeeh@solid-run.com>
 Date: Mon, 23 Mar 2020 12:35:04 +0200
 Subject: [PATCH 6/8] lx2160a: add SVR check for a050234 to apply only on rev1
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

@@ -17,7 +17,7 @@ echo "#include <configs/lx2160a_${SERDES}.rcwi>" >> RCW/template.rcw
 make clean
 make -j${PARALLEL}
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

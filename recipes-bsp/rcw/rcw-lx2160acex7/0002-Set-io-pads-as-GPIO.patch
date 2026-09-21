@@ -3,7 +3,7 @@ From: Rabeeh Khoury <rabeeh@solid-run.com>
 Date: Wed, 30 Oct 2019 11:43:37 +0200
 Subject: [PATCH 2/2] Set io pads as GPIO
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

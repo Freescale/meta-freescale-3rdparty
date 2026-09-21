@@ -11,7 +11,7 @@ enable full speed.
 ConnectX-5 NICs
 4. Run a009531 and a00885 on rev2.
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---
