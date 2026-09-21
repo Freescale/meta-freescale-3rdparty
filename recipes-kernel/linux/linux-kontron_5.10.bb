@@ -1,3 +1,6 @@
+# nooelint: oelint.var.mandatoryvar.LICENSE
+# LICENSE is set by meta-freescale's linux-imx.inc, required below; oelint
+# cannot follow a require into another layer.
 # Copyright (C) 2012-2020 O.S. Systems Software LTDA.
 # Released under the MIT license (see COPYING.MIT for the terms)
 #
@@ -7,6 +10,8 @@
 require recipes-kernel/linux/linux-imx.inc
 
 SUMMARY = "Kontron Linux mainline based kernel with backported features and fixes"
+DESCRIPTION = "Linux kernel for Kontron Electronics i.MX6UL/ULL boards, mainline based with vendor backports"
+HOMEPAGE = "https://git.kontron-electronics.de/linux/linux"
 SECTION = "kernel"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
