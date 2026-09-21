@@ -19,5 +19,4 @@ SRC_URI = "\
     git://github.com/varigit/uboot-imx.git;protocol=https;branch=${SRCBRANCH} \
 "
 
-S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
