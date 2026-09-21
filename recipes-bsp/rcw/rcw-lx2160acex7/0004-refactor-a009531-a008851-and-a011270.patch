@@ -8,7 +8,7 @@ instructions.
 2. Use SVR register to execute the PCIe workarounds on the relevant rev
 of the device.
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

@@ -7,7 +7,7 @@ This patch adds support for lx2160a rcw project.
 In general RCW has lots of redundent files and can be restructured
 better as in this patch.
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

@@ -6,7 +6,7 @@ Subject: [PATCH] S2 - enable gen3, xspi increase divisor to 28
 Serdes group 2 enable PCIe gen 3
 XSPI increase divisor to 28 - this fixes UEFI SPI flash detection.
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---
