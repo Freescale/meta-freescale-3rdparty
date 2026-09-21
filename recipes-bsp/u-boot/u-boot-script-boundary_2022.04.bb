@@ -1,5 +1,8 @@
 require recipes-bsp/u-boot/u-boot-boundary-common_${PV}.inc
 
+SUMMARY = "Boot script for Nitrogen boards"
+HOMEPAGE = "https://github.com/boundarydevices"
+
 DEPENDS = "u-boot-mkimage-native"
 
 inherit deploy
