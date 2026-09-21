@@ -1,3 +1,5 @@
+SUMMARY = "Broadcom BCM${CHIP_MODEL} NVRAM configuration"
+HOMEPAGE = "https://www.broadcom.com/products/wireless"
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://LICENCE.broadcom_bcm43xx;md5=3160c14df7228891b868060e1951dfbc"
 
