@@ -9,7 +9,7 @@ Based on NXP's LX2160ARDB device tree; it defines -
 3. 4 SATA ports that depending on SERDES configuration they can get
 connected to external SATA drives
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

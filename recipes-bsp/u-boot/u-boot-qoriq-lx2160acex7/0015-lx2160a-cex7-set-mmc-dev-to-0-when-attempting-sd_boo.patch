@@ -7,7 +7,7 @@ Subject: [PATCH 15/17] lx2160a-cex7: set mmc dev to 0 when attempting
 When attempting sd_bootcmd which is the fallback of failed distroboot
 then set mmc dev to 0; since distroboot already set that variable to 1.
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---
