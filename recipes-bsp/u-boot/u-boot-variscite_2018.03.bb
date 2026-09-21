@@ -1,6 +1,8 @@
 require recipes-bsp/u-boot/u-boot.inc
 
 SUMMARY = "U-Boot for Variscite i.MX6Q/DL VAR-SOM-MX6"
+DESCRIPTION = "U-Boot bootloader for Variscite i.MX6 SoM carrier boards, built from the vendor maintained uboot-imx tree"
+HOMEPAGE = "https://github.com/varigit/uboot-imx"
 SECTION = "bootloaders"
 LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
