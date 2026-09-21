@@ -5,7 +5,7 @@ Subject: [PATCH 07/17] lx2160a: load dpl into 0x80001000 instead of 0x80d00000
 
 and enlarge the image size to 0x1000 blocks
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

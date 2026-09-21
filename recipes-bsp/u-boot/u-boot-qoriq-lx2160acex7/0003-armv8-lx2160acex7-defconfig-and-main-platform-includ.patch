@@ -7,7 +7,7 @@ This patch add lx2160acex7 main defconfig and main include file.
 Notice that the defconfig doesn't support the secured boot mode where a
 follow up patch will cover this.
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---
