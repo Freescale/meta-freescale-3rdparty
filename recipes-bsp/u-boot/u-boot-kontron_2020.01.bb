@@ -22,7 +22,6 @@ PROVIDES += "u-boot"
 
 PV .= "+git${SRCPV}"
 
-S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
 # FIXME: Allow linking of 'tools' binaries with native libraries
