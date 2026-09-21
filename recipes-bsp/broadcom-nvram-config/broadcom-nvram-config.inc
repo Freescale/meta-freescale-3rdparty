@@ -1,8 +1,8 @@
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://LICENCE.broadcom_bcm43xx;md5=3160c14df7228891b868060e1951dfbc"
 
-SRC_URI = " \
-   file://LICENCE.broadcom_bcm43xx \
+SRC_URI = "\
+    file://LICENCE.broadcom_bcm43xx \
 "
 
 S = "${UNPACKDIR}"
@@ -16,16 +16,16 @@ do_install() {
         ${D}${BRCM_FWDIR}
 }
 
-SRC_URI += " \
-   file://brcmfmac${CHIP_MODEL}-sdio.txt \
+SRC_URI += "\
+    file://brcmfmac${CHIP_MODEL}-sdio.txt \
 "
 
-FILES:${PN} = " \
-  ${BRCM_FWDIR}/brcmfmac${CHIP_MODEL}-sdio.txt \
+FILES:${PN} = "\
+    ${BRCM_FWDIR}/brcmfmac${CHIP_MODEL}-sdio.txt \
 "
 
-RDEPENDS:${PN} = " \ 
-  linux-firmware-bcm${CHIP_MODEL} \
+RDEPENDS:${PN} = "\
+    linux-firmware-bcm${CHIP_MODEL} \
 "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
