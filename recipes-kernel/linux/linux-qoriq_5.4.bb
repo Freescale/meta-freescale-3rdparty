@@ -1,3 +1,8 @@
+# nooelint: oelint.var.suggestedvar.SECTION
+# SECTION comes from meta-freescale's linux-qoriq.inc, required below. oelint
+# cannot follow a require into another layer, so it sees it as unset; restating
+# it here would duplicate a value meta-freescale owns.
+
 LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 
 LINUX_VERSION = "5.4.47"
