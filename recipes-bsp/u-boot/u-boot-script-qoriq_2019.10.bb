@@ -4,6 +4,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 INHIBIT_DEFAULT_DEPS = "1"
 DEPENDS = "u-boot-mkimage-native"
+PROVIDES += "u-boot-default-script"
 
 SRC_URI = "\
     file://boot.cmd.in \
@@ -46,8 +47,6 @@ do_deploy() {
 }
 
 addtask deploy after do_install before do_build
-
-PROVIDES += "u-boot-default-script"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
