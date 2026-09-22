@@ -14,6 +14,12 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
 
+INHIBIT_DEFAULT_DEPS = "1"
+DEPENDS = "bc-native bison-native libgcc python3-native swig-native virtual/${TARGET_PREFIX}gcc"
+DEPENDS:append:qoriq-arm64 = " dtc-native"
+DEPENDS:append:qoriq-arm = " dtc-native"
+DEPENDS:append:qoriq-ppc = " boot-format-native"
+
 SRC_URI = "\
     git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot;nobranch=1 \
     file://0001-patman-Drop-binary-parameter.patch \
@@ -30,12 +36,6 @@ SRCREV = "1e55b2f9e7f56b76569089b9e950f49c1579580e"
 B = "${WORKDIR}/build"
 PV:append = "+fslgit"
 LOCALVERSION = "+fsl"
-
-INHIBIT_DEFAULT_DEPS = "1"
-DEPENDS = "bc-native bison-native libgcc python3-native swig-native virtual/${TARGET_PREFIX}gcc"
-DEPENDS:append:qoriq-arm64 = " dtc-native"
-DEPENDS:append:qoriq-arm = " dtc-native"
-DEPENDS:append:qoriq-ppc = " boot-format-native"
 
 python () {
     if d.getVar("TCMODE") == "external-fsl":
