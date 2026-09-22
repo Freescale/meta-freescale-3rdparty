@@ -26,8 +26,6 @@ SRCREV = "5ae5233c064e94a8bd1b4a1652a03b87b0be63f6"
 
 COMPATIBLE_MACHINE = "(qoriq)"
 
-PACKAGE_ARCH = "${MACHINE_ARCH}"
-
 PLATFORM = "${MACHINE}"
 PLATFORM:ls1088ardb-pb = "ls1088ardb"
 PLATFORM_ADDITIONAL_TARGET ??= ""
@@ -60,6 +58,8 @@ PACKAGECONFIG ??= " \
     ${@bb.utils.filter('COMBINED_FEATURES', 'optee', d)} \
 "
 PACKAGECONFIG[optee] = ",,optee-os-qoriq"
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 uboot_boot_sec ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa-secure-boot"
 uboot_boot ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa"
