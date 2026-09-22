@@ -1,4 +1,5 @@
 DESCRIPTION = "U-Boot for Boundary Devices boards"
+SECTION = "bootloaders"
 LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=5a7450c57ffe5ae63fd732446b988025"
 
