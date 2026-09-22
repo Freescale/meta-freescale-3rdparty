@@ -17,6 +17,8 @@ do_install() {
         ${D}${BRCM_FWDIR}
 }
 
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 FILES:${PN} = "\
     ${BRCM_FWDIR}/brcmfmac${CHIP_MODEL}-sdio.txt \
 "
@@ -24,5 +26,3 @@ FILES:${PN} = "\
 RDEPENDS:${PN} = "\
     linux-firmware-bcm${CHIP_MODEL} \
 "
-
-PACKAGE_ARCH = "${MACHINE_ARCH}"
