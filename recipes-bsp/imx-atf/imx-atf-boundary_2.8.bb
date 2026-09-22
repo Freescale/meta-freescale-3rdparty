@@ -30,7 +30,7 @@ ATF_PLATFORM:mx8mm-nxp-bsp = "imx8mm"
 ATF_PLATFORM:mx8mn-nxp-bsp = "imx8mn"
 ATF_PLATFORM:mx8mp-nxp-bsp = "imx8mp"
 
-EXTRA_OEMAKE += " \
+EXTRA_OEMAKE += "\
     CROSS_COMPILE="${TARGET_PREFIX}" \
     PLAT=${ATF_PLATFORM} \
 "
