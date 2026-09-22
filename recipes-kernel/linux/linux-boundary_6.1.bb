@@ -4,6 +4,8 @@
 require recipes-kernel/linux/linux-imx.inc
 
 SUMMARY = "Linux kernel for Boundary Devices boards"
+DESCRIPTION = "Linux kernel for Boundary Devices Nitrogen i.MX6, i.MX7 and i.MX8M boards, built from the vendor maintained tree"
+HOMEPAGE = "https://github.com/boundarydevices/linux"
 SECTION = "kernel"
 
 LICENSE = "GPL-2.0-only"
