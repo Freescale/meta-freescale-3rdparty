@@ -5,6 +5,8 @@
 require recipes-bsp/u-boot/u-boot.inc
 require u-boot-olimex-common_${PV}.inc
 
+SECTION = "bootloaders"
+
 PROVIDES += "u-boot u-boot-mfgtool"
 
 SRC_URI:append:olimex-imx8mp-evb = " file://0001-Add-Olimex-iMX8MP-SOM-EVB-IND.patch"
