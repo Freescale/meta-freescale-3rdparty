@@ -9,12 +9,13 @@ CVE_PRODUCT = "arm:arm-trusted-firmware \
                arm_trusted_firmware_project:arm_trusted_firmware \
                trustedfirmware:trusted_firmware-a"
 
+DEPENDS += "cst-native mbedtls openssl openssl-native rcw u-boot u-boot-mkimage-native"
+DEPENDS:append:lx2160a = " ddr-phy"
+
 PV = "1.5+git${SRCPV}"
 
 inherit deploy
 
-DEPENDS += "cst-native mbedtls openssl openssl-native rcw u-boot u-boot-mkimage-native"
-DEPENDS:append:lx2160a = " ddr-phy"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
 SRC_URI = "\
