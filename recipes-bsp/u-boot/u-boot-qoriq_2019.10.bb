@@ -19,6 +19,7 @@ DEPENDS:append:qoriq-arm64 = " dtc-native"
 DEPENDS:append:qoriq-arm = " dtc-native"
 DEPENDS:append:qoriq-ppc = " boot-format-native"
 PROVIDES += "u-boot"
+PV:append = "+fslgit"
 
 SRC_URI = "\
     git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot;nobranch=1 \
@@ -34,7 +35,6 @@ SRC_URI = "\
 SRCREV = "1e55b2f9e7f56b76569089b9e950f49c1579580e"
 
 B = "${WORKDIR}/build"
-PV:append = "+fslgit"
 LOCALVERSION = "+fsl"
 
 python () {
