@@ -3,6 +3,7 @@ LIC_FILES_CHKSUM = "file://LICENCE.broadcom_bcm43xx;md5=3160c14df7228891b868060e
 
 SRC_URI = "\
     file://LICENCE.broadcom_bcm43xx \
+    file://brcmfmac${CHIP_MODEL}-sdio.txt \
 "
 
 S = "${UNPACKDIR}"
@@ -15,10 +16,6 @@ do_install() {
     cp -r ${UNPACKDIR}/brcmfmac${CHIP_MODEL}-sdio.txt \
         ${D}${BRCM_FWDIR}
 }
-
-SRC_URI += "\
-    file://brcmfmac${CHIP_MODEL}-sdio.txt \
-"
 
 FILES:${PN} = "\
     ${BRCM_FWDIR}/brcmfmac${CHIP_MODEL}-sdio.txt \
