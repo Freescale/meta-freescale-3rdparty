@@ -14,13 +14,13 @@ SRC_URI:append:lx2160acex7 = " \
 do_configure:prepend:lx2160acex7 () {
     for BT in ${BOARD_TARGETS}
     do
-	mkdir -p ${S}/${BOARD_TARGETS}/${SERDES}
-	cat <<EOF >${S}/${BOARD_TARGETS}/README
+        mkdir -p ${S}/${BOARD_TARGETS}/${SERDES}
+        cat <<EOF >${S}/${BOARD_TARGETS}/README
 The RCW directories for lx2160acex7 are created based on existing SERDES
 configuration. Currently created automatically - later maybe by building
 cross product of serdes & ddr speeds in a final commit.
 EOF
-	cat <<EOF >${S}/${BOARD_TARGETS}/${SERDES}/${SPEED}.rcw
+        cat <<EOF >${S}/${BOARD_TARGETS}/${SERDES}/${SPEED}.rcw
 #include <configs/lx2160a_defaults.rcwi>
 #include <configs/lx2160a_${SPEED}.rcwi>
 #include <configs/lx2160a_${SERDES}.rcwi>
