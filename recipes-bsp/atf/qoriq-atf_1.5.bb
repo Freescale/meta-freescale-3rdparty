@@ -105,12 +105,12 @@ do_compile() {
     else
         bl33="${uboot_boot}"
         rcwtemp="${rcw}"
-    fi       
+    fi
 
     if [ "${BUILD_OPTEE}" = "true" ]; then
-        bl32="${RECIPE_SYSROOT}${nonarch_base_libdir}/firmware/tee_${MACHINE}.bin" 
+        bl32="${RECIPE_SYSROOT}${nonarch_base_libdir}/firmware/tee_${MACHINE}.bin"
         bl32opt="BL32=${bl32}"
-        spdopt="SPD=opteed" 
+        spdopt="SPD=opteed"
     fi
 
     if [ "${BUILD_OTA}" = "true" ]; then
@@ -152,9 +152,9 @@ do_compile() {
         flexspi_nor)
             rcwimg="${RCWXSPI}${rcwtemp}.bin"
             uefiboot="${UEFI_XSPIBOOT}"
-            ;;        
+            ;;
         esac
-            
+
         if [ -f "${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg}" ]; then
                 oe_runmake V=1 -C ${S} realclean
                 oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33} ${bl32opt} ${spdopt} ${secureopt} ${fuseopt} ${otaopt}
@@ -225,7 +225,7 @@ do_deploy() {
     if [ "${BUILD_SECURE}" = "true" ]; then
         secext="_sec"
     fi
-        
+
     if [ -f "${S}/fuse_fip.bin" ]; then
         cp -r ${D}/boot/atf/fuse_fip.bin ${DEPLOYDIR}/atf/fuse_fip${secext}.bin
     fi
