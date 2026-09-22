@@ -3,7 +3,7 @@
 
 require recipes-kernel/linux/linux-imx.inc
 
-DEPENDS += "lzop-native bc-native"
+DEPENDS += "bc-native lzop-native"
 
 LINUX_VERSION = "4.14.78"
 
