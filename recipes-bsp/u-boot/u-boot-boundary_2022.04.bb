@@ -1,5 +1,10 @@
+# nooelint: oelint.var.mandatoryvar.SUMMARY
+# SUMMARY comes from oe-core's u-boot.inc, required below; oelint cannot
+# follow a require into another layer.
 require recipes-bsp/u-boot/u-boot.inc
 require recipes-bsp/u-boot/u-boot-boundary-common_${PV}.inc
+
+HOMEPAGE = "https://github.com/boundarydevices/u-boot"
 
 inherit ${@oe.utils.ifelse(d.getVar('UBOOT_PROVIDES_BOOT_CONTAINER') == '1', 'imx-boot-container', '')} deploy
 
