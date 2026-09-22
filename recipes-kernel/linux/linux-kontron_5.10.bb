@@ -7,6 +7,7 @@
 require recipes-kernel/linux/linux-imx.inc
 
 SUMMARY = "Kontron Linux mainline based kernel with backported features and fixes"
+SECTION = "kernel"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
 DEPENDS += "bc-native lzop-native"
