@@ -24,12 +24,12 @@ do_compile() {
     kernel_devicetree_tmp=""
     for kdt in ${KERNEL_DEVICETREE}
     do
-	kernel_devicetree_tmp="${kernel_devicetree_tmp}${kernel_devicetree_spc}$(basename ${kdt})"
-	kernel_devicetree_spc=" "
+        kernel_devicetree_tmp="${kernel_devicetree_tmp}${kernel_devicetree_spc}$(basename ${kdt})"
+        kernel_devicetree_spc=" "
     done
     kernel_devicetree="${kernel_devicetree_tmp}"
     sed -e 's/@KERNEL_BOOTCMD[@]/${KERNEL_BOOTCMD}/' -e "s,@KERNEL_IMAGETYPE[@],${KERNEL_IMAGETYPE},g" \
-	-e "s,@KERNEL_DEVICETREE[@],${kernel_devicetree},g" \
+        -e "s,@KERNEL_DEVICETREE[@],${kernel_devicetree},g" \
         "${UNPACKDIR}/boot.cmd.in" > ${B}/boot.cmd
     target_arch="${TARGET_ARCH}"
     test "${TARGET_ARCH}" = "aarch64" && target_arch="arm64"
