@@ -55,7 +55,7 @@ BUILD_OPTEE = "${@bb.utils.contains('COMBINED_FEATURES', 'optee', 'true', 'false
 BUILD_FUSE = "${@bb.utils.contains('DISTRO_FEATURES', 'fuse', 'true', 'false', d)}"
 BUILD_OTA = "${@bb.utils.contains('DISTRO_FEATURES', 'ota', 'true', 'false', d)}"
 
-PACKAGECONFIG ??= " \
+PACKAGECONFIG ??= "\
     ${@bb.utils.filter('COMBINED_FEATURES', 'optee', d)} \
 "
 PACKAGECONFIG[optee] = ",,optee-os-qoriq"
