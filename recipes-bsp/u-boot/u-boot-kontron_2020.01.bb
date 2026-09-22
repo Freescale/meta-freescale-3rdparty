@@ -11,16 +11,15 @@ DEPENDS += "bc-native bison-native dtc-native lzop-native"
 LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=30503fd321432fc713238f582193b78e"
 
+PROVIDES += "u-boot"
+PV .= "+git${SRCPV}"
+
 SRC_URI = "git://git.kontron-electronics.de/linux/u-boot.git;protocol=https;branch=${SRCBRANCH} \
            file://fw_env.config \
 "
 SRCREV = "3d58441adf3e633279db6c96acb33a7aef4fd6f9"
 SRCBRANCH = "v2020.01-ktn"
 LOCALVERSION = "-ktn"
-
-PROVIDES += "u-boot"
-
-PV .= "+git${SRCPV}"
 
 B = "${WORKDIR}/build"
 
