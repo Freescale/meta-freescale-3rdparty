@@ -9,6 +9,8 @@ SRC_URI = "\
     file://boot.cmd.in \
 "
 
+S = "${UNPACKDIR}"
+
 KERNEL_BOOTCMD ?= "booti"
 
 inherit deploy
