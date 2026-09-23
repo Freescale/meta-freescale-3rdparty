@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 setenv kernel @KERNEL_IMAGETYPE@
 setenv fdt_file @KERNEL_DEVICETREE@
 setenv rootfs_mmc0 setenv rootfs /dev/mmcblk0p2
