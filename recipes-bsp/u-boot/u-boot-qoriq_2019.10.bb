@@ -1,7 +1,6 @@
 require recipes-bsp/u-boot/u-boot.inc
 
 DESCRIPTION = "U-Boot provided by Freescale with focus on QorIQ boards"
-PROVIDES += "u-boot"
 
 inherit fsl-u-boot-localversion
 
@@ -19,6 +18,7 @@ DEPENDS = "bc-native bison-native libgcc python3-native swig-native virtual/${TA
 DEPENDS:append:qoriq-arm64 = " dtc-native"
 DEPENDS:append:qoriq-arm = " dtc-native"
 DEPENDS:append:qoriq-ppc = " boot-format-native"
+PROVIDES += "u-boot"
 
 SRC_URI = "\
     git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot;nobranch=1 \
