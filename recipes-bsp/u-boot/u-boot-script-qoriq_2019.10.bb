@@ -3,7 +3,7 @@ DESCRIPTION = "Boot script for launching images with U-Boot distro boot"
 HOMEPAGE = "https://github.com/nxp-qoriq"
 SECTION = "bootloaders"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+LIC_FILES_CHKSUM = "file://boot.cmd.in;beginline=1;endline=1;md5=b2dccaa94b3629a08bfb4f983cad6f89"
 
 INHIBIT_DEFAULT_DEPS = "1"
 DEPENDS = "u-boot-mkimage-native"
