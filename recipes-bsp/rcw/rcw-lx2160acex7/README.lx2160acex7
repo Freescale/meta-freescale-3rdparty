@@ -1,0 +1,3 @@
+The RCW directories for lx2160acex7 are created based on existing SERDES
+configuration. Currently created automatically - later maybe by building
+cross product of serdes & ddr speeds in a final commit.
