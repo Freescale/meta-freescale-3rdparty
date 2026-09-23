@@ -22,7 +22,7 @@ inherit deploy
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
 SRC_URI = "\
-    git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1 \
+    git://github.com/nxp-qoriq/atf.git;protocol=https;nobranch=1 \
     file://0001-Clean-usage-of-void-pointers-to-access-symbols.patch \
 "
 SRCREV = "5ae5233c064e94a8bd1b4a1652a03b87b0be63f6"
