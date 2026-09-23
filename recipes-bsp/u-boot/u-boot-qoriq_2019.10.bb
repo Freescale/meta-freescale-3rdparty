@@ -27,7 +27,7 @@ PROVIDES += "u-boot"
 PV:append = "+fslgit"
 
 SRC_URI = "\
-    git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot;nobranch=1 \
+    git://github.com/nxp-qoriq/u-boot.git;protocol=https;nobranch=1 \
     file://0001-patman-Drop-binary-parameter.patch \
     file://0001-patman-Update-command.Run-to-handle-failure-better.patch \
     file://0001-patman-Adjust-command-to-return-strings-instead-of-b.patch \
