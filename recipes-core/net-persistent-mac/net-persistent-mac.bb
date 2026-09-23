@@ -12,6 +12,8 @@ INITSCRIPT_PARAMS = "start 39 S ."
 SRC_URI = "file://init \
            file://default"
 
+S = "${UNPACKDIR}"
+
 do_install () {
 	install -d ${D}${sysconfdir}/init.d
 	install -m 0755 ${UNPACKDIR}/init ${D}${sysconfdir}/init.d/${PN}
