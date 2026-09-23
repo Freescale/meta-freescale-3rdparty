@@ -5,7 +5,7 @@ DESCRIPTION = "Reference implementation of Armv8-A secure world software for the
 HOMEPAGE = "https://github.com/boundarydevices/imx-atf"
 SECTION = "BSP"
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/BSD-3-Clause;md5=550794465ba0ec5312d6919e203a55f9"
+LIC_FILES_CHKSUM = "file://docs/license.rst;md5=b2c740efedc159745b9b31f88ff03dde"
 
 CVE_PRODUCT = "arm:arm-trusted-firmware \
                arm:trusted_firmware-a \
