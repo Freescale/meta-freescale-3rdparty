@@ -21,7 +21,6 @@ SRC_URI = "git://git.kontron-electronics.de/linux/linux.git;protocol=https;branc
            file://defconfig"
 LOCALVERSION = "-ktn"
 
-
 # PV is defined in the base in linux-imx.inc file and uses the LINUX_VERSION definition
 # required by kernel-yocto.bbclass.
 #
