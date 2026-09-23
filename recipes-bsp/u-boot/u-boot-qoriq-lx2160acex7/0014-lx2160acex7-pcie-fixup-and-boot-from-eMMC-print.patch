@@ -3,7 +3,7 @@ From: Rabeeh Khoury <rabeeh@solid-run.com>
 Date: Mon, 23 Mar 2020 12:53:48 +0200
 Subject: [PATCH 14/17] lx2160acex7: pcie fixup and boot from eMMC print
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

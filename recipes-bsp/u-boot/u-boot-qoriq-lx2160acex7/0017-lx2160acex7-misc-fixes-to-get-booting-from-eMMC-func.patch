@@ -4,7 +4,7 @@ Date: Tue, 5 May 2020 01:01:01 +0300
 Subject: [PATCH 17/17] lx2160acex7: misc fixes to get booting from eMMC
  functional
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

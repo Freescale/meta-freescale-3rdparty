@@ -10,7 +10,7 @@ Following is a list of changes -
 in u-boot
 4. Added eMMC to distroboot target list
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

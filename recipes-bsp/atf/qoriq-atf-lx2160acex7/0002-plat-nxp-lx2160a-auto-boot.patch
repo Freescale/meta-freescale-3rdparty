@@ -12,7 +12,7 @@ of RCW code.
 With this patch images are unified and can be used to boot from SD /
 eMMC and SPI.
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

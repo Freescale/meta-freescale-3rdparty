@@ -3,6 +3,12 @@ DESCRIPTION = "ARM Trusted Firmware"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://license.rst;md5=e927e02bca647e14efd87e9e914b2443"
 
+CVE_PRODUCT = "arm:arm-trusted-firmware \
+               arm:trusted_firmware-a \
+               arm:arm_trusted_firmware \
+               arm_trusted_firmware_project:arm_trusted_firmware \
+               trustedfirmware:trusted_firmware-a"
+
 PV = "1.5+git${SRCPV}"
 
 inherit deploy

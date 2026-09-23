@@ -11,7 +11,7 @@ create_pbl.c
 With this method a single boot image is unified for all the 3 different
 boot methods.
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

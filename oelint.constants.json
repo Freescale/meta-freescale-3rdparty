@@ -1,0 +1,41 @@
+{
+    "comment": "Layer-specific oelint-adv constant DB. oelint-adv auto-loads 'oelint.constants.json' from the layer root (the directory holding conf/layer.conf) whenever a file from this layer is linted, so no --constantmods is needed. It lists the real variables, functions, overrides and includes that oelint cannot resolve when run standalone, outside a full bitbake build: they come from openembedded-core and meta-freescale, which this layer depends on but which are not part of the scan.",
+    "oelint-require-file-ignore": [
+        "recipes-bsp/u-boot/u-boot.inc",
+        "recipes-kernel/linux/linux-imx.inc",
+        "recipes-kernel/linux/linux-qoriq.inc",
+        "recipes-bsp/u-boot/u-boot-boundary-common_${PV}.inc"
+    ],
+    "functions": {
+        "known": [
+            "do_image_boot_ubifs"
+        ]
+    },
+    "variables": {
+        "known": [
+            "BOOT_TOOLS",
+            "KBUILD_DEFCONFIG",
+            "LE_UBOOT_FOR_ARMBE_TARGET",
+            "MC_FLAVOUR",
+            "UBOOT_INITIAL_ENV",
+            "UUU_BOOTLOADER"
+        ]
+    },
+    "replacements": {
+        "distros": [
+            "use-mainline-bsp"
+        ],
+        "machines": [
+            "ls1012a",
+            "ls1012afrwy",
+            "ls1043a",
+            "ls1046a",
+            "ls1088ardb-pb",
+            "lx2160a",
+            "mx8mm-nxp-bsp",
+            "mx8mn-nxp-bsp",
+            "mx8mp-nxp-bsp",
+            "mx8mq-nxp-bsp"
+        ]
+    }
+}

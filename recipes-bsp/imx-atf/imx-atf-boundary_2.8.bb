@@ -5,6 +5,12 @@ SECTION = "BSP"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/BSD-3-Clause;md5=550794465ba0ec5312d6919e203a55f9"
 
+CVE_PRODUCT = "arm:arm-trusted-firmware \
+               arm:trusted_firmware-a \
+               arm:arm_trusted_firmware \
+               arm_trusted_firmware_project:arm_trusted_firmware \
+               trustedfirmware:trusted_firmware-a"
+
 PROVIDES = "imx-atf"
 
 PV .= "+git${SRCPV}"
@@ -20,11 +26,11 @@ inherit deploy
 
 BOOT_TOOLS = "imx-boot-tools"
 
-ATF_PLATFORM        ?= "INVALID"
-ATF_PLATFORM:mx8mq-nxp-bsp   = "imx8mq"
-ATF_PLATFORM:mx8mm-nxp-bsp   = "imx8mm"
-ATF_PLATFORM:mx8mn-nxp-bsp   = "imx8mn"
-ATF_PLATFORM:mx8mp-nxp-bsp   = "imx8mp"
+ATF_PLATFORM ?= "INVALID"
+ATF_PLATFORM:mx8mq-nxp-bsp = "imx8mq"
+ATF_PLATFORM:mx8mm-nxp-bsp = "imx8mm"
+ATF_PLATFORM:mx8mn-nxp-bsp = "imx8mn"
+ATF_PLATFORM:mx8mp-nxp-bsp = "imx8mp"
 
 EXTRA_OEMAKE += " \
     CROSS_COMPILE="${TARGET_PREFIX}" \

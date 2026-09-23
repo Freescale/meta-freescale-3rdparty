@@ -7,7 +7,7 @@ Adds SolidRun's LX2160A based SoC COM express type 7 module support.
 The patch is based on LX2160ARDB board and modifies the support to two
 SO-DIMMs DDR4 support on I2C address 0x50 and 0x52.
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---
