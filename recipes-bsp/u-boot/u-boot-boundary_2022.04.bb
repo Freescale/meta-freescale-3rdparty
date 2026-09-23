@@ -6,7 +6,7 @@ require recipes-bsp/u-boot/u-boot-boundary-common_${PV}.inc
 
 HOMEPAGE = "https://github.com/boundarydevices/u-boot"
 
-inherit ${@oe.utils.ifelse(d.getVar('UBOOT_PROVIDES_BOOT_CONTAINER') == '1', 'imx-boot-container', '')} deploy
+inherit_defer ${@oe.utils.ifelse(d.getVar('UBOOT_PROVIDES_BOOT_CONTAINER') == '1', 'imx-boot-container', '')} deploy
 
 DEPENDS += "bison-native dtc-native python3-setuptools-native"
 PROVIDES += "u-boot"
