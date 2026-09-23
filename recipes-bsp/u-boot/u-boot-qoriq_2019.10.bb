@@ -106,7 +106,6 @@ do_compile:append:qoriq() {
     unset i
 }
 
-
 PACKAGES += "${PN}-images"
 FILES:${PN}-images += "/boot"
 COMPATIBLE_MACHINE = "(qoriq)"
