@@ -24,7 +24,7 @@ DEPENDS:append:qoriq-arm64 = " dtc-native"
 DEPENDS:append:qoriq-arm = " dtc-native"
 DEPENDS:append:qoriq-ppc = " boot-format-native"
 PROVIDES += "u-boot"
-PV:append = "+fslgit"
+PV .= "+fslgit"
 
 SRC_URI = "\
     git://github.com/nxp-qoriq/u-boot.git;protocol=https;nobranch=1 \
