@@ -1,3 +1,10 @@
+# nooelint: oelint.var.mandatoryvar.SUMMARY oelint.var.mandatoryvar.DESCRIPTION oelint.var.mandatoryvar.LICENSE oelint.var.suggestedvar.SECTION
+# SUMMARY, DESCRIPTION, LICENSE and SECTION come from meta-freescale's
+# linux-qoriq.inc, required below. oelint cannot follow a require into another
+# layer, so it sees them as unset; restating them here would duplicate values
+# meta-freescale owns.
+
+HOMEPAGE = "https://github.com/nxp-qoriq/linux"
 LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 
 LINUX_VERSION = "5.4.47"
