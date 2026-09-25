@@ -1,9 +1,15 @@
+# nooelint: oelint.var.mandatoryvar.SUMMARY
+# SUMMARY comes from oe-core's u-boot.inc, required below; oelint cannot
+# follow a require into another layer.
 # Copyright (C) 2013-2016 Freescale Semiconductor
 # Copyright 2018 (C) O.S. Systems Software LTDA.
 # Copyright 2017-2024 NXP
 
 require recipes-bsp/u-boot/u-boot.inc
 require u-boot-olimex-common_${PV}.inc
+
+HOMEPAGE = "https://github.com/nxp-imx/uboot-imx"
+SECTION = "bootloaders"
 
 PROVIDES += "u-boot u-boot-mfgtool"
 

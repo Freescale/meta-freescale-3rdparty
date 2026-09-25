@@ -1,18 +1,30 @@
+# nooelint: oelint.var.mandatoryvar.SUMMARY
+# SUMMARY comes from oe-core's u-boot.inc, required below; oelint cannot
+# follow a require into another layer.
 require recipes-bsp/u-boot/u-boot.inc
 
 DESCRIPTION = "U-Boot provided by Freescale with focus on QorIQ boards"
-PROVIDES += "u-boot"
+HOMEPAGE = "https://github.com/nxp-qoriq/u-boot"
+SECTION = "bootloaders"
 
 inherit fsl-u-boot-localversion
 
 LICENSE = "GPL-2.0-only & BSD-3-Clause & BSD-2-Clause & LGPL-2.0-only & LGPL-2.1-only"
-LIC_FILES_CHKSUM = " \
+LIC_FILES_CHKSUM = "\
     file://Licenses/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
     file://Licenses/bsd-2-clause.txt;md5=6a31f076f5773aabd8ff86191ad6fdd5 \
     file://Licenses/bsd-3-clause.txt;md5=4a1190eac56a9db675d58ebe86eaf50c \
     file://Licenses/lgpl-2.0.txt;md5=5f30f0716dfdd0d91eb439ebec522ec2 \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
+
+INHIBIT_DEFAULT_DEPS = "1"
+DEPENDS = "bc-native bison-native libgcc python3-native swig-native virtual/${TARGET_PREFIX}gcc"
+DEPENDS:append:qoriq-arm64 = " dtc-native"
+DEPENDS:append:qoriq-arm = " dtc-native"
+DEPENDS:append:qoriq-ppc = " boot-format-native"
+PROVIDES += "u-boot"
+PV:append = "+fslgit"
 
 SRC_URI = "\
     git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot;nobranch=1 \
@@ -27,16 +39,8 @@ SRC_URI = "\
 "
 SRCREV = "1e55b2f9e7f56b76569089b9e950f49c1579580e"
 
-S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
-PV:append = "+fslgit"
 LOCALVERSION = "+fsl"
-
-INHIBIT_DEFAULT_DEPS = "1"
-DEPENDS = "libgcc virtual/${TARGET_PREFIX}gcc bison-native bc-native swig-native python3-native"
-DEPENDS:append:qoriq-arm64 = " dtc-native"
-DEPENDS:append:qoriq-arm = " dtc-native"
-DEPENDS:append:qoriq-ppc = " boot-format-native"
 
 python () {
     if d.getVar("TCMODE") == "external-fsl":
@@ -101,7 +105,6 @@ do_compile:append:qoriq() {
     done
     unset i
 }
-
 
 PACKAGES += "${PN}-images"
 FILES:${PN}-images += "/boot"
