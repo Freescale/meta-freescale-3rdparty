@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend:imx6qdl-variscite-som := "${THISDIR}/${PN}:"
 
 COMPATIBLE_MACHINE:imx6sl-warp = "(.)"
 COMPATIBLE_MACHINE:imx6dl-riotboard = "(.)"
