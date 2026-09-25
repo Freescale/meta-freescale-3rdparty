@@ -20,8 +20,6 @@ SRC_URI = "git://github.com/boundarydevices/imx-atf.git;branch=${SRCBRANCH};prot
 "
 SRCREV = "7e3484cc10bfc9a53c1e64867b3fb99761f7c375"
 
-S = "${WORKDIR}/git"
-
 inherit deploy
 
 BOOT_TOOLS = "imx-boot-tools"
