@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-License-Identifier: MIT
 
 ### BEGIN INIT INFO
 # Provides:          net-persistent-mac
