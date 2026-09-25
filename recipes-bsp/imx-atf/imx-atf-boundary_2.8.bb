@@ -1,6 +1,8 @@
 # Copyright (C) 2017-2023 NXP
 
-DESCRIPTION = "i.MX ARM Trusted Firmware"
+SUMMARY = "ARM Trusted Firmware for Boundary Devices i.MX8 boards"
+DESCRIPTION = "Reference implementation of Armv8-A secure world software for the Boundary Devices Nitrogen8 family"
+HOMEPAGE = "https://github.com/boundarydevices/imx-atf"
 SECTION = "BSP"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/BSD-3-Clause;md5=550794465ba0ec5312d6919e203a55f9"

@@ -1,4 +1,6 @@
+SUMMARY = "U-Boot distro boot script for QorIQ"
 DESCRIPTION = "Boot script for launching images with U-Boot distro boot"
+HOMEPAGE = "https://github.com/nxp-qoriq"
 SECTION = "bootloaders"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"

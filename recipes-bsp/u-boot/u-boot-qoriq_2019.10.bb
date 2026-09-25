@@ -1,6 +1,10 @@
+# nooelint: oelint.var.mandatoryvar.SUMMARY
+# SUMMARY comes from oe-core's u-boot.inc, required below; oelint cannot
+# follow a require into another layer.
 require recipes-bsp/u-boot/u-boot.inc
 
 DESCRIPTION = "U-Boot provided by Freescale with focus on QorIQ boards"
+HOMEPAGE = "https://github.com/nxp-qoriq/u-boot"
 SECTION = "bootloaders"
 
 inherit fsl-u-boot-localversion
