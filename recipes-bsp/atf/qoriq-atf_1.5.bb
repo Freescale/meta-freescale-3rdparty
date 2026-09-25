@@ -9,12 +9,13 @@ CVE_PRODUCT = "arm:arm-trusted-firmware \
                arm_trusted_firmware_project:arm_trusted_firmware \
                trustedfirmware:trusted_firmware-a"
 
+DEPENDS += "cst-native mbedtls openssl openssl-native rcw u-boot u-boot-mkimage-native"
+DEPENDS:append:lx2160a = " ddr-phy"
+
 PV = "1.5+git${SRCPV}"
 
 inherit deploy
 
-DEPENDS += "cst-native mbedtls openssl openssl-native rcw u-boot u-boot-mkimage-native"
-DEPENDS:append:lx2160a = " ddr-phy"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
 SRC_URI = "\
@@ -24,8 +25,6 @@ SRC_URI = "\
 SRCREV = "5ae5233c064e94a8bd1b4a1652a03b87b0be63f6"
 
 COMPATIBLE_MACHINE = "(qoriq)"
-
-PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 PLATFORM = "${MACHINE}"
 PLATFORM:ls1088ardb-pb = "ls1088ardb"
@@ -59,6 +58,8 @@ PACKAGECONFIG ??= " \
     ${@bb.utils.filter('COMBINED_FEATURES', 'optee', d)} \
 "
 PACKAGECONFIG[optee] = ",,optee-os-qoriq"
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 uboot_boot_sec ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa-secure-boot"
 uboot_boot ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa"
