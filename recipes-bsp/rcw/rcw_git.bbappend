@@ -1,6 +1,6 @@
 FILESEXTRAPATHS:append:lx2160acex7 := "${THISDIR}/${PN}-lx2160acex7:"
 
-SRC_URI:append:lx2160acex7 = "\
+SRC_URI:append:lx2160acex7 = " \
     file://0001-lx2160acex7-misc-RCW-files.patch \
     file://0002-Set-io-pads-as-GPIO.patch \
     file://0003-S2-enable-gen3-xspi-increase-divisor-to-28.patch \
