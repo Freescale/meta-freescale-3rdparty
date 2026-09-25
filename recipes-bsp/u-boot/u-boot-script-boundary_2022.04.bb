@@ -1,6 +1,9 @@
 require recipes-bsp/u-boot/u-boot-boundary-common_${PV}.inc
 
-DEPENDS = "u-boot-mkimage-native"
+SUMMARY = "Boot script for Nitrogen boards"
+HOMEPAGE = "https://github.com/boundarydevices"
+
+DEPENDS += "u-boot-mkimage-native"
 
 inherit deploy
 
@@ -9,6 +12,7 @@ BOOTSCRIPT:use-mainline-bsp ??= "${S}/board/boundary/bootscripts/bootscript-main
 
 UPGRADESCRIPT = "${S}/board/boundary/bootscripts/upgrade.txt"
 
+do_mkimage[doc] = "Compiles the boot and upgrade scripts into U-Boot script images"
 do_mkimage () {
     uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
                   -n "boot script" -d ${BOOTSCRIPT} ${S}/boot.scr

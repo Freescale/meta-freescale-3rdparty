@@ -1,8 +1,11 @@
+SUMMARY = "Broadcom BCM${CHIP_MODEL} NVRAM configuration"
+HOMEPAGE = "https://www.broadcom.com/products/wireless"
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://LICENCE.broadcom_bcm43xx;md5=3160c14df7228891b868060e1951dfbc"
 
 SRC_URI = "\
     file://LICENCE.broadcom_bcm43xx \
+    file://brcmfmac${CHIP_MODEL}-sdio.txt \
 "
 
 S = "${UNPACKDIR}"
@@ -16,16 +19,12 @@ do_install() {
         ${D}${BRCM_FWDIR}
 }
 
-SRC_URI += "\
-    file://brcmfmac${CHIP_MODEL}-sdio.txt \
-"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-FILES:${PN} = "\
+FILES:${PN} += "\
     ${BRCM_FWDIR}/brcmfmac${CHIP_MODEL}-sdio.txt \
 "
 
 RDEPENDS:${PN} = "\
     linux-firmware-bcm${CHIP_MODEL} \
 "
-
-PACKAGE_ARCH = "${MACHINE_ARCH}"
