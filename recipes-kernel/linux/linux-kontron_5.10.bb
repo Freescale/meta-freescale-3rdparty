@@ -9,7 +9,7 @@ require recipes-kernel/linux/linux-imx.inc
 SUMMARY = "Kontron Linux mainline based kernel with backported features and fixes"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
-DEPENDS += "lzop-native bc-native"
+DEPENDS += "bc-native lzop-native"
 
 SRC_URI = "git://git.kontron-electronics.de/linux/linux.git;protocol=https;branch=${SRCBRANCH} \
            file://defconfig"
