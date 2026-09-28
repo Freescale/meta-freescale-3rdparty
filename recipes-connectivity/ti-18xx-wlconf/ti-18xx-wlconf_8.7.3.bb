@@ -1,4 +1,6 @@
 SUMMARY = "Configuration utility for TI wireless drivers"
+DESCRIPTION = "wlconf configuration utility from the TI WiLink8 WLAN utilities, used to tune the wl18xx driver"
+HOMEPAGE = "https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils/"
 SECTION = "console/network"
 LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://README;beginline=1;endline=21;md5=adc05a1903d3f107f85c90328e3a9438"
