@@ -9,21 +9,18 @@ SRC_URI:append:lx2160acex7 = " \
     file://0007-lx2160acex7-pcie-workarounds-and-fan-full-speed.patch \
     file://0008-lx2160a-add-generic-bootloc-section.patch \
     file://0009-lx2160acex7-remove-all-predefined-RCW-files.patch \
+    file://README.lx2160acex7 \
 "
 
 do_configure:prepend:lx2160acex7 () {
     for BT in ${BOARD_TARGETS}
     do
         mkdir -p ${S}/${BOARD_TARGETS}/${SERDES}
-        cat <<EOF >${S}/${BOARD_TARGETS}/README
-The RCW directories for lx2160acex7 are created based on existing SERDES
-configuration. Currently created automatically - later maybe by building
-cross product of serdes & ddr speeds in a final commit.
-EOF
-        cat <<EOF >${S}/${BOARD_TARGETS}/${SERDES}/${SPEED}.rcw
-#include <configs/lx2160a_defaults.rcwi>
-#include <configs/lx2160a_${SPEED}.rcwi>
-#include <configs/lx2160a_${SERDES}.rcwi>
-EOF
+        install -m 0644 ${UNPACKDIR}/README.lx2160acex7 ${S}/${BOARD_TARGETS}/README
+        printf '%s\n' \
+            '#include <configs/lx2160a_defaults.rcwi>' \
+            '#include <configs/lx2160a_${SPEED}.rcwi>' \
+            '#include <configs/lx2160a_${SERDES}.rcwi>' \
+            >${S}/${BOARD_TARGETS}/${SERDES}/${SPEED}.rcw
     done
 }
