@@ -3,7 +3,7 @@
 SUMMARY = "ARM Trusted Firmware for Boundary Devices i.MX8 boards"
 DESCRIPTION = "Reference implementation of Armv8-A secure world software for the Boundary Devices Nitrogen8 family"
 HOMEPAGE = "https://github.com/boundarydevices/imx-atf"
-SECTION = "BSP"
+SECTION = "bsp"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://docs/license.rst;md5=b2c740efedc159745b9b31f88ff03dde"
 
