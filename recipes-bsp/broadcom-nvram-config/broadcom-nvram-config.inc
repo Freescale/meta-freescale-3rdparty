@@ -21,7 +21,7 @@ do_install() {
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-FILES:${PN} = "\
+FILES:${PN} += "\
     ${BRCM_FWDIR}/brcmfmac${CHIP_MODEL}-sdio.txt \
 "
 
