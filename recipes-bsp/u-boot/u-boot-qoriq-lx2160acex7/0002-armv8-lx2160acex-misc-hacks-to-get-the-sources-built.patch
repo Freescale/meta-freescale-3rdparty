@@ -6,7 +6,7 @@ Subject: [PATCH 02/17] armv8: lx2160acex: misc hacks to get the sources built
 those hacks will be sorted out nicer in the future and this patch will
 not be needed anymore
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

@@ -3,7 +3,7 @@ From: Rabeeh Khoury <rabeeh@solid-run.com>
 Date: Sun, 28 Jul 2019 13:26:45 +0300
 Subject: [PATCH 01/17] armv8: add lx2160acex7 build inclusion
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

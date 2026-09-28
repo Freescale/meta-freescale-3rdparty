@@ -9,7 +9,7 @@ NVMe as part of default startup script...
 
 Credit to Damjan Marion <dmarion@me.com> on fixing that on LSDK-19.09.
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

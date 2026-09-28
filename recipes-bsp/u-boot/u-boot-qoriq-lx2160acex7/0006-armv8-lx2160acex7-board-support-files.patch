@@ -9,7 +9,7 @@ The lx2160acex7 board support files does the following -
 3. Sets EMC2301 PWM fan controller to it's default value
 4. Misc FDT fixups prior to booting Linux
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

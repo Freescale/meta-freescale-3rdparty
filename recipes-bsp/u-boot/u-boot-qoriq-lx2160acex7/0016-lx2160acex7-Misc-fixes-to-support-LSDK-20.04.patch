@@ -3,7 +3,7 @@ From: Rabeeh Khoury <rabeeh@solid-run.com>
 Date: Mon, 4 May 2020 22:52:02 +0300
 Subject: [PATCH 16/17] lx2160acex7: Misc fixes to support LSDK-20.04
 
-Upstream-Status: Inappropriate [Solid-Run BSP]
+Upstream-Status: Inappropriate [embedded specific]
 
 Signed-off-by: Rabeeh Khoury <rabeeh@solid-run.com>
 ---

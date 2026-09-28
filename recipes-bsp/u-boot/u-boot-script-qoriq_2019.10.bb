@@ -1,13 +1,19 @@
+SUMMARY = "U-Boot distro boot script for QorIQ"
 DESCRIPTION = "Boot script for launching images with U-Boot distro boot"
+HOMEPAGE = "https://github.com/nxp-qoriq"
+SECTION = "bootloaders"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+LIC_FILES_CHKSUM = "file://boot.cmd.in;beginline=1;endline=1;md5=b2dccaa94b3629a08bfb4f983cad6f89"
 
 INHIBIT_DEFAULT_DEPS = "1"
 DEPENDS = "u-boot-mkimage-native"
+PROVIDES += "u-boot-default-script"
 
 SRC_URI = "\
     file://boot.cmd.in \
 "
+
+S = "${UNPACKDIR}"
 
 KERNEL_BOOTCMD ?= "booti"
 
@@ -20,12 +26,12 @@ do_compile() {
     kernel_devicetree_tmp=""
     for kdt in ${KERNEL_DEVICETREE}
     do
-	kernel_devicetree_tmp="${kernel_devicetree_tmp}${kernel_devicetree_spc}$(basename ${kdt})"
-	kernel_devicetree_spc=" "
+        kernel_devicetree_tmp="${kernel_devicetree_tmp}${kernel_devicetree_spc}$(basename ${kdt})"
+        kernel_devicetree_spc=" "
     done
     kernel_devicetree="${kernel_devicetree_tmp}"
     sed -e 's/@KERNEL_BOOTCMD[@]/${KERNEL_BOOTCMD}/' -e "s,@KERNEL_IMAGETYPE[@],${KERNEL_IMAGETYPE},g" \
-	-e "s,@KERNEL_DEVICETREE[@],${kernel_devicetree},g" \
+        -e "s,@KERNEL_DEVICETREE[@],${kernel_devicetree},g" \
         "${UNPACKDIR}/boot.cmd.in" > ${B}/boot.cmd
     target_arch="${TARGET_ARCH}"
     test "${TARGET_ARCH}" = "aarch64" && target_arch="arm64"
@@ -45,10 +51,8 @@ do_deploy() {
 
 addtask deploy after do_install before do_build
 
-PROVIDES += "u-boot-default-script"
-
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 COMPATIBLE_MACHINE = "(qoriq)"
 
-FILES:${PN} = "/boot"
+FILES:${PN} += "/boot"
