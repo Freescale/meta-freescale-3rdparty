@@ -5,6 +5,7 @@ This file lists all licenses used by recipes in the meta-freescale-3rdparty laye
 ./recipes-bsp/atf/qoriq-atf_1.5.bb: LICENSE = "BSD"
 ./recipes-bsp/broadcom-nvram-config/broadcom-nvram-config.inc: LICENSE = "Proprietary"
 ./recipes-bsp/imx-atf/imx-atf-boundary_2.8.bb: LICENSE = "BSD-3-Clause"
+./recipes-bsp/ti-bt-firmware/ti-bt-firmware_11.8.32.bb: LICENSE = "LicenseRef-TI-Text-File"
 ./recipes-bsp/u-boot/u-boot-boundary-common_2022.04.inc: LICENSE = "GPL-2.0-or-later"
 ./recipes-bsp/u-boot/u-boot-kontron_2020.01.bb: LICENSE = "GPL-2.0-or-later"
 ./recipes-bsp/u-boot/u-boot-olimex-common_2024.04.inc: LICENSE = "GPL-2.0-or-later"
