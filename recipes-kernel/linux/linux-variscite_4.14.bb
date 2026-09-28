@@ -5,6 +5,10 @@ require recipes-kernel/linux/linux-imx.inc
 
 SECTION = "kernel"
 
+# linux-imx.inc pins the COPYING of newer kernels; 4.14 predates that
+# rewrite and still ships the classic text (same GPL-2.0-only licence).
+LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
+
 DEPENDS += "bc-native lzop-native"
 
 LINUX_VERSION = "4.14.78"
