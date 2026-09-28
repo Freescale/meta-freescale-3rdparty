@@ -5,7 +5,7 @@ SUMMARY = "Network device MAC persistency"
 DESCRIPTION = "Provides support to store/restore the MAC of a specific network device"
 SECTION = "base"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+LIC_FILES_CHKSUM = "file://init;beginline=2;endline=2;md5=b2dccaa94b3629a08bfb4f983cad6f89"
 
 inherit update-rc.d
 
