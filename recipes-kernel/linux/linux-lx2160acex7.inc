@@ -1,5 +1,3 @@
-FILESEXTRAPATHS:append:lx2160acex7 := "${THISDIR}/linux-fslc-qoriq-lx2160acex7:"
-
 SRC_URI:append:lx2160acex7 = " \
     file://0001-arm64-dts-lx2160a-add-lx2160acex7-device-tree-build.patch \
     file://0002-arm64-dts-lx2160a-add-lx2160acex7-device-tree.patch \
