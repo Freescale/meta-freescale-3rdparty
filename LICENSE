@@ -12,5 +12,5 @@ This file lists all licenses used by recipes in the meta-freescale-3rdparty laye
 ./recipes-bsp/u-boot/u-boot-script-qoriq_2019.10.bb: LICENSE = "MIT"
 ./recipes-bsp/u-boot/u-boot-variscite_2018.03.bb: LICENSE = "GPL-2.0-or-later"
 ./recipes-connectivity/ti-18xx-wlconf/ti-18xx-wlconf_8.7.3.bb: LICENSE = "GPL-2.0-only"
-./recipes-core/net-persistent-mac/net-persistent-mac.bb: LICENSE = "MIT"
+./recipes-core/net-persistent-mac/net-persistent-mac_1.0.bb: LICENSE = "MIT"
 ./recipes-kernel/linux/linux-boundary_6.1.bb: LICENSE = "GPL-2.0-only"
