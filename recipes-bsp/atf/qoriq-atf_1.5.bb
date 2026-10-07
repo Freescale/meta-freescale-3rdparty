@@ -3,7 +3,7 @@ DESCRIPTION = "Reference implementation of Armv8-A secure world software for the
 HOMEPAGE = "https://github.com/nxp-qoriq/atf"
 SECTION = "bsp"
 
-LICENSE = "BSD"
+LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://license.rst;md5=e927e02bca647e14efd87e9e914b2443"
 
 CVE_PRODUCT = "arm:arm-trusted-firmware \
