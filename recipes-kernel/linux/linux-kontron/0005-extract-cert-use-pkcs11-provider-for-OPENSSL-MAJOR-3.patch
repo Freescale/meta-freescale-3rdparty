@@ -1,0 +1,106 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luciano Dittgen <luciano.dittgen@ossystems.com.br>
+Date: Wed, 7 Oct 2026 14:29:02 -0300
+Subject: [PATCH 5/5] extract-cert: use pkcs11 provider for OPENSSL MAJOR >= 3
+
+Backport of the extract-cert part of upstream commits 558bdc45dfb2
+("sign-file,extract-cert: use pkcs11 provider for OPENSSL MAJOR >= 3")
+and 80f54d6f9142 ("extract-cert: Wrap key_pass with '#ifdef
+USE_PKCS11_ENGINE'"), adapted to scripts/extract-cert.c of 5.10
+(moved to certs/ in 5.17, before ssl-common.h existed). OpenSSL 4 no
+longer provides the ENGINE API, so the host tool did not link.
+
+Upstream-Status: Backport [558bdc45dfb2669e1741384a0c80be9c82fa052c, 80f54d6f91426b9994e9074e8e167547859622f3]
+Signed-off-by: Luciano Dittgen <luciano.dittgen@ossystems.com.br>
+---
+ scripts/extract-cert.c | 47 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 46 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/extract-cert.c b/scripts/extract-cert.c
+index 3bc48c726c41c..69696354d8986 100644
+--- a/scripts/extract-cert.c
++++ b/scripts/extract-cert.c
+@@ -21,7 +21,16 @@
+ #include <openssl/bio.h>
+ #include <openssl/pem.h>
+ #include <openssl/err.h>
+-#include <openssl/engine.h>
++#if OPENSSL_VERSION_MAJOR >= 3
++# define USE_PKCS11_PROVIDER
++# include <openssl/provider.h>
++# include <openssl/store.h>
++#else
++# if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DEPRECATED_3_0)
++#  define USE_PKCS11_ENGINE
++#  include <openssl/engine.h>
++# endif
++#endif
+ 
+ #define PKEY_ID_PKCS7 2
+ 
+@@ -68,7 +77,9 @@ static void drain_openssl_errors(void)
+ 		}					\
+ 	} while(0)
+ 
++#ifdef USE_PKCS11_ENGINE
+ static const char *key_pass;
++#endif
+ static BIO *wb;
+ static char *cert_dst;
+ static int kbuild_verbose;
+@@ -97,7 +108,9 @@ int main(int argc, char **argv)
+ 
+ 	kbuild_verbose = atoi(getenv("KBUILD_VERBOSE")?:"0");
+ 
++#ifdef USE_PKCS11_ENGINE
+         key_pass = getenv("KBUILD_SIGN_PIN");
++#endif
+ 
+ 	if (argc != 3)
+ 		format();
+@@ -112,6 +125,34 @@ int main(int argc, char **argv)
+ 		fclose(f);
+ 		exit(0);
+ 	} else if (!strncmp(cert_src, "pkcs11:", 7)) {
++#ifdef USE_PKCS11_PROVIDER
++		OSSL_STORE_CTX *store;
++
++		if (!OSSL_PROVIDER_try_load(NULL, "pkcs11", true))
++			ERR(1, "OSSL_PROVIDER_try_load(pkcs11)");
++		if (!OSSL_PROVIDER_try_load(NULL, "default", true))
++			ERR(1, "OSSL_PROVIDER_try_load(default)");
++
++		store = OSSL_STORE_open(cert_src, NULL, NULL, NULL, NULL);
++		ERR(!store, "OSSL_STORE_open");
++
++		while (!OSSL_STORE_eof(store)) {
++			OSSL_STORE_INFO *info = OSSL_STORE_load(store);
++			X509 *cert;
++
++			if (!info) {
++				drain_openssl_errors();
++				continue;
++			}
++			if (OSSL_STORE_INFO_get_type(info) == OSSL_STORE_INFO_CERT) {
++				cert = OSSL_STORE_INFO_get1_CERT(info);
++				ERR(!cert, "OSSL_STORE_INFO_get1_CERT");
++				write_cert(cert);
++			}
++			OSSL_STORE_INFO_free(info);
++		}
++		OSSL_STORE_close(store);
++#elif defined(USE_PKCS11_ENGINE)
+ 		ENGINE *e;
+ 		struct {
+ 			const char *cert_id;
+@@ -134,6 +175,10 @@ int main(int argc, char **argv)
+ 		ENGINE_ctrl_cmd(e, "LOAD_CERT_CTRL", 0, &parms, NULL, 1);
+ 		ERR(!parms.cert, "Get X.509 from PKCS#11");
+ 		write_cert(parms.cert);
++#else
++		fprintf(stderr, "no pkcs11 engine/provider available\n");
++		exit(1);
++#endif
+ 	} else {
+ 		BIO *b;
+ 		X509 *x509;

@@ -1,0 +1,53 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kees Cook <keescook@chromium.org>
+Date: Thu, 8 Jun 2023 22:34:58 +0100
+Subject: [PATCH 2/5] gcc-plugins: Reorganize gimple includes for GCC 13
+
+mainline commit: e6a71160cc145e18ab45195abf89884112e02dfb
+
+The gimple-iterator.h header must be included before gimple-fold.h
+starting with GCC 13. Reorganize gimple headers to work for all GCC
+versions.
+
+Reported-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Link: https://lore.kernel.org/all/20230113173033.4380-1-palmer@rivosinc.com/
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+[ Modified to handle differences in other includes in the 5.15.y tree. ]
+Signed-off-by: Paul Barker <paul.barker@sancloud.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+(cherry picked from commit c7cf7760b9b51403b26280a101775cfda2f31dbc)
+
+Context adapted to v5.10, which still carries the GCC < 4.9
+include guards; the later duplicate #include "gimple.h" is kept and
+is a no-op.
+
+Upstream-Status: Backport [e6a71160cc145e18ab45195abf89884112e02dfb]
+Signed-off-by: Luciano Dittgen <luciano.dittgen@ossystems.com.br>
+---
+ scripts/gcc-plugins/gcc-common.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/gcc-plugins/gcc-common.h b/scripts/gcc-plugins/gcc-common.h
+index 9ad76b7f3f10e..d094e0d3c5024 100644
+--- a/scripts/gcc-plugins/gcc-common.h
++++ b/scripts/gcc-plugins/gcc-common.h
+@@ -108,7 +108,9 @@
+ #include "varasm.h"
+ #include "stor-layout.h"
+ #include "internal-fn.h"
++#include "gimple.h"
+ #include "gimple-expr.h"
++#include "gimple-iterator.h"
+ #include "gimple-fold.h"
+ #include "context.h"
+ #include "tree-ssa-alias.h"
+@@ -130,7 +132,6 @@
+ #include "tree-ssa-operands.h"
+ #include "tree-phinodes.h"
+ #include "tree-cfg.h"
+-#include "gimple-iterator.h"
+ #include "gimple-ssa.h"
+ #include "ssa-iterators.h"
+ #endif
