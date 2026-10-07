@@ -2,7 +2,7 @@
 
 This file lists all licenses used by recipes in the meta-freescale-3rdparty layer.
 
-./recipes-bsp/atf/qoriq-atf_1.5.bb: LICENSE = "BSD"
+./recipes-bsp/atf/qoriq-atf_1.5.bb: LICENSE = "BSD-3-Clause"
 ./recipes-bsp/broadcom-nvram-config/broadcom-nvram-config.inc: LICENSE = "Proprietary"
 ./recipes-bsp/imx-atf/imx-atf-boundary_2.8.bb: LICENSE = "BSD-3-Clause"
 ./recipes-bsp/ti-bt-firmware/ti-bt-firmware_11.8.32.bb: LICENSE = "LicenseRef-TI-Text-File"
