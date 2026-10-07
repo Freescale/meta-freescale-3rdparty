@@ -1,0 +1,35 @@
+From: Luciano Dittgen <luciano.dittgen@ossystems.com.br>
+Date: Mon, 21 Sep 2026 17:05:00 -0300
+Subject: [PATCH] Do not warn on RWX LOAD segments
+
+Binutils 2.39 warns when a segment has RWX permissions, and this tree
+links with --fatal-warnings, so bl31.elf fails to link:
+
+  ld.bfd: warning: build/lx2160acex7/release/bl31/bl31.elf has a LOAD
+  segment with RWX permissions
+
+The segment layout is what it has always been; only the linker became
+noisier. Suppress the warning, as upstream TF-A did in review 19401 and
+as meta-freescale already carries for its own qoriq-atf 2.12 recipe.
+
+Upstream-Status: Backport [https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/19401]
+
+Adapted to the 1.5 Makefile, which has no ld.lld guard around the line.
+
+Signed-off-by: Luciano Dittgen <luciano.dittgen@ossystems.com.br>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -175,7 +175,7 @@ endif
+ 
+ TF_LDFLAGS		+=	--fatal-warnings -O1
+ TF_LDFLAGS		+=	--gc-sections
+-TF_LDFLAGS		+=	$(TF_LDFLAGS_$(ARCH))
++TF_LDFLAGS		+=	$(TF_LDFLAGS_$(ARCH)) --no-warn-rwx-segments
+ 
+ DTC_FLAGS		+=	-I dts -O dtb
+ 

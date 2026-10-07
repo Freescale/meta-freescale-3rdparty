@@ -12,7 +12,7 @@ CVE_PRODUCT = "arm:arm-trusted-firmware \
                arm_trusted_firmware_project:arm_trusted_firmware \
                trustedfirmware:trusted_firmware-a"
 
-DEPENDS += "cst-native mbedtls openssl openssl-native rcw u-boot u-boot-mkimage-native"
+DEPENDS += "mbedtls openssl openssl-native qoriq-cst-native rcw u-boot u-boot-mkimage-native"
 DEPENDS:append:lx2160a = " ddr-phy"
 
 PV = "1.5+git${SRCPV}"
@@ -24,6 +24,8 @@ do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 SRC_URI = "\
     git://github.com/nxp-qoriq/atf.git;protocol=https;nobranch=1 \
     file://0001-Clean-usage-of-void-pointers-to-access-symbols.patch \
+    file://0002-gicv3-Mark-gic_version-unused-when-assertions-are-off.patch \
+    file://0003-Do-not-warn-on-RWX-LOAD-segments.patch \
 "
 SRCREV = "5ae5233c064e94a8bd1b4a1652a03b87b0be63f6"
 
