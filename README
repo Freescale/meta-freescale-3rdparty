@@ -4,6 +4,11 @@ OpenEmbedded/Yocto BSP layer for Freescale's ARM based platforms
 This layer provides support for Freescale's ARM based platforms for
 use with OpenEmbedded and/or Yocto Freescale's BSP layer.
 
+Maintainer
+----------
+
+Otavio Salvador <otavio.salvador@ossystems.com.br>
+
 This layer depends on:
 
 URI: git://git.openembedded.org/openembedded-core
