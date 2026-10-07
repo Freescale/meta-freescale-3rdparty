@@ -18,7 +18,13 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 DEPENDS += "bc-native lzop-native"
 
 SRC_URI = "git://git.kontron-electronics.de/linux/linux.git;protocol=https;branch=${SRCBRANCH} \
-           file://defconfig"
+           file://defconfig \
+           file://0001-gcc-plugins-drop-std-gnu-11-to-fix-GCC-13-build.patch \
+           file://0002-gcc-plugins-Reorganize-gimple-includes-for-GCC-13.patch \
+           file://0003-gcc-plugins-Remove-TODO_verify_il-for-GCC-16.patch \
+           file://0004-gcc-plugins-Always-define-CONST_CAST_GIMPLE-and-CONS.patch \
+           file://0005-extract-cert-use-pkcs11-provider-for-OPENSSL-MAJOR-3.patch \
+           "
 LOCALVERSION = "-ktn"
 
 # PV is defined in the base in linux-imx.inc file and uses the LINUX_VERSION definition
