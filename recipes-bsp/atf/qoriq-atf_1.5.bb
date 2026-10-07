@@ -12,7 +12,7 @@ CVE_PRODUCT = "arm:arm-trusted-firmware \
                arm_trusted_firmware_project:arm_trusted_firmware \
                trustedfirmware:trusted_firmware-a"
 
-DEPENDS += "cst-native mbedtls openssl openssl-native rcw u-boot u-boot-mkimage-native"
+DEPENDS += "mbedtls openssl openssl-native qoriq-cst-native rcw u-boot u-boot-mkimage-native"
 DEPENDS:append:lx2160a = " ddr-phy"
 
 PV = "1.5+git${SRCPV}"
