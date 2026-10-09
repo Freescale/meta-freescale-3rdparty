@@ -5,7 +5,7 @@ layer should be submitted through the
 [Issues](https://github.com/Freescale/meta-freescale-3rdparty/issues) page.
 
 For urgent or not-yet-released issues, contact the maintainer listed in the
-[README](README). Include:
+[README](README.md). Include:
 
 - The affected layer or software module
 - The recipe and its version
